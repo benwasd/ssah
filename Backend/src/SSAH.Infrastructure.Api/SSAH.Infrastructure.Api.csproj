@@ -13,4 +13,8 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SSAH.Core\SSAH.Core.csproj" />
+  </ItemGroup>
+
 </Project>
