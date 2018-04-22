@@ -1,5 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+
+using Autofac;
+
 using Microsoft.AspNetCore.Mvc;
+
+using SSAH.Core;
+using SSAH.Core.Domain;
+using SSAH.Core.Domain.Entities;
 
 namespace SSAH.Infrastructure.Api.Controllers
 {
@@ -10,7 +18,12 @@ namespace SSAH.Infrastructure.Api.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            return new string[] { "value1", "value2" };
+            var unitOfWorkFactory = DependencyRegistry.Container.Resolve<IUnitOfWorkFactory<IRepository<Course>>>();
+
+            using (var unitOfWork = unitOfWorkFactory.Begin())
+            {
+                return unitOfWork.Dependent.Get().Select(x => x.Id.ToString()).ToArray();
+            }            
         }
 
         // GET api/values/5
