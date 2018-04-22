@@ -1,8 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions.Internal;
+using Microsoft.EntityFrameworkCore.SqlServer.Metadata.Conventions.Internal;
 
-using SSAH.Core.Domain.Entities;
+using SSAH.Infrastructure.DbAccess.TypeConfigurations;
 
 namespace SSAH.Infrastructure.DbAccess.DbModel
 {
@@ -10,7 +16,7 @@ namespace SSAH.Infrastructure.DbAccess.DbModel
     {
         public IModel Create()
         {
-            var conventions = new ConventionSet();
+            var conventions = SqlServerConventionSetBuilder.Build();
             ConfigureConventions(conventions);
 
             var builder = new ModelBuilder(conventions);
@@ -25,8 +31,7 @@ namespace SSAH.Infrastructure.DbAccess.DbModel
 
         private static void ConfigureModelBuilder(ModelBuilder builder)
         {
-            builder.Entity<Course>().HasKey(p => p.Id);
-            builder.Entity<Course>().Property(p => p.Lol);
+            builder.ApplyConfiguration(new CourseTypeConfiguration());
         }
     }
 }

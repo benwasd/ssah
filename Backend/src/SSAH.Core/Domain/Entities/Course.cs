@@ -1,11 +1,7 @@
-﻿using System;
-
-namespace SSAH.Core.Domain.Entities
+﻿namespace SSAH.Core.Domain.Entities
 {
-    public class Course
+    public class Course : EntityBase
     {
-        public Guid Id { get; set; }
-
         public string Lol { get; set; }
     }
 }
