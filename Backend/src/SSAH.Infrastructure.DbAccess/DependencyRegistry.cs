@@ -12,8 +12,8 @@ namespace SSAH.Infrastructure.DbAccess
         public static void Configure(ContainerBuilder builder)
         {
             // DbModel
-            builder.RegisterType<ContextFactory>().As<IContextFactory>().SingleInstance();
-            builder.RegisterType<ModelFactory>().As<IModelFactory>().SingleInstance();
+            builder.RegisterType<ContextOptionsProvider>().As<IContextOptionsProvider>().InstancePerDependency();
+            builder.RegisterType<ModelCreator>().As<IModelCreator>().InstancePerDependency();
 
             // Domain
             builder.RegisterGeneric(typeof(Repository<>)).As(typeof(IRepository<>)).InstancePerDependency();

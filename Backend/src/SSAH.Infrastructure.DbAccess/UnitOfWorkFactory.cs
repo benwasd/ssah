@@ -52,8 +52,10 @@ namespace SSAH.Infrastructure.DbAccess
 
         private static DbContext CreateContextInLifetimeScope(ILifetimeScope childLifetimeScope)
         {
-            var contextFactory = childLifetimeScope.Resolve<IContextFactory>();
-            var context = contextFactory.Create();
+            var context = new Context(
+                childLifetimeScope.Resolve<IContextOptionsProvider>(),
+                childLifetimeScope.Resolve<IModelCreator>()
+            );
 
             return context;
         }
