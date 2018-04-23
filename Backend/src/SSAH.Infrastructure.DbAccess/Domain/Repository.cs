@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.EntityFrameworkCore;
 
 using SSAH.Core.Domain;
+using SSAH.Core.Domain.Entities;
 
 namespace SSAH.Infrastructure.DbAccess.Domain
 {
@@ -19,6 +22,17 @@ namespace SSAH.Infrastructure.DbAccess.Domain
         public IEnumerable<T> Get()
         {
             return _set;
+        }
+
+        public T Create()
+        {
+            return Activator.CreateInstance<T>();
+            //return _set.CreateProxy();
+        }
+
+        public void Add(T add)
+        {
+            _set.Add(add);
         }
     }
 }

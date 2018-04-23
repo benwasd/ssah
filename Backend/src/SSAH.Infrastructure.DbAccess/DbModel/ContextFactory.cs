@@ -19,15 +19,15 @@ namespace SSAH.Infrastructure.DbAccess.DbModel
             var c = new Context(options);
 
             // TODO: Find a better place, replace with migrations
-            lock (this)
-            {
-                if (!s_isRecreated)
-                {
-                    c.Database.EnsureDeleted();
-                    c.Database.EnsureCreated();
-                    s_isRecreated = true;
-                }
-            }
+            //lock (this)
+            //{
+            //    if (!s_isRecreated)
+            //    {
+            //        c.Database.EnsureDeleted();
+            //        c.Database.EnsureCreated();
+            //        s_isRecreated = true;
+            //    }
+            //}
 
             return c;
         }
@@ -36,9 +36,9 @@ namespace SSAH.Infrastructure.DbAccess.DbModel
         {
             var builder = new DbContextOptionsBuilder<Context>();
             builder.UseSqlServer(@"Server=.\SQLEXPRESS; Database=SSAH; Integrated Security=True;");
+            builder.UseLazyLoadingProxies();
 
-            var model = _modelFactory.Create();
-            builder.UseModel(model);
+            builder.UseModel(_modelFactory.Create());
 
             return builder.Options;
         }

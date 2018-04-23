@@ -26,6 +26,7 @@ namespace SSAH.Infrastructure.DbAccess.DbModel
         private static void ConfigureModelBuilder(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new CourseTypeConfiguration());
+            builder.ApplyConfiguration(new ParticipantTypeConfiguration());
         }
     }
 }

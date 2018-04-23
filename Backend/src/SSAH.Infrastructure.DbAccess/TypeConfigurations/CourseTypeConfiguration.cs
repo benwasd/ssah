@@ -12,6 +12,9 @@ namespace SSAH.Infrastructure.DbAccess.TypeConfigurations
         {
             builder.ConfigureEntityBaseProperties();
             builder.Property(p => p.Lol);
+            builder.HasMany(p => p.Participants).WithOne();
+
+            builder.ToTable("Wus", "xx");
         }
     }
 }
