@@ -1,5 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Autofac;
+
 using Microsoft.AspNetCore.Mvc;
+
+using SSAH.Core;
+using SSAH.Core.Domain;
+using SSAH.Core.Domain.Entities;
 
 namespace SSAH.Infrastructure.Api.Controllers
 {
@@ -10,7 +19,30 @@ namespace SSAH.Infrastructure.Api.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            return new string[] { "value1", "value2" };
+            var unitOfWorkFactory = DependencyRegistry.Container.Resolve<IUnitOfWorkFactory<IRepository<Course>>>();
+
+            using (var unitOfWork = unitOfWorkFactory.Begin())
+            {
+                var y = unitOfWork.Dependent.Create();
+                y.Lol = "wuasud";
+                y.CreatedOn = DateTimeOffset.Now;
+                y.CreatedBy = "WUWU";
+                y.Participants = new[]
+                {
+                    new Participant { CreatedOn = DateTimeOffset.Now, CreatedBy = "System", Name = "Beni" },
+                    new Participant { CreatedOn = DateTimeOffset.Now, CreatedBy = "System", Name = "Andrina" }
+                };
+
+
+                unitOfWork.Dependent.Add(y);
+                unitOfWork.Commit();
+            }
+
+            using (var u = unitOfWorkFactory.Begin())
+            {
+                var x = u.Dependent.Get().ToList();
+                return x.First().Participants.Select(p => p.Name).ToArray();
+            }
         }
 
         // GET api/values/5

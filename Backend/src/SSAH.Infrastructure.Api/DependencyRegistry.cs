@@ -7,5 +7,8 @@ namespace SSAH.Infrastructure.Api
         public static void Configure(ContainerBuilder builder)
         {
         }
+
+        // TODO: Remove
+        public static IContainer Container { get; set; }
     }
 }

@@ -7,7 +7,7 @@ namespace SSAH.Startup
     {
         public static void Main(string[] args)
         {
-            var container = Bootstrapper.BootstrapContainer();
+            SSAH.Infrastructure.Api.DependencyRegistry.Container = Bootstrapper.BootstrapContainer();
 
             BuildWebHost(args).Run();
         }

@@ -8,4 +8,8 @@
     <PackageReference Include="Autofac" Version="4.7.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SSAH.Core\SSAH.Core.csproj" />
+  </ItemGroup>
+
 </Project>
