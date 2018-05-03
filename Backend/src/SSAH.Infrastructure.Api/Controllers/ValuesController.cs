@@ -26,13 +26,13 @@ namespace SSAH.Infrastructure.Api.Controllers
             using (var unitOfWork = unitOfWorkFactory.Begin())
             {
                 var y = unitOfWork.Dependent.Create();
-                y.Instructor = new Instructor { CreatedOn = DateTimeOffset.Now, CreatedBy = "System", Givenname = "Lol", Surname = "Lo", PhoneNumber = "+41 75 123213", DateOfBirth = DateTime.Today };
-                y.CreatedOn = DateTimeOffset.Now;
+                y.Instructor = new Instructor { CreatedOn = DateTime.Now, CreatedBy = "System", Givenname = "Lol", Surname = "Lo", PhoneNumber = "+41 75 123213", DateOfBirth = DateTime.Today };
+                y.CreatedOn = DateTime.Now;
                 y.CreatedBy = "WUWU";
                 y.Participants = new[]
                 {
-                    new CourseParticipant { CreatedOn = DateTimeOffset.Now, CreatedBy = "System", Participant = new Participant { CreatedOn = DateTimeOffset.Now, CreatedBy = "System", Name = "Beni" } },
-                    new CourseParticipant { CreatedOn = DateTimeOffset.Now, CreatedBy = "System", Participant = new Participant { CreatedOn = DateTimeOffset.Now, CreatedBy = "System", Name = "Andrina" } }
+                    new CourseParticipant { CreatedOn = DateTime.Now, CreatedBy = "System", Participant = new Participant { CreatedOn = DateTime.Now, CreatedBy = "System", Name = "Beni" } },
+                    new CourseParticipant { CreatedOn = DateTime.Now, CreatedBy = "System", Participant = new Participant { CreatedOn = DateTime.Now, CreatedBy = "System", Name = "Andrina" } }
                 };
 
                 var x = unitOfWork.Dependent2.Value;
