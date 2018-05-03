@@ -11,10 +11,8 @@ namespace SSAH.Infrastructure.DbAccess.TypeConfigurations
         public void Configure(EntityTypeBuilder<Course> builder)
         {
             builder.ConfigureEntityBaseProperties();
-            builder.Property(p => p.Lol);
-            builder.HasMany(p => p.Participants).WithOne();
-
-            builder.ToTable("Wus", "xx");
+            builder.HasOne(e => e.Instructor).WithMany().HasForeignKey(e => e.InstructorId);
+            builder.HasMany(e => e.Participants).WithOne().HasForeignKey(e => e.CourseId);
         }
     }
 }

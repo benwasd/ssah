@@ -19,7 +19,7 @@ namespace SSAH.Infrastructure
             builder.RegisterGeneric(typeof(OptionsMonitor<>)).As(typeof(IOptionsMonitor<>)).SingleInstance();
             builder.RegisterGeneric(typeof(OptionsFactory<>)).As(typeof(IOptionsFactory<>)).InstancePerDependency();
             builder.RegisterGeneric(typeof(OptionsCache<>)).As(typeof(IOptionsMonitorCache<>)).SingleInstance();
-            builder.AddOption<TimeOptions>("TimeOptions");
+            builder.AddOption<GroupCoursesOptions>("GroupCoursesOptions");
         }
 
         public static void AddOption<TOptions>(this ContainerBuilder builder, string name)

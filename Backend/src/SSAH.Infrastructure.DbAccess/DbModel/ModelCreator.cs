@@ -9,7 +9,11 @@ namespace SSAH.Infrastructure.DbAccess.DbModel
         public void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new CourseTypeConfiguration());
+            builder.ApplyConfiguration(new CourseParticipantTypeConfiguration());
+            builder.ApplyConfiguration(new InstructorTypeConfiguration());
             builder.ApplyConfiguration(new ParticipantTypeConfiguration());
+            builder.ApplyConfiguration(new QualificationTypeConfiguration());
+            builder.ApplyConfiguration(new SeasonTypeConfiguration());
         }
     }
 }
