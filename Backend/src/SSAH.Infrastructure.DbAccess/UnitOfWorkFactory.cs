@@ -57,8 +57,18 @@ namespace SSAH.Infrastructure.DbAccess
                 childLifetimeScope.Resolve<IModelCreator>()
             );
 
+            if (initialized == false)
+            {
+                context.Database.EnsureDeleted();
+                context.Database.EnsureCreated();
+                initialized = true;
+            }
+            
+
             return context;
         }
+
+        private static bool initialized = false;
 
         private static void RegisterContextSpecificComponents(DbContext context, ILifetimeScope childLifetimeScope)
         {

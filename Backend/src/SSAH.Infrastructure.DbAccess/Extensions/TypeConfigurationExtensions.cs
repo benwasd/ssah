@@ -11,7 +11,7 @@ namespace SSAH.Infrastructure.DbAccess.Extensions
             where T : EntityBase
         {
             builder.HasKey(p => p.Id);
-            builder.Property(p => p.RowVersion).HasColumnType("timestamp").IsRowVersion();
+            builder.Property(p => p.RowVersion).HasColumnType("timestamp").IsRowVersion().IsRequired();
         }
     }
 }
