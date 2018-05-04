@@ -31,11 +31,9 @@ namespace SSAH.Infrastructure.Api.Controllers
                 y.CreatedBy = "WUWU";
                 y.Participants = new[]
                 {
-                    new CourseParticipant { CreatedOn = DateTime.Now, CreatedBy = "System", Participant = new Participant { CreatedOn = DateTime.Now, CreatedBy = "System", Name = "Beni" } },
-                    new CourseParticipant { CreatedOn = DateTime.Now, CreatedBy = "System", Participant = new Participant { CreatedOn = DateTime.Now, CreatedBy = "System", Name = "Andrina" } }
+                    new CourseParticipant { CreatedOn = DateTime.Now, CreatedBy = "System", Participant = new Participant { CreatedOn = DateTime.Now, CreatedBy = "System", Name = "Beni", Language = Language.SwissGerman} },
+                    new CourseParticipant { CreatedOn = DateTime.Now, CreatedBy = "System", Participant = new Participant { CreatedOn = DateTime.Now, CreatedBy = "System", Name = "Andrina", Language = Language.SwissGerman } }
                 };
-
-                var x = unitOfWork.Dependent2.Value;
 
                 unitOfWork.Dependent.Add(y);
                 unitOfWork.Commit();

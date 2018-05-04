@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.ComponentModel.DataAnnotations;
+
+using SSAH.Core.Domain.Objects;
 
 namespace SSAH.Core.Domain.Entities
 {
@@ -9,14 +10,14 @@ namespace SSAH.Core.Domain.Entities
         [StringLength(Constants.StringLengths.NAME)]
         [Required]
         public string Name { get; set; }
-    }
 
-    public class CourseParticipant : EntityBase
-    {
-        public Guid CourseId { get; set; }
+        public Language Language { get; set; }
 
-        public Guid ParticipantId { get; set; }
+        /// <summary>Jahrgang</summary>
+        public int AgeGroup { get; set; }
 
-        public virtual Participant Participant { get; set; }
+        public Guid? ApplicantId { get; set; }
+
+        public virtual Applicant Applicant { get; set; }
     }
 }

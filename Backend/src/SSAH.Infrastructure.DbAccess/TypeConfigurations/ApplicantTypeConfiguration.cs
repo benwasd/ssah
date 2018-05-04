@@ -6,12 +6,11 @@ using SSAH.Infrastructure.DbAccess.Extensions;
 
 namespace SSAH.Infrastructure.DbAccess.TypeConfigurations
 {
-    public class CourseParticipantTypeConfiguration : IEntityTypeConfiguration<CourseParticipant>
+    public class ApplicantTypeConfiguration : IEntityTypeConfiguration<Applicant>
     {
-        public void Configure(EntityTypeBuilder<CourseParticipant> builder)
+        public void Configure(EntityTypeBuilder<Applicant> builder)
         {
             builder.ConfigureEntityBaseProperties();
-            builder.HasOne(e => e.Participant).WithMany().HasForeignKey(e => e.ParticipantId).IsRequired();
         }
     }
 }

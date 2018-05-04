@@ -16,11 +16,14 @@ namespace SSAH.Core.Domain.Entities
 
         public virtual Instructor Instructor { get; set; }
 
+        public CourseStatus Status { get; set; }
+
         public virtual ICollection<CourseParticipant> Participants { get; set; }
 
         public DateTime StartDate { get; set; }
 
         [StringLength(Constants.StringLengths.TEXT)]
+        [Required]
         public string PeriodOptionsValue { get; set; }
 
         public ICollection<GroupCoursePeriodOptions> GetPeriodsOptions(ISerializationService serializerService)
