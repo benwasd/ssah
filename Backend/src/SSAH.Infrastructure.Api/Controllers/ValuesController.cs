@@ -5,10 +5,12 @@ using System.Linq;
 using Autofac;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 using SSAH.Core;
 using SSAH.Core.Domain;
 using SSAH.Core.Domain.Entities;
+using SSAH.Core.Domain.Objects;
 
 namespace SSAH.Infrastructure.Api.Controllers
 {
@@ -19,20 +21,19 @@ namespace SSAH.Infrastructure.Api.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            var unitOfWorkFactory = DependencyRegistry.Container.Resolve<IUnitOfWorkFactory<IRepository<Course>>>();
+            var unitOfWorkFactory = DependencyRegistry.Container.Resolve<IUnitOfWorkFactory<IRepository<Course>, IOptions<GroupCoursesOptions>>>();
 
             using (var unitOfWork = unitOfWorkFactory.Begin())
             {
                 var y = unitOfWork.Dependent.Create();
-                y.Lol = "wuasud";
-                y.CreatedOn = DateTimeOffset.Now;
+                y.Instructor = new Instructor { CreatedOn = DateTime.Now, CreatedBy = "System", Givenname = "Lol", Surname = "Lo", PhoneNumber = "+41 75 123213", DateOfBirth = DateTime.Today };
+                y.CreatedOn = DateTime.Now;
                 y.CreatedBy = "WUWU";
                 y.Participants = new[]
                 {
-                    new Participant { CreatedOn = DateTimeOffset.Now, CreatedBy = "System", Name = "Beni" },
-                    new Participant { CreatedOn = DateTimeOffset.Now, CreatedBy = "System", Name = "Andrina" }
+                    new CourseParticipant { CreatedOn = DateTime.Now, CreatedBy = "System", Participant = new Participant { CreatedOn = DateTime.Now, CreatedBy = "System", Name = "Beni", Language = Language.SwissGerman} },
+                    new CourseParticipant { CreatedOn = DateTime.Now, CreatedBy = "System", Participant = new Participant { CreatedOn = DateTime.Now, CreatedBy = "System", Name = "Andrina", Language = Language.SwissGerman } }
                 };
-
 
                 unitOfWork.Dependent.Add(y);
                 unitOfWork.Commit();
@@ -41,7 +42,7 @@ namespace SSAH.Infrastructure.Api.Controllers
             using (var u = unitOfWorkFactory.Begin())
             {
                 var x = u.Dependent.Get().ToList();
-                return x.First().Participants.Select(p => p.Name).ToArray();
+                return x.First().Participants.Select(p => p.Participant.Name).ToArray();
             }
         }
 

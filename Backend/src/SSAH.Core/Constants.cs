@@ -9,7 +9,9 @@
 
         public struct StringLengths
         {
+            public const int CODE = 30;
             public const int NAME = 200;
+            public const int TEXT = 1000;
         }
     }
 }

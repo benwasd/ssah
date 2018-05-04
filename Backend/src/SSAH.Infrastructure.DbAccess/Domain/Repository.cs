@@ -34,5 +34,15 @@ namespace SSAH.Infrastructure.DbAccess.Domain
         {
             _set.Add(add);
         }
+
+        protected DbSet<T> GetSet()
+        {
+            return _set;
+        }
+
+        protected virtual IQueryable<T> GetQuery()
+        {
+            return _set;
+        }
     }
 }
