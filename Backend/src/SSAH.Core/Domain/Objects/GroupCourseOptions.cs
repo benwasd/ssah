@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 
 namespace SSAH.Core.Domain.Objects
 {
@@ -8,14 +9,10 @@ namespace SSAH.Core.Domain.Objects
 
         public DateTime ValidTo { get; set; }
 
+        public int WeekInterval { get; set; } = 1;
+
         public Discipline Discipline { get; set; }
-
-        public DayOfWeek StartDay { get; set; }
-
-        public TimeSpan StartTime { get; set; }
-
-        public DayOfWeek EndDay { get; set; }
-
-        public TimeSpan EndTime { get; set; }
+        
+        public Collection<GroupCoursePeriodOptions> Periods { get; set; }
     }
 }

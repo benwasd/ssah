@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SSAH.Infrastructure", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SSAH.Infrastructure.DbAccess", "src\SSAH.Infrastructure.DbAccess\SSAH.Infrastructure.DbAccess.csproj", "{E5D4A362-5CB1-4955-9E21-047EFE246CA3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SSAH.Startup", "src\SSAH.Startup\SSAH.Startup.csproj", "{55D14B9C-A767-4748-B8D8-4F12FF2AB714}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SSAH.Startup", "src\SSAH.Startup\SSAH.Startup.csproj", "{55D14B9C-A767-4748-B8D8-4F12FF2AB714}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SSAH.Infrastructure.Api", "src\SSAH.Infrastructure.Api\SSAH.Infrastructure.Api.csproj", "{5F1951EF-56BC-480B-831F-891D1EF2BD22}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SSAH.Tests.Unit", "test\SSAH.Tests.Unit\SSAH.Tests.Unit.csproj", "{1B84BF06-76D3-4854-BE22-6F3FA2805293}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{5F1951EF-56BC-480B-831F-891D1EF2BD22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F1951EF-56BC-480B-831F-891D1EF2BD22}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F1951EF-56BC-480B-831F-891D1EF2BD22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B84BF06-76D3-4854-BE22-6F3FA2805293}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B84BF06-76D3-4854-BE22-6F3FA2805293}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B84BF06-76D3-4854-BE22-6F3FA2805293}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B84BF06-76D3-4854-BE22-6F3FA2805293}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

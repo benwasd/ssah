@@ -6,6 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
 using SSAH.Core.Domain.Objects;
+using SSAH.Core.Services;
+using SSAH.Infrastructure.Services;
 
 namespace SSAH.Infrastructure
 {
@@ -20,6 +22,8 @@ namespace SSAH.Infrastructure
             builder.RegisterGeneric(typeof(OptionsFactory<>)).As(typeof(IOptionsFactory<>)).InstancePerDependency();
             builder.RegisterGeneric(typeof(OptionsCache<>)).As(typeof(IOptionsMonitorCache<>)).SingleInstance();
             builder.AddOption<GroupCoursesOptions>("GroupCoursesOptions");
+
+            builder.RegisterType<JsonSerializationService>().As<ISerializationService>().InstancePerDependency();
         }
 
         public static void AddOption<TOptions>(this ContainerBuilder builder, string name)
