@@ -27,7 +27,7 @@ let nunit resultFilePrefix testAssemblies =
   let nunit3Args setParams = 
     NUnit3Defaults |> setParams |> buildNUnit3Args
 
-  nunit3Args (fun p -> { p with WorkingDir = tempDir; Workers = (Some 1); Agents = (Some 1); ProcessModel = SingleProcessModel; ResultSpecs = [resultFilePrefix + ".TestResults.xml;format=nunit2"] }) testAssemblies
+  nunit3Args (fun p -> { p with WorkingDir = tempDir; Workers = (Some 1); Agents = (Some 1); ProcessModel = SingleProcessModel; ResultSpecs = [resultFilePrefix + ".TestResults.xml"] }) testAssemblies
   |> OpenCover (fun p -> { p with WorkingDir = tempDir; Register = RegisterUser; Output = resultFilePrefix + ".CoverageReport.xml"; TimeOut = System.TimeSpan.MaxValue; MergeByHash = true; ExePath = openCoverExe; TestRunnerExePath = nunit3Exe })
 
 Target "Clean" (fun _ ->
@@ -65,13 +65,17 @@ Target "Build-Frontend" (fun _ ->
 Target "Test-Backend" (fun _ ->
   CreateDir tempDir
 
-  !! "./Backend/**/*Test.Unit/bin/Release/*Test.Unit.dll"
+  !! "./Backend/test/**/bin/Release/netcoreapp2.0/*Tests.Unit.dll"
     |> SetBaseDir projectRoot
     |> nunit "Unit"
 )
 
 Target "Integration-Test-Backend" (fun _ ->
-  ()
+  CreateDir tempDir
+
+  !! "./Backend/test/**/bin/Release/netcoreapp2.0/*Tests.Integration.dll"
+    |> SetBaseDir projectRoot
+    |> nunit "Unit"
 )
 
 Target "Test-Frontend" (fun _ ->
