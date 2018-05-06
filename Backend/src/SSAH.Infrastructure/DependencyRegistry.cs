@@ -1,8 +1,11 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 using Autofac;
 
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Debug;
 using Microsoft.Extensions.Options;
 
 using SSAH.Core.Domain.Objects;
@@ -15,6 +18,7 @@ namespace SSAH.Infrastructure
     {
         public static void Configure(ContainerBuilder builder)
         {
+            // Configuration
             builder.Register(_ => BuildConfiguration()).As<IConfiguration>().SingleInstance();
             builder.RegisterGeneric(typeof(OptionsManager<>)).As(typeof(IOptions<>)).InstancePerLifetimeScope();
             builder.RegisterGeneric(typeof(OptionsManager<>)).As(typeof(IOptionsSnapshot<>)).InstancePerLifetimeScope();
@@ -23,6 +27,17 @@ namespace SSAH.Infrastructure
             builder.RegisterGeneric(typeof(OptionsCache<>)).As(typeof(IOptionsMonitorCache<>)).SingleInstance();
             builder.AddOption<GroupCoursesOptions>("GroupCoursesOptions");
 
+            // Logger
+            builder.RegisterType<LoggerFactory>().UsingConstructor(typeof(System.Collections.Generic.IEnumerable<ILoggerProvider>), typeof(IOptionsMonitor<LoggerFilterOptions>)).As<ILoggerFactory>().SingleInstance();
+            builder.RegisterType<DebugLoggerProvider>().As<ILoggerProvider>().SingleInstance();
+            builder.RegisterGeneric(typeof(Logger<>)).As(typeof(ILogger<>));
+            builder.AddOption<LoggerFilterOptions>("Logging");
+
+
+            //var xx = new ConfigureOptions<>(options => options.MinLevel = LogLevel.Information);
+            //builder.RegisterInstance(xx).As<IConfigureOptions<LoggerFilterOptions>>();
+
+            // Services
             builder.RegisterType<JsonSerializationService>().As<ISerializationService>().InstancePerDependency();
         }
 

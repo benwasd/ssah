@@ -13,6 +13,7 @@
       "launchBrowser": true,
       "launchUrl": "api/values",
       "environmentVariables": {
+        "ASPNETCORE_preventHostingStartup": "true",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
