@@ -18,6 +18,8 @@ namespace SSAH.Core.Domain.Entities
 
         public CourseStatus Status { get; set; }
 
+        public CourseType Type { get; set; }
+
         public virtual ICollection<CourseParticipant> Participants { get; set; }
 
         public DateTime StartDate { get; set; }

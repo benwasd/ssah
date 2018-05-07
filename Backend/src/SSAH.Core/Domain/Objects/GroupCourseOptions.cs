@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 namespace SSAH.Core.Domain.Objects
 {
@@ -13,6 +13,6 @@ namespace SSAH.Core.Domain.Objects
 
         public Discipline Discipline { get; set; }
         
-        public Collection<GroupCoursePeriodOptions> Periods { get; set; }
+        public ICollection<GroupCoursePeriodOptions> Periods { get; set; }
     }
 }
