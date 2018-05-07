@@ -1,97 +1,91 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
+﻿using System.IO;
 
-using Microsoft.AspNetCore;
+using Autofac;
+
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace SSAH.Startup
 {
     public class Program
     {
+        private static IContainer s_rootContainer;
+
         public static void Main(string[] args)
         {
-            SSAH.Infrastructure.Api.DependencyRegistry.Container = Bootstrapper.BootstrapContainer();
+            s_rootContainer = Bootstrapper.BootstrapContainer();
 
-            BuildWebHost(args).Run();
-        }
-
-        public static IWebHost BuildWebHost(string[] args)
-        {
-            return new WebHostBuilder()
-                .UseIISIntegration()
+            CreateDefaultBuilder(args)
+                .ConfigureServices(services => services.AddSingleton(s_rootContainer))
                 .UseStartup<Startup>()
-                .Build();
+                .Build()
+                .Run();
         }
 
         public static IWebHostBuilder CreateDefaultBuilder(string[] args)
         {
             var builder = new WebHostBuilder()
-                .UseKestrel((builderContext, options) =>
-                {
-                    options.Configure(builderContext.Configuration.GetSection("Kestrel"));
-                })
+                .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
-                .ConfigureAppConfiguration((hostingContext, config) =>
-                {
-                    var env = hostingContext.HostingEnvironment;
+                .UseStartup<Startup>()
+                //.ConfigureAppConfiguration((hostingContext, config) =>
+                //{
+                //    var env = hostingContext.HostingEnvironment;
 
-                    config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                          .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+                //    config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                //          .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
 
-                    if (env.IsDevelopment())
-                    {
-                        var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
-                        if (appAssembly != null)
-                        {
-                            config.AddUserSecrets(appAssembly, optional: true);
-                        }
-                    }
+                //    if (env.IsDevelopment())
+                //    {
+                //        var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
+                //        if (appAssembly != null)
+                //        {
+                //            config.AddUserSecrets(appAssembly, optional: true);
+                //        }
+                //    }
 
-                    config.AddEnvironmentVariables();
+                //    config.AddEnvironmentVariables();
 
-                    if (args != null)
-                    {
-                        config.AddCommandLine(args);
-                    }
-                })
-                .ConfigureLogging((hostingContext, logging) =>
-                {
-                    logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
-                    logging.AddConsole();
-                    logging.AddDebug();
-                })
-                .ConfigureServices((hostingContext, services) =>
-                {
-                    // Fallback
-                    services.PostConfigure<HostFilteringOptions>(options =>
-                    {
-                        if (options.AllowedHosts == null || options.AllowedHosts.Count == 0)
-                        {
-                            // "AllowedHosts": "localhost;127.0.0.1;[::1]"
-                            var hosts = hostingContext.Configuration["AllowedHosts"]?.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-                            // Fall back to "*" to disable.
-                            options.AllowedHosts = (hosts?.Length > 0 ? hosts : new[] { "*" });
-                        }
-                    });
-                    // Change notification
-                    services.AddSingleton<IOptionsChangeTokenSource<HostFilteringOptions>>(
-                        new ConfigurationChangeTokenSource<HostFilteringOptions>(hostingContext.Configuration));
+                //    if (args != null)
+                //    {
+                //        config.AddCommandLine(args);
+                //    }
+                //})
+                //.ConfigureLogging((hostingContext, logging) =>
+                //{
+                //    logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
+                //    logging.AddConsole();
+                //    logging.AddDebug();
+                //})
+                //.ConfigureServices((hostingContext, services) =>
+                //{
+                //    // Fallback
+                //    services.PostConfigure<HostFilteringOptions>(options =>
+                //    {
+                //        if (options.AllowedHosts == null || options.AllowedHosts.Count == 0)
+                //        {
+                //            // "AllowedHosts": "localhost;127.0.0.1;[::1]"
+                //            var hosts = hostingContext.Configuration["AllowedHosts"]?.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                //            // Fall back to "*" to disable.
+                //            options.AllowedHosts = (hosts?.Length > 0 ? hosts : new[] { "*" });
+                //        }
+                //    });
+                //    // Change notification
+                //    services.AddSingleton<IOptionsChangeTokenSource<HostFilteringOptions>>(
+                //        new ConfigurationChangeTokenSource<HostFilteringOptions>(hostingContext.Configuration));
 
-                    services.AddTransient<IStartupFilter, HostFilteringStartupFilter>();
-                })
+                //    services.AddTransient<IStartupFilter, HostFilteringStartupFilter>();
+                //})
                 .UseIISIntegration()
                 .UseDefaultServiceProvider((context, options) =>
                 {
                     options.ValidateScopes = context.HostingEnvironment.IsDevelopment();
                 });
 
-            if (args != null)
-            {
-                builder.UseConfiguration(new ConfigurationBuilder().AddCommandLine(args).Build());
-            }
+            //if (args != null)
+            //{
+            //    builder.UseConfiguration(new ConfigurationBuilder().AddCommandLine(args).Build());
+            //}
 
             return builder;
         }

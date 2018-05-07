@@ -1,6 +1,10 @@
 ﻿using Autofac;
 
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 using SSAH.Core;
 using SSAH.Infrastructure.Api.Pipeline;
@@ -9,36 +13,25 @@ namespace SSAH.Infrastructure.Api
 {
     public static class WebApiBootstrapper
     {
-        public static void UseSnowSchoolAdministrationHub(this IApplicationBuilder app,IContainer container)
+        public static void AddSnowSchoolAdministrationHub(this IServiceCollection services)
         {
-            app.UseGlobalExceptionHandler();
-            app.UseScopeMiddleware(container.Resolve<IUnitOfWorkFactory<ILifetimeScope>>());
-            //app.UseRequestId();
-            //app.UseMiloAuth(ConfigureAuth());
-            //app.UseWebApi(ConfigureWebApi(container));
+            var mvcBuilder = services.AddMvc();
+
+            // Add custoim controller activator
+            mvcBuilder.Services.Replace(ServiceDescriptor.Transient<IControllerActivator, UnitOfWorkControllerActivator>()); ;
         }
 
-        //private static CookieAuthenticationOptions ConfigureAuth()
-        //{
-        //    var options = new CookieAuthenticationOptions();
+        public static void UseSnowSchoolAdministrationHub(this IApplicationBuilder app, IHostingEnvironment env, IContainer container)
+        {
+            app.UseGlobalExceptionHandler();
 
-        //    // AuthConfig.CookieAuthOptions(options);
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
 
-        //    return options;
-        //}
-
-        //private static HttpConfiguration ConfigureWebApi(IContainer container)
-        //{
-        //    var configuration = container.Resolve<HttpConfiguration>();
-        //    configuration.DependencyResolver = new WebApiInfrastructureDependencyResolver(container);
-        //    configuration.MessageHandlers.Insert(0, new DependencyScopeInjector());
-
-        //    CorsConfig.Configure(configuration);
-        //    FilterConfig.Configure(configuration, container);
-        //    FormatterConfig.Configure(configuration);
-        //    RouteConfig.Configure(configuration, container);
-
-        //    return configuration;
-        //}
+            app.UseScopeMiddleware(container.Resolve<IUnitOfWorkFactory<ILifetimeScope>>());
+            app.UseMvc();
+        }
     }
 }

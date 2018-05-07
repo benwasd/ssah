@@ -13,12 +13,8 @@ using SSAH.Core.Domain.Objects;
 
 namespace SSAH.Infrastructure.Api.Controllers
 {
-    public class Wus
-    {
-    }
-
     [Route("api/[controller]")]
-    public class ValuesController : ControllerBase
+    public class ValuesController : Controller
     {
         private readonly IUnitOfWorkFactory<IRepository<Course>, IOptions<GroupCoursesOptions>, ILogger<ValuesController>> _asd;
 
