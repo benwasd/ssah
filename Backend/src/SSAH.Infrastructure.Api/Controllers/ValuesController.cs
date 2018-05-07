@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using Autofac;
-
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 using SSAH.Core;
@@ -17,13 +16,18 @@ namespace SSAH.Infrastructure.Api.Controllers
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
+        private readonly IUnitOfWorkFactory<IRepository<Course>, IOptions<GroupCoursesOptions>, ILogger<ValuesController>> _asd;
+
+        public ValuesController(IUnitOfWorkFactory<IRepository<Course>, IOptions<GroupCoursesOptions>, ILogger<ValuesController>> asd)
+        {
+            _asd = asd;
+        }
+
         // GET api/values
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            var unitOfWorkFactory = DependencyRegistry.Container.Resolve<IUnitOfWorkFactory<IRepository<Course>, IOptions<GroupCoursesOptions>>>();
-
-            using (var unitOfWork = unitOfWorkFactory.Begin())
+            using (var unitOfWork = _asd.Begin())
             {
                 var y = unitOfWork.Dependent.Create();
                 y.Instructor = new Instructor { CreatedOn = DateTime.Now, CreatedBy = "System", Givenname = "Lol", Surname = "Lo", PhoneNumber = "+41 75 123213", DateOfBirth = DateTime.Today };
@@ -34,12 +38,15 @@ namespace SSAH.Infrastructure.Api.Controllers
                     new CourseParticipant { CreatedOn = DateTime.Now, CreatedBy = "System", Participant = new Participant { CreatedOn = DateTime.Now, CreatedBy = "System", Name = "Beni", Language = Language.SwissGerman} },
                     new CourseParticipant { CreatedOn = DateTime.Now, CreatedBy = "System", Participant = new Participant { CreatedOn = DateTime.Now, CreatedBy = "System", Name = "Andrina", Language = Language.SwissGerman } }
                 };
+                y.PeriodOptionsValue = "";
+
+                unitOfWork.Dependent3.LogTrace("WUSA");
 
                 unitOfWork.Dependent.Add(y);
                 unitOfWork.Commit();
             }
 
-            using (var u = unitOfWorkFactory.Begin())
+            using (var u = _asd.Begin())
             {
                 var x = u.Dependent.Get().ToList();
                 return x.First().Participants.Select(p => p.Participant.Name).ToArray();

@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Autofac.Features.ResolveAnything;
 
 namespace SSAH.Startup
 {
@@ -11,6 +12,8 @@ namespace SSAH.Startup
             SSAH.Infrastructure.DependencyRegistry.Configure(containerBuilder);
             SSAH.Infrastructure.Api.DependencyRegistry.Configure(containerBuilder);
             SSAH.Infrastructure.DbAccess.DependencyRegistry.Configure(containerBuilder);
+
+            containerBuilder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
 
             return containerBuilder.Build();
         }
