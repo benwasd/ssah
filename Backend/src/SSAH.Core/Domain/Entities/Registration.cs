@@ -7,7 +7,7 @@ namespace SSAH.Core.Domain.Entities
     {
         public Guid ApplicantId { get; set; }
 
-        public Applicant Applicant { get; set; }
+        public virtual Applicant Applicant { get; set; }
 
         public DateTime AvailableFrom { get; set; }
 

@@ -11,7 +11,7 @@ namespace SSAH.Infrastructure.DbAccess.TypeConfigurations
         public void Configure(EntityTypeBuilder<Course> builder)
         {
             builder.ConfigureEntityBaseProperties();
-            builder.HasOne(e => e.Instructor).WithMany().HasForeignKey(e => e.InstructorId).IsRequired();
+            builder.HasOne(e => e.Instructor).WithMany().HasForeignKey(e => e.InstructorId).IsRequired(false);
             builder.HasMany(e => e.Participants).WithOne().HasForeignKey(e => e.CourseId).IsRequired();
         }
     }

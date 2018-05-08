@@ -12,10 +12,10 @@ namespace SSAH.Core.Domain.Entities
 
         public CourseType CourseType { get; set; }
 
-        public int Niveau { get; set; }
+        public int NiveauId { get; set; }
 
         public Guid? ResultingParticipantId { get; set; }
 
-        public Participant ResultingParticipant { get; set; }
+        public virtual Participant ResultingParticipant { get; set; }
     }
 }

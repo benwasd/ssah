@@ -4,6 +4,7 @@ using SSAH.Core;
 using SSAH.Core.Domain;
 using SSAH.Infrastructure.DbAccess.DbModel;
 using SSAH.Infrastructure.DbAccess.Domain;
+using SSAH.Infrastructure.DbAccess.Domain.Seeder;
 
 namespace SSAH.Infrastructure.DbAccess
 {
@@ -17,6 +18,12 @@ namespace SSAH.Infrastructure.DbAccess
 
             // Domain
             builder.RegisterGeneric(typeof(Repository<>)).As(typeof(IRepository<>)).InstancePerDependency();
+            builder.RegisterType<CourseRepository>().As<ICourseRepository>().InstancePerDependency();
+            builder.RegisterType<RegistrationRepository>().As<IRegistrationRepository>().InstancePerDependency();
+            builder.RegisterType<SeasonRepository>().As<ISeasonRepository>().InstancePerDependency();
+
+            // Domain Seeder
+            builder.RegisterType<SeasonSeeder>().As<IDbSeeder>().InstancePerDependency();
 
             // UnitOfWork
             builder.RegisterGeneric(typeof(UnitOfWorkFactory<>)).As(typeof(IUnitOfWorkFactory<>)).InstancePerDependency();
