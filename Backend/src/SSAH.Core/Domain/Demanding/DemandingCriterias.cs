@@ -1,0 +1,68 @@
+﻿using System;
+using System.Linq;
+
+using SSAH.Core.Domain.Entities;
+using SSAH.Core.Domain.Objects;
+using SSAH.Core.Services;
+
+namespace SSAH.Core.Domain.Demanding
+{
+    public class DemandingCriterias
+    {
+        private DemandingCriterias()
+        {
+        }
+
+        public static DemandingCriterias CreateFromRegistration(RegistrationWithPartipiant registrationWithPartipiant)
+        {
+            return new DemandingCriterias
+            {
+                CourseType = registrationWithPartipiant.RegistrationPartipiant.CourseType,
+                Discipline = registrationWithPartipiant.RegistrationPartipiant.Discipline,
+                NiveauId = registrationWithPartipiant.RegistrationPartipiant.NiveauId,
+                From = registrationWithPartipiant.Registration.AvailableFrom.Date,
+                To = registrationWithPartipiant.Registration.AvailableTo.Date,
+                IsCourse = false
+            };
+        }
+
+        public static DemandingCriterias CreateFromCourse(Course course, ISerializationService serializationService)
+        {
+            var courseDates = course.GetAllCourseDates(serializationService).ToArray();
+
+            return new DemandingCriterias
+            {
+                CourseType = course.Type,
+                Discipline = course.Discipline,
+                NiveauId = course.NiveauId,
+                From = courseDates.First().Start.Date,
+                To = courseDates.First().End.Date,
+                IsCourse = true
+            };
+        }
+
+        public CourseType CourseType { get; private set; }
+
+        public Discipline Discipline { get; private set; }
+
+        public int NiveauId { get; private set; }
+
+        public DateTime From { get; private set; }
+
+        public DateTime To { get; private set; }
+
+        private bool IsCourse { get; set; }
+
+        public bool Match(DemandingCriterias otherCriteria)
+        {
+            var periodMatch = IsCourse
+                ? otherCriteria.From <= From && To <= otherCriteria.To
+                : From <= otherCriteria.From && otherCriteria.To <= To;
+
+            return CourseType == otherCriteria.CourseType
+                && Discipline == otherCriteria.Discipline
+                && NiveauId == otherCriteria.NiveauId
+                && periodMatch;
+        }
+    }
+}

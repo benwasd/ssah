@@ -2,7 +2,7 @@
 
 namespace SSAH.Infrastructure.Api.Dtos
 {
-    public class RegistrationParticipantDto
+    public class RegistrationParticipantDto : EntityDto
     {
         public string Name { get; set; }
 

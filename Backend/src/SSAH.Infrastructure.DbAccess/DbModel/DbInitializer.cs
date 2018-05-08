@@ -14,7 +14,6 @@ namespace SSAH.Infrastructure.DbAccess.DbModel
 
             using (var unitOfWork = unitOfWorkFactory.Begin())
             {
-                unitOfWork.Dependent.Database.EnsureDeleted();
                 unitOfWork.Dependent.Database.EnsureCreated();
             }
 

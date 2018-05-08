@@ -1,5 +1,6 @@
 ﻿using Autofac;
 
+using SSAH.Core.Domain.Demanding;
 using SSAH.Core.Services;
 
 namespace SSAH.Core
@@ -8,8 +9,10 @@ namespace SSAH.Core
     {
         public static void Configure(ContainerBuilder builder)
         {
-            // Services
+            // Domain
             builder.RegisterType<DemandService>().As<IDemandService>().InstancePerDependency();
+
+            // Services
             builder.RegisterType<CourseService>().As<ICourseService>().InstancePerDependency();
         }
     }

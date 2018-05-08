@@ -18,7 +18,7 @@ namespace SSAH.Tests.Unit.Domain.Entities
         public void GetAllCourseDates_ThreeWeekMondayFridayMorningCourse()
         {
             // Arrange
-            var course = new Course(default(Discipline), default(CourseStatus), default(CourseType), new DateTime(2018, 4, 30));
+            var course = new Course(default(Discipline), default(CourseStatus), default(CourseType), default(int), new DateTime(2018, 4, 30));
             course.SetPeriodsOptions(SerializationService, GroupCoursePeriodOptionsCollection.Create(ThreeWeekMondayFridayMorningCourse()));
 
             // Act

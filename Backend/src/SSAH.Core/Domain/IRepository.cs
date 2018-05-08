@@ -21,6 +21,10 @@ namespace SSAH.Core.Domain
 
         T Create();
 
+        T CreateAndAdd();
+
         void Add(T add);
+
+        void Remove(T remove);
     }
 }

@@ -13,11 +13,12 @@ namespace SSAH.Core.Domain.Entities
         {
         }
 
-        public Course(Discipline discipline, CourseStatus status, CourseType type, DateTime startDate)
+        public Course(Discipline discipline, CourseStatus status, CourseType type, int niveauId, DateTime startDate)
         {
             Discipline = discipline;
             Status = status;
             Type = type;
+            NiveauId = niveauId;
             StartDate = startDate;
         }
 

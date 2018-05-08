@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
+using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -25,6 +27,11 @@ namespace SSAH.Infrastructure.DbAccess.Domain
             return GetRegisteredPartipiants()
                 .Where(rp => rp.RegistrationPartipiant.Discipline == discipline)
                 .Where(rp => from <= rp.Registration.AvailableTo && rp.Registration.AvailableFrom <= to);
+        }
+
+        public async Task<IEnumerable<Registration>> GetByApplicant(Guid applicantId)
+        {
+            return await GetQuery().Where(r => r.ApplicantId == applicantId).ToArrayAsync();
         }
 
         private IEnumerable<RegistrationWithPartipiant> GetRegisteredPartipiants()

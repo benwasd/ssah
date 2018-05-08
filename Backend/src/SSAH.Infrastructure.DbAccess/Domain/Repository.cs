@@ -50,9 +50,22 @@ namespace SSAH.Infrastructure.DbAccess.Domain
             return _set.CreateProxy();
         }
 
+        public T CreateAndAdd()
+        {
+            var created = _set.CreateProxy();
+            _set.Add(created);
+
+            return created;
+        }
+
         public void Add(T add)
         {
             _set.Add(add);
+        }
+
+        public void Remove(T remove)
+        {
+            _set.Remove(remove);
         }
 
         protected DbSet<T> GetSet()

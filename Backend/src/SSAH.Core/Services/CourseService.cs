@@ -24,7 +24,7 @@ namespace SSAH.Core.Services
             _serializationService = serializationService;
         }
 
-        public IEnumerable<Course> GetPotentialGroupCourses(Discipline discipline, DateTime from, DateTime to)
+        public IEnumerable<Course> GetPotentialGroupCourses(Discipline discipline, DateTime from, DateTime to, int[] potentialNiveauIds)
         {
             var matchingGroupCourseOptions = _groupCourseOptions.Value.Where(gc => gc.Discipline == discipline && gc.ValidFrom <= from && to <= gc.ValidTo);
             var currentOrUpcommingSeasonStart = _seasonRepository.GetCurrentOrUpcommingOrThrow(DateTime.Today).Start;
@@ -35,7 +35,10 @@ namespace SSAH.Core.Services
 
                 while (courseStart < to)
                 {
-                    yield return CreateEarlyProposalCourse(courseStart, groupCourseOption);
+                    foreach (var potentialNiveauId in potentialNiveauIds)
+                    {
+                        yield return CreateEarlyProposalCourse(courseStart, potentialNiveauId, groupCourseOption);
+                    }
 
                     courseStart = courseStart.AddDays(groupCourseOption.WeekInterval * 7);
                 }
@@ -50,9 +53,9 @@ namespace SSAH.Core.Services
             return currentOrUpcommingSeasonStart.AddDays(offset * 7);
         }
 
-        private Course CreateEarlyProposalCourse(DateTime courseStart, GroupCourseOptions groupCourseOption)
+        private Course CreateEarlyProposalCourse(DateTime courseStart, int niveauId, GroupCourseOptions groupCourseOption)
         {
-            return new Course(groupCourseOption.Discipline, CourseStatus.EarlyProposal, CourseType.Group, courseStart)
+            return new Course(groupCourseOption.Discipline, CourseStatus.EarlyProposal, CourseType.Group, niveauId, courseStart)
                 .SetPeriodsOptions(_serializationService, groupCourseOption.Periods);
         }
     }
