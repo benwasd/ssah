@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.Expressions;
 
 using SSAH.Core.Domain;
 using SSAH.Core.Domain.Entities;
@@ -20,7 +20,14 @@ namespace SSAH.Infrastructure.DbAccess.Domain
             _registrationPartipiantSet = registrationPartipiantSet;
         }
 
-        public IEnumerable<RegistrationWithPartipiant> GetRegisteredPartipiants()
+        public IEnumerable<RegistrationWithPartipiant> GetRegisteredPartipiantOverlappingPeriod(Discipline discipline, DateTime from, DateTime to)
+        {
+            return GetRegisteredPartipiants()
+                .Where(rp => rp.RegistrationPartipiant.Discipline == discipline)
+                .Where(rp => from <= rp.Registration.AvailableTo && rp.Registration.AvailableFrom <= to);
+        }
+
+        private IEnumerable<RegistrationWithPartipiant> GetRegisteredPartipiants()
         {
             return Queryable.Join(
                 _registrationPartipiantSet,

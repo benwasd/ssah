@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using SSAH.Core.Domain.Objects;
 
@@ -6,6 +7,6 @@ namespace SSAH.Core.Services
 {
     public interface IDemandService
     {
-        void GetGroupCourseDemand(Discipline discipline, DateTime from, DateTime to);
+        IEnumerable<PotentialCourse> GetGroupCourseDemand(Discipline discipline, DateTime from, DateTime to);
     }
 }

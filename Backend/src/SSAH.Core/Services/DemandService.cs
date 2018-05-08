@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.Extensions.Options;
 
 using SSAH.Core.Domain;
+using SSAH.Core.Domain.Entities;
 using SSAH.Core.Domain.Objects;
 
 namespace SSAH.Core.Services
@@ -23,16 +25,33 @@ namespace SSAH.Core.Services
             _serializationService = serializationService;
         }
 
-        public void GetGroupCourseDemand(Discipline discipline, DateTime from, DateTime to)
+        public IEnumerable<PotentialCourse> GetGroupCourseDemand(Discipline discipline, DateTime from, DateTime to)
         {
             var potentialCourses = _courseService.GetPotentialGroupCourses(discipline, from, to);
+            var potentialPartipiants = _registrationRepository.GetRegisteredPartipiantOverlappingPeriod(discipline, from, to).ToArray();
 
             foreach (var potentialCourse in potentialCourses)
             {
-                var allX = potentialCourse.GetAllCourseDates(_serializationService).ToArray();
-                var fromX = allX.First();
-                var toX = allX.Last();
+                var courseDates = potentialCourse.GetAllCourseDates(_serializationService).OrderBy(cd => cd.Start).ToArray();
+                var courseFrom = courseDates.First().Start;
+                var courseTo = courseDates.Last().End;
+
+                var demand = potentialPartipiants.Count(pp => pp.Registration.AvailableFrom <= courseFrom && courseTo <= pp.Registration.AvailableTo);
+
+                if (from <= courseFrom && courseTo <= to)
+                {
+                    demand = demand + 1;
+                }
+
+                yield return new PotentialCourse { Course = potentialCourse, Demand = demand };
             }
         }
+    }
+
+    public class PotentialCourse
+    {
+        public Course Course { get; set; }
+
+        public int Demand { get; set; }
     }
 }

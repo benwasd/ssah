@@ -12,6 +12,8 @@ namespace SSAH.Core.Domain.Entities
 
         public CourseType CourseType { get; set; }
 
+        public Discipline Discipline { get; set; }
+
         public int NiveauId { get; set; }
 
         public Guid? ResultingParticipantId { get; set; }

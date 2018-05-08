@@ -8,6 +8,8 @@ namespace SSAH.Infrastructure.Api.Dtos
 
         public CourseType CourseType { get; set; }
 
+        public Discipline Discipline { get; set; }
+
         public int NiveauId { get; set; }
     }
 }
