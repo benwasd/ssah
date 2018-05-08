@@ -80,6 +80,8 @@ namespace SSAH.Infrastructure.Api.Controllers
         {
             var registration = _registrationRepository.GetById(registrationId);
 
+            // TODO: Do this functional
+
             foreach (var registrationPartipiant in registration.RegistrationPartipiant)
             {
                 var groupCourseDemands = _demandService.GetGroupCourseDemand(
@@ -96,6 +98,19 @@ namespace SSAH.Infrastructure.Api.Controllers
                         CoursePeriods = groupCourseDemand.Course.GetAllCourseDates(_serializationService).ToList()
                     };
                 }
+            }
+        }
+
+        [HttpPost]
+        public async Task CommitRegistration(CommitRegistrationDto commitRegistrationDto)
+        {
+            var registration = await _registrationRepository.GetByIdAsync(commitRegistrationDto.RegistrationId);
+
+            foreach (var registrationPartipiant in registration.RegistrationPartipiant)
+            {
+                var commitRegistrationPartipiant = commitRegistrationDto.Participants.First(p => p.RegistrationParticipantId == registrationPartipiant.Id);
+
+                await registrationPartipiant.CommitAsync(registration, commitRegistrationPartipiant.AgeGroup, commitRegistrationPartipiant.Language);
             }
         }
     }
