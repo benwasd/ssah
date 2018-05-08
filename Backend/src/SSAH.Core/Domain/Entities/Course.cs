@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 
 using SSAH.Core.Domain.Objects;
 using SSAH.Core.Services;
@@ -10,13 +9,30 @@ namespace SSAH.Core.Domain.Entities
 {
     public class Course : EntityBase
     {
+        protected Course()
+        {
+        }
+
+        public Course(Discipline discipline, CourseStatus status, CourseType type, int niveauId, DateTime startDate)
+        {
+            Discipline = discipline;
+            Status = status;
+            Type = type;
+            NiveauId = niveauId;
+            StartDate = startDate;
+        }
+
         public Discipline Discipline { get; set; }
 
-        public Guid InstructorId { get; set; }
+        public Guid? InstructorId { get; set; }
 
         public virtual Instructor Instructor { get; set; }
 
         public CourseStatus Status { get; set; }
+
+        public CourseType Type { get; set; }
+
+        public int NiveauId { get; set; }
 
         public virtual ICollection<CourseParticipant> Participants { get; set; }
 
@@ -26,34 +42,20 @@ namespace SSAH.Core.Domain.Entities
         [Required]
         public string PeriodOptionsValue { get; set; }
 
-        public ICollection<GroupCoursePeriodOptions> GetPeriodsOptions(ISerializationService serializerService)
+        public GroupCoursePeriodOptionsCollection GetPeriodsOptions(ISerializationService serializerService)
         {
-            return serializerService.Deserialize<ICollection<GroupCoursePeriodOptions>>(PeriodOptionsValue);
+            return serializerService.Deserialize<GroupCoursePeriodOptionsCollection>(PeriodOptionsValue);
         }
 
-        public void SetPeriodsOptions(ISerializationService serializerService, ICollection<GroupCoursePeriodOptions> options)
+        public Course SetPeriodsOptions(ISerializationService serializerService, GroupCoursePeriodOptionsCollection options)
         {
             PeriodOptionsValue = serializerService.Serialize(options);
+            return this;
         }
 
         public IEnumerable<Period> GetAllCourseDates(ISerializationService serializerService)
         {
-            var periodsOptions = GetPeriodsOptions(serializerService);
-
-            foreach (var periodOptionsByWeek in periodsOptions.OrderBy(p => p.Week).GroupBy(p => p.Week))
-            {
-                var date = StartDate.Date.AddDays(periodOptionsByWeek.Key * 7);
-
-                foreach (var periodOptions in periodOptionsByWeek.OrderBy(p => p.Day).ThenBy(p => p.StartTime))
-                {
-                    while (date.DayOfWeek != periodOptions.Day)
-                    {
-                        date = date.AddDays(1);
-                    }
-
-                    yield return new Period(date + periodOptions.StartTime, periodOptions.EndTime - periodOptions.StartTime);
-                }
-            }
+            return GetPeriodsOptions(serializerService).GetCourseDatesOfOneExecution(StartDate);
         }
     }
 }

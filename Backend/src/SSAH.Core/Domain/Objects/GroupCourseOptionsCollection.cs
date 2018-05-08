@@ -2,7 +2,7 @@
 
 namespace SSAH.Core.Domain.Objects
 {
-    public class GroupCoursesOptions : Collection<GroupCourseOptions>
+    public class GroupCourseOptionsCollection : Collection<GroupCourseOptions>
     {
     }
 }

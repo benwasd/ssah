@@ -25,17 +25,13 @@ namespace SSAH.Infrastructure
             builder.RegisterGeneric(typeof(OptionsMonitor<>)).As(typeof(IOptionsMonitor<>)).SingleInstance();
             builder.RegisterGeneric(typeof(OptionsFactory<>)).As(typeof(IOptionsFactory<>)).InstancePerDependency();
             builder.RegisterGeneric(typeof(OptionsCache<>)).As(typeof(IOptionsMonitorCache<>)).SingleInstance();
-            builder.AddOption<GroupCoursesOptions>("GroupCoursesOptions");
+            builder.AddOption<GroupCourseOptionsCollection>("GroupCourseOptions");
+            builder.AddOption<DemandingThresholdOptions>("DemandingThresholdOptions");
 
             // Logger
             builder.RegisterType<LoggerFactory>().UsingConstructor(typeof(System.Collections.Generic.IEnumerable<ILoggerProvider>), typeof(IOptionsMonitor<LoggerFilterOptions>)).As<ILoggerFactory>().SingleInstance();
             builder.RegisterType<DebugLoggerProvider>().As<ILoggerProvider>().SingleInstance();
             builder.RegisterGeneric(typeof(Logger<>)).As(typeof(ILogger<>));
-            builder.AddOption<LoggerFilterOptions>("Logging");
-
-
-            //var xx = new ConfigureOptions<>(options => options.MinLevel = LogLevel.Information);
-            //builder.RegisterInstance(xx).As<IConfigureOptions<LoggerFilterOptions>>();
 
             // Services
             builder.RegisterType<JsonSerializationService>().As<ISerializationService>().InstancePerDependency();

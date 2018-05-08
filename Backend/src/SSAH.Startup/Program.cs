@@ -5,6 +5,8 @@ using Autofac;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 
+using SSAH.Infrastructure.DbAccess.DbModel;
+
 namespace SSAH.Startup
 {
     public class Program
@@ -14,6 +16,8 @@ namespace SSAH.Startup
         public static void Main(string[] args)
         {
             s_rootContainer = Bootstrapper.BootstrapContainer();
+
+            DbInitializer.Initialize(s_rootContainer);
 
             CreateDefaultBuilder(args)
                 .ConfigureServices(services => services.AddSingleton(s_rootContainer))

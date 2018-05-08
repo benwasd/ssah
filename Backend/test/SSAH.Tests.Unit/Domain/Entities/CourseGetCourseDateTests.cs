@@ -9,7 +9,7 @@ using SSAH.Core.Domain.Objects;
 using SSAH.Core.Services;
 using SSAH.Infrastructure.Services;
 
-namespace SSAH.Tests.Unit
+namespace SSAH.Tests.Unit.Domain.Entities
 {
     [TestFixture]
     public class CourseGetCourseDateTests
@@ -18,9 +18,8 @@ namespace SSAH.Tests.Unit
         public void GetAllCourseDates_ThreeWeekMondayFridayMorningCourse()
         {
             // Arrange
-            var course = new Course();
-            course.SetPeriodsOptions(SerializationService, ThreeWeekMondayFridayMorningCourse().ToList());
-            course.StartDate = new DateTime(2018, 4, 30);
+            var course = new Course(default(Discipline), default(CourseStatus), default(CourseType), default(int), new DateTime(2018, 4, 30));
+            course.SetPeriodsOptions(SerializationService, GroupCoursePeriodOptionsCollection.Create(ThreeWeekMondayFridayMorningCourse()));
 
             // Act
             var result = course.GetAllCourseDates(SerializationService).ToArray();
