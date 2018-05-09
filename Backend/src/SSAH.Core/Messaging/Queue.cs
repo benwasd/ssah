@@ -1,21 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Text;
 
 namespace SSAH.Core.Messaging
 {
-    public class Queue : IObservable<IEvent>
+    public class Queue : ObservableBase<IEvent>, IQueue
     {
+        private readonly EventLoopScheduler _scheduler;
+        private readonly Subject<IEvent> _subject;
+
         public Queue()
         {
-            var x = new EventLoopScheduler();
-            var obs = new Subject<IEvent>();
-            obs.
+            _scheduler = new EventLoopScheduler();
+            _subject = new Subject<IEvent>();
         }
 
+        public void Publish(IEvent @event)
+        {
+            _subject.OnNext(@event);
+        }
+
+        protected override IDisposable SubscribeCore(IObserver<IEvent> observer)
+        {
+            return _subject.ObserveOn(_scheduler).Subscribe(observer);
+        }
     }
 }
