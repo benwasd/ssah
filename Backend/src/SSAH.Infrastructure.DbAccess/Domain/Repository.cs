@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 using SSAH.Core.Domain;
@@ -10,7 +10,7 @@ using SSAH.Core.Domain.Entities;
 namespace SSAH.Infrastructure.DbAccess.Domain
 {
     public class Repository<T> : IRepository<T>
-        where T : class
+        where T : EntityBase
     {
         private readonly DbSet<T> _set;
 
@@ -24,15 +24,48 @@ namespace SSAH.Infrastructure.DbAccess.Domain
             return _set;
         }
 
+
+        public T GetById(Guid id)
+        {
+            return GetQuery().First(e => e.Id == id);
+        }
+
+        public Task<T> GetByIdAsync(Guid id)
+        {
+            return GetQuery().FirstAsync(e => e.Id == id);
+        }
+
+        public T GetByIdOrDefault(Guid id)
+        {
+            return GetQuery().FirstOrDefault(e => e.Id == id);
+        }
+
+        public Task<T> GetByIdOrDefaultAsync(Guid id)
+        {
+            return GetQuery().FirstOrDefaultAsync(e => e.Id == id);
+        }
+
         public T Create()
         {
-            return Activator.CreateInstance<T>();
-            //return _set.CreateProxy();
+            return _set.CreateProxy();
+        }
+
+        public T CreateAndAdd()
+        {
+            var created = _set.CreateProxy();
+            _set.Add(created);
+
+            return created;
         }
 
         public void Add(T add)
         {
             _set.Add(add);
+        }
+
+        public void Remove(T remove)
+        {
+            _set.Remove(remove);
         }
 
         protected DbSet<T> GetSet()
