@@ -11,7 +11,9 @@ using SSAH.Core;
 using SSAH.Core.Domain;
 using SSAH.Core.Domain.Demanding;
 using SSAH.Core.Domain.Entities;
+using SSAH.Core.Domain.Messages;
 using SSAH.Core.Domain.Objects;
+using SSAH.Core.Messaging;
 using SSAH.Core.Services;
 using SSAH.Infrastructure.Api.Dtos;
 using SSAH.Infrastructure.Api.Mapping;
@@ -27,8 +29,16 @@ namespace SSAH.Infrastructure.Api.Controllers
         private readonly ISerializationService _serializationService;
         private readonly IMapper _mapper;
         private readonly ICollectionMapper<RegistrationParticipantDto, RegistrationPartipiant> _collectionMapper;
+        private readonly IQueue _queue;
 
-        public RegistrationController(IUnitOfWork unitOfWork, IDemandService demandService, IRegistrationRepository registrationRepository, ISerializationService serializationService, IMapper mapper, ICollectionMapper<RegistrationParticipantDto, RegistrationPartipiant> collectionMapper)
+        public RegistrationController(
+            IUnitOfWork unitOfWork,
+            IDemandService demandService,
+            IRegistrationRepository registrationRepository,
+            ISerializationService serializationService,
+            IMapper mapper,
+            ICollectionMapper<RegistrationParticipantDto, RegistrationPartipiant> collectionMapper,
+            IQueue queue)
         {
             _unitOfWork = unitOfWork;
             _demandService = demandService;
@@ -36,6 +46,7 @@ namespace SSAH.Infrastructure.Api.Controllers
             _serializationService = serializationService;
             _mapper = mapper;
             _collectionMapper = collectionMapper;
+            _queue = queue;
         }
 
         [HttpGet]
@@ -66,7 +77,7 @@ namespace SSAH.Infrastructure.Api.Controllers
 
             _unitOfWork.Commit();
 
-            // TODO: Emit Message on Bus
+            _queue.Publish(new InterestRegisteredMessage(model.Id));
 
             return new RegistrationResultDto
             {

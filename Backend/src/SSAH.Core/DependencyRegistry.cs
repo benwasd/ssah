@@ -13,12 +13,12 @@ namespace SSAH.Core
         {
             // Domain
             builder.RegisterType<DemandService>().As<IDemandService>().InstancePerDependency();
-            builder.RegisterType<EventObserverTest>().As<AutoAttachEventObserverBase>().InstancePerDependency();
+            builder.RegisterType<MessageObserverTest>().As<AutoAttachMessageObserverBase>().InstancePerDependency();
             
             // Messaging
             builder.RegisterType<Queue>().As<IQueue>().SingleInstance();
-            builder.RegisterType<AutoEventAttacher>().AsSelf().SingleInstance();
-            builder.RegisterBuildCallback(c => c.Resolve<AutoEventAttacher>().Start(c));
+            builder.RegisterType<AutoMessageObserverAttacher>().AsSelf().SingleInstance();
+            builder.RegisterBuildCallback(c => c.Resolve<AutoMessageObserverAttacher>().Start(c));
 
             // Services
             builder.RegisterType<CourseService>().As<ICourseService>().InstancePerDependency();

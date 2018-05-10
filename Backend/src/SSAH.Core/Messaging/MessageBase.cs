@@ -2,9 +2,9 @@
 
 namespace SSAH.Core.Messaging
 {
-    public class EventBase : IEvent
+    public class MessageBase : IMessage
     {
-        public EventBase()
+        public MessageBase()
         {
             Id = Guid.NewGuid();
         }

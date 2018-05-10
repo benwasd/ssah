@@ -2,8 +2,8 @@
 
 namespace SSAH.Core.Messaging
 {
-    public interface IQueue : IObservable<IEvent>
+    public interface IQueue : IObservable<IMessage>
     {
-        void Publish(IEvent @event);
+        void Publish(IMessage message);
     }
 }

@@ -6,7 +6,7 @@ using Autofac;
 
 namespace SSAH.Core.Messaging
 {
-    public abstract class AutoAttachEventObserverBase : IDisposable
+    public abstract class AutoAttachMessageObserverBase : IDisposable
     {
         private IDisposable[] _disposables;
 
