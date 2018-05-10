@@ -26,13 +26,13 @@ namespace SSAH.Core.Domain.Demanding
             };
         }
 
-        public static DemandingCriterias CreateFromCourse(Course course, ISerializationService serializationService)
+        public static DemandingCriterias CreateFromCourse(GroupCourse course, ISerializationService serializationService)
         {
             var courseDates = course.GetAllCourseDates(serializationService).ToArray();
 
             return new DemandingCriterias
             {
-                CourseType = course.Type,
+                CourseType = CourseType.Group,
                 Discipline = course.Discipline,
                 NiveauId = course.NiveauId,
                 From = courseDates.First().Start.Date,

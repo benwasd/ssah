@@ -97,7 +97,8 @@ namespace SSAH.Infrastructure.Api.Controllers
             {
                 var groupCourseDemands = _demandService.GetGroupCourseDemand(
                     registrationPartipiant.Discipline,
-                    registration.AvailableFrom, registration.AvailableTo,
+                    registration.AvailableFrom,
+                    registration.AvailableTo,
                     includingRegistration: new RegistrationWithPartipiant { Registration = registration, RegistrationPartipiant = registrationPartipiant }
                 );
 
@@ -106,7 +107,7 @@ namespace SSAH.Infrastructure.Api.Controllers
                     yield return new PossibleCourseDto
                     {
                         RegistrationPartipiantId = registrationPartipiant.Id,
-                        CoursePeriods = groupCourseDemand.Course.GetAllCourseDates(_serializationService).ToList()
+                        CoursePeriods = groupCourseDemand.GroupCourse.GetAllCourseDates(_serializationService).ToList()
                     };
                 }
             }

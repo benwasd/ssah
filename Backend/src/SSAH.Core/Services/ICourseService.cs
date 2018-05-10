@@ -8,6 +8,6 @@ namespace SSAH.Core.Services
 {
     public interface ICourseService
     {
-        IEnumerable<Course> GetPotentialGroupCourses(Discipline discipline, DateTime from, DateTime to, int[] potentialNiveauIds);
+        IEnumerable<GroupCourse> GetPotentialGroupCourses(Discipline discipline, DateTime from, DateTime to, int[] potentialNiveauIds);
     }
 }

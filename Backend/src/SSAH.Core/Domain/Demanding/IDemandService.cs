@@ -7,6 +7,6 @@ namespace SSAH.Core.Domain.Demanding
 {
     public interface IDemandService
     {
-        IEnumerable<PotentialCourse> GetGroupCourseDemand(Discipline discipline, DateTime from, DateTime to, RegistrationWithPartipiant includingRegistration = null);
+        IEnumerable<PotentialGroupCourse> GetGroupCourseDemand(Discipline discipline, DateTime from, DateTime to, RegistrationWithPartipiant includingRegistration = null);
     }
 }

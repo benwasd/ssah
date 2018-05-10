@@ -16,9 +16,9 @@ namespace SSAH.Infrastructure.Api.Controllers
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
-        private readonly IUnitOfWorkFactory<IRepository<Course>, IOptions<GroupCourseOptionsCollection>, ILogger<ValuesController>> _asd;
+        private readonly IUnitOfWorkFactory<IRepository<GroupCourse>, IOptions<GroupCourseOptionsCollection>, ILogger<ValuesController>> _asd;
 
-        public ValuesController(IUnitOfWorkFactory<IRepository<Course>, IOptions<GroupCourseOptionsCollection>, ILogger<ValuesController>> asd)
+        public ValuesController(IUnitOfWorkFactory<IRepository<GroupCourse>, IOptions<GroupCourseOptionsCollection>, ILogger<ValuesController>> asd)
         {
             _asd = asd;
         }
@@ -38,7 +38,8 @@ namespace SSAH.Infrastructure.Api.Controllers
                     new CourseParticipant { CreatedOn = DateTime.Now, CreatedBy = "System", Participant = new Participant { CreatedOn = DateTime.Now, CreatedBy = "System", Name = "Beni", Language = Language.SwissGerman, Applicant = new Applicant { CreatedOn = DateTime.Now, CreatedBy = "System", Surname = "Surname", Givenname = "Givenname", PhoneNumber = "PhoneNumber", Residence = "Residence"} } },
                     new CourseParticipant { CreatedOn = DateTime.Now, CreatedBy = "System", Participant = new Participant { CreatedOn = DateTime.Now, CreatedBy = "System", Name = "Andrina", Language = Language.SwissGerman, Applicant = new Applicant { CreatedOn = DateTime.Now, CreatedBy = "System", Surname = "Surname", Givenname = "Givenname", PhoneNumber = "PhoneNumber", Residence = "Residence"} } }
                 };
-                y.PeriodOptionsValue = "";
+                y.OptionsIdentifier = 2;
+                y.PeriodsOptionsValue = "";
 
                 unitOfWork.Dependent3.LogTrace("WUSA");
 

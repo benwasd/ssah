@@ -2,9 +2,9 @@
 
 namespace SSAH.Core.Domain.Demanding
 {
-    public class PotentialCourse
+    public class PotentialGroupCourse
     {
-        public Course Course { get; set; }
+        public GroupCourse GroupCourse { get; set; }
 
         public int Demand { get; set; }
     }

@@ -24,7 +24,7 @@ namespace SSAH.Core.Domain.Demanding
             _serializationService = serializationService;
         }
 
-        public IEnumerable<PotentialCourse> GetGroupCourseDemand(Discipline discipline, DateTime from, DateTime to, RegistrationWithPartipiant includingRegistration = null)
+        public IEnumerable<PotentialGroupCourse> GetGroupCourseDemand(Discipline discipline, DateTime from, DateTime to, RegistrationWithPartipiant includingRegistration = null)
         {
             var potentialPartipiants = TryAdd(_registrationRepository.GetRegisteredPartipiantOverlappingPeriod(discipline, from, to), includingRegistration).ToArray();
             var potentialPartipiantCriterias = potentialPartipiants.Select(DemandingCriterias.CreateFromRegistration).ToArray();
@@ -38,7 +38,8 @@ namespace SSAH.Core.Domain.Demanding
 
                 if (demand >= _demandingThresholdOptions.Value.MinParticipants)
                 {
-                    yield return new PotentialCourse { Course = potentialCourse, Demand = demand };
+                    // TODO: Add max partipiants, and instructor availability
+                    yield return new PotentialGroupCourse { GroupCourse = potentialCourse, Demand = demand };
                 }
             }
         }
