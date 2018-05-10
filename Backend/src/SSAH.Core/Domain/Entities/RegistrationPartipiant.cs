@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 
 using SSAH.Core.Domain.Objects;
 
@@ -21,19 +20,28 @@ namespace SSAH.Core.Domain.Entities
 
         public virtual Participant ResultingParticipant { get; set; }
 
-        public Task CommitAsync(Registration registration, int ageGroup, Language language)
-        {
-            return Task.CompletedTask;
-        }
+        public Language Language { get; set; }
 
-        private Participant ToParticipant(Applicant applicant, int ageGroup, Language language)
+        /// <summary>Jahrgang</summary>
+        public int AgeGroup { get; set; }
+
+        public int CourseIdentifier { get; set; }
+
+        public DateTime CourseStartDate { get; set; }
+
+        public Participant ToParticipant(Applicant applicant)
         {
+            if (ResultingParticipantId != null)
+            {
+                throw new InvalidOperationException("This registrastion partipiant already created a partipiant.");
+            }
+
             var participant = new Participant();
             participant.ApplicantId = applicant.Id;
             participant.Applicant = applicant;
             participant.Name = Name;
-            participant.Language = language;
-            participant.AgeGroup = ageGroup;
+            participant.Language = Language;
+            participant.AgeGroup = AgeGroup;
 
             ResultingParticipantId = participant.Id;
             ResultingParticipant = participant;

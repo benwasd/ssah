@@ -9,6 +9,10 @@ namespace SSAH.Infrastructure.Api.Dtos
     {
         public Guid RegistrationPartipiantId { get; set; }
         
+        public int Identifier { get; set; }
+
+        public DateTime StartDate { get; set; }
+
         public ICollection<Period> CoursePeriods { get; set; }
     }
 }

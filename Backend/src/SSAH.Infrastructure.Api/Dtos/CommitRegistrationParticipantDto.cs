@@ -4,15 +4,15 @@ using SSAH.Core.Domain.Objects;
 
 namespace SSAH.Infrastructure.Api.Dtos
 {
-    public class CommitRegistrationParticipantDto
+    public class CommitRegistrationParticipantDto : EntityDto
     {
-        public Guid RegistrationParticipantId { get; set; }
-
         public Language Language { get; set; }
 
         /// <summary>Jahrgang</summary>
         public int AgeGroup { get; set; }
 
-        // TODO: Add course reference
+        public int CourseIdentifier { get; set; }
+
+        public DateTime CourseStartDate { get; set; }
     }
 }

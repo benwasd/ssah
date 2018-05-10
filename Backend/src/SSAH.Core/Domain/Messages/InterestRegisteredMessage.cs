@@ -4,13 +4,16 @@ using SSAH.Core.Messaging;
 
 namespace SSAH.Core.Domain.Messages
 {
-    public class InterestRegisteredMessage : MessageBase
+    public class InterestRegisteredChangedMessage : MessageBase
     {
-        public InterestRegisteredMessage(Guid registrationId)
+        public InterestRegisteredChangedMessage(Guid registrationId, bool canceled = false)
         {
             RegistrationId = registrationId;
+            Canceled = canceled;
         }
 
         public Guid RegistrationId { get; }
+
+        public bool Canceled { get; }
     }
 }

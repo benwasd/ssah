@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
+using Newtonsoft.Json;
+
 using SSAH.Core;
 using SSAH.Infrastructure.Api.Pipeline;
 
@@ -18,7 +20,8 @@ namespace SSAH.Infrastructure.Api
             var mvcBuilder = services.AddMvc();
 
             // Add custoim controller activator
-            mvcBuilder.Services.Replace(ServiceDescriptor.Transient<IControllerActivator, UnitOfWorkControllerActivator>()); ;
+            mvcBuilder.Services.Replace(ServiceDescriptor.Transient<IControllerActivator, UnitOfWorkControllerActivator>());
+            mvcBuilder.AddJsonOptions(options => options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore);
         }
 
         public static void UseSnowSchoolAdministrationHub(this IApplicationBuilder app, IHostingEnvironment env, IContainer container)

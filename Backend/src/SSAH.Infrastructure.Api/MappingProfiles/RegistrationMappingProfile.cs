@@ -6,7 +6,7 @@ namespace SSAH.Infrastructure.Api.MappingProfiles
 {
     public class RegistrationMappingProfile : MappingProfileBase
     {
-        public RegistrationMappingProfile() 
+        public RegistrationMappingProfile()
             : base("Registration")
         {
             MapEntitiesToDtos();
@@ -43,7 +43,20 @@ namespace SSAH.Infrastructure.Api.MappingProfiles
             CreateDtoToEntityMap<RegistrationParticipantDto, RegistrationPartipiant>()
                 .ForMember(dest => dest.RegistrationId, opt => opt.Ignore())
                 .ForMember(dest => dest.ResultingParticipantId, opt => opt.Ignore())
-                .ForMember(dest => dest.ResultingParticipant, opt => opt.Ignore());
+                .ForMember(dest => dest.ResultingParticipant, opt => opt.Ignore())
+                .ForMember(dest => dest.Language, opt => opt.Ignore())
+                .ForMember(dest => dest.AgeGroup, opt => opt.Ignore())
+                .ForMember(dest => dest.CourseIdentifier, opt => opt.Ignore())
+                .ForMember(dest => dest.CourseStartDate, opt => opt.Ignore());
+
+            CreateDtoToEntityMap<CommitRegistrationParticipantDto, RegistrationPartipiant>()
+                .ForMember(dest => dest.RegistrationId, opt => opt.Ignore())
+                .ForMember(dest => dest.ResultingParticipantId, opt => opt.Ignore())
+                .ForMember(dest => dest.ResultingParticipant, opt => opt.Ignore())
+                .ForMember(dest => dest.Name, opt => opt.Ignore())
+                .ForMember(dest => dest.CourseType, opt => opt.Ignore())
+                .ForMember(dest => dest.Discipline, opt => opt.Ignore())
+                .ForMember(dest => dest.NiveauId, opt => opt.Ignore());
         }
     }
 }
