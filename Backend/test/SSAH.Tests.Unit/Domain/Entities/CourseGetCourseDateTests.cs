@@ -9,7 +9,7 @@ using SSAH.Core.Domain.Objects;
 using SSAH.Core.Services;
 using SSAH.Infrastructure.Services;
 
-namespace SSAH.Tests.Unit
+namespace SSAH.Tests.Unit.Domain.Entities
 {
     [TestFixture]
     public class CourseGetCourseDateTests
@@ -18,9 +18,8 @@ namespace SSAH.Tests.Unit
         public void GetAllCourseDates_ThreeWeekMondayFridayMorningCourse()
         {
             // Arrange
-            var course = new Course();
-            course.SetPeriodsOptions(SerializationService, ThreeWeekMondayFridayMorningCourse().ToList());
-            course.StartDate = new DateTime(2018, 4, 30);
+            var course = new GroupCourse(default(Discipline), default(CourseStatus), default(int), new DateTime(2018, 4, 30));
+            course.SetPeriodsOptions(SerializationService, CreateOptions(ThreeWeekMondayFridayMorningCourse()));
 
             // Act
             var result = course.GetAllCourseDates(SerializationService).ToArray();
@@ -65,6 +64,15 @@ namespace SSAH.Tests.Unit
             yield return new GroupCoursePeriodOptions { Week = 1, Day = DayOfWeek.Friday, StartTime = TimeSpan.Parse("8:00"), EndTime = TimeSpan.Parse("12:00") };
             yield return new GroupCoursePeriodOptions { Week = 2, Day = DayOfWeek.Monday, StartTime = TimeSpan.Parse("7:00"), EndTime = TimeSpan.Parse("11:00") };
             yield return new GroupCoursePeriodOptions { Week = 2, Day = DayOfWeek.Friday, StartTime = TimeSpan.Parse("7:00"), EndTime = TimeSpan.Parse("11:00") };
+        }
+
+        private GroupCourseOptions CreateOptions(IEnumerable<GroupCoursePeriodOptions> threeWeekMondayFridayMorningCourse)
+        {
+            return new GroupCourseOptions
+            {
+                Identifier = threeWeekMondayFridayMorningCourse.GetHashCode(),
+                Periods = GroupCoursePeriodOptionsCollection.Create(threeWeekMondayFridayMorningCourse)
+            };
         }
     }
 }

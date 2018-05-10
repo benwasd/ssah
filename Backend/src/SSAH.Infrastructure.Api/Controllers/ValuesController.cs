@@ -16,9 +16,9 @@ namespace SSAH.Infrastructure.Api.Controllers
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
-        private readonly IUnitOfWorkFactory<IRepository<Course>, IOptions<GroupCoursesOptions>, ILogger<ValuesController>> _asd;
+        private readonly IUnitOfWorkFactory<IRepository<GroupCourse>, IOptions<GroupCourseOptionsCollection>, ILogger<ValuesController>> _asd;
 
-        public ValuesController(IUnitOfWorkFactory<IRepository<Course>, IOptions<GroupCoursesOptions>, ILogger<ValuesController>> asd)
+        public ValuesController(IUnitOfWorkFactory<IRepository<GroupCourse>, IOptions<GroupCourseOptionsCollection>, ILogger<ValuesController>> asd)
         {
             _asd = asd;
         }
@@ -30,15 +30,16 @@ namespace SSAH.Infrastructure.Api.Controllers
             using (var unitOfWork = _asd.Begin())
             {
                 var y = unitOfWork.Dependent.Create();
-                y.Instructor = new Instructor { CreatedOn = DateTime.Now, CreatedBy = "System", Givenname = "Lol", Surname = "Lo", PhoneNumber = "+41 75 123213", DateOfBirth = DateTime.Today };
+                y.Instructor = new Instructor { CreatedOn = DateTime.Now, CreatedBy = "System", Givenname = "GetGroupCourseDemand", Surname = "Lo", PhoneNumber = "+41 75 123213", DateOfBirth = DateTime.Today };
                 y.CreatedOn = DateTime.Now;
                 y.CreatedBy = "WUWU";
                 y.Participants = new[]
                 {
-                    new CourseParticipant { CreatedOn = DateTime.Now, CreatedBy = "System", Participant = new Participant { CreatedOn = DateTime.Now, CreatedBy = "System", Name = "Beni", Language = Language.SwissGerman} },
-                    new CourseParticipant { CreatedOn = DateTime.Now, CreatedBy = "System", Participant = new Participant { CreatedOn = DateTime.Now, CreatedBy = "System", Name = "Andrina", Language = Language.SwissGerman } }
+                    new CourseParticipant { CreatedOn = DateTime.Now, CreatedBy = "System", Participant = new Participant { CreatedOn = DateTime.Now, CreatedBy = "System", Name = "Beni", Language = Language.SwissGerman, Applicant = new Applicant { CreatedOn = DateTime.Now, CreatedBy = "System", Surname = "Surname", Givenname = "Givenname", PhoneNumber = "PhoneNumber", Residence = "Residence"} } },
+                    new CourseParticipant { CreatedOn = DateTime.Now, CreatedBy = "System", Participant = new Participant { CreatedOn = DateTime.Now, CreatedBy = "System", Name = "Andrina", Language = Language.SwissGerman, Applicant = new Applicant { CreatedOn = DateTime.Now, CreatedBy = "System", Surname = "Surname", Givenname = "Givenname", PhoneNumber = "PhoneNumber", Residence = "Residence"} } }
                 };
-                y.PeriodOptionsValue = "";
+                y.OptionsIdentifier = 2;
+                y.PeriodsOptionsValue = "";
 
                 unitOfWork.Dependent3.LogTrace("WUSA");
 
