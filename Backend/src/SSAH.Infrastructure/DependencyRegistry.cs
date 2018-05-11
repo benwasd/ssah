@@ -35,6 +35,7 @@ namespace SSAH.Infrastructure
 
             // Services
             builder.RegisterType<JsonSerializationService>().As<ISerializationService>().InstancePerDependency();
+            builder.RegisterType<NotificationService>().As<INotificationService>().InstancePerDependency();
         }
 
         public static void AddOption<TOptions>(this ContainerBuilder builder, string name)
