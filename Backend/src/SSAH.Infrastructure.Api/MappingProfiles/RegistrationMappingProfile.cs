@@ -29,6 +29,10 @@ namespace SSAH.Infrastructure.Api.MappingProfiles
         private void MapDtosToEntities()
         {
             CreateMap<RegistrationDto, Registration>()
+                .ForMember(dest => dest.Applicant, opt => opt.MapFrom(src => new Applicant()))
+                .ForMember(dest => dest.Applicant, opt => opt.Condition(src => src.ApplicantId == null))
+                .ForMember(dest => dest.ApplicantId, opt => opt.MapFrom(src => src.ApplicantId))
+                .ForMember(dest => dest.ApplicantId, opt => opt.Condition(src => src.ApplicantId != null))
                 .ForMember(dest => dest.AvailableFrom, opt => opt.MapFrom(src => src.AvailableFrom))
                 .ForMember(dest => dest.AvailableTo, opt => opt.MapFrom(src => src.AvailableTo))
                 .ForAllOtherMembers(opt => opt.Ignore());

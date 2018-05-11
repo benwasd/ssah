@@ -7,6 +7,8 @@ namespace SSAH.Infrastructure.Api.Dtos
     {
         public Guid? RegistrationId { get; set; }
 
+        public Guid? ApplicantId { get; set; }
+
         public string Surname { get; set; }
 
         public string Givenname { get; set; }

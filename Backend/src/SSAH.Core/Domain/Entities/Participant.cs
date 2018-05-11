@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 
 using SSAH.Core.Domain.Objects;
@@ -8,6 +9,11 @@ namespace SSAH.Core.Domain.Entities
 {
     public class Participant : EntityBase
     {
+        public Participant()
+        {
+            CompletedNiveaus = new Collection<ParticipantCompletedNiveau>();
+        }
+
         [StringLength(Constants.StringLengths.NAME)]
         [Required]
         public string Name { get; set; }
