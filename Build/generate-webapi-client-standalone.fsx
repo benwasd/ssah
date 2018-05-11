@@ -13,8 +13,10 @@
 open Fake
 open System.IO
 
+open NSwag.AssemblyLoader
 open NSwag.CodeGeneration.TypeScript
 open NSwag.SwaggerGeneration.WebApi
+open System
 
 let projectRoot = __SOURCE_DIRECTORY__ @@ ".."
 
@@ -40,6 +42,24 @@ let generate inputAssembly outputApiTs =
       GenerateOptionalParameters = true
     )
 
+  let resolver = ResolveEventHandler(fun _ args ->
+    let name = args.Name.Substring(0, args.Name.IndexOf(','))
+
+    if name = "System.Runtime" then
+      let fileName2 = """C:\Program Files\dotnet\shared\Microsoft.NETCore.App\2.0.6\""" + name + ".dll"
+      
+      if (File.Exists fileName2) then
+        printfn "Resolve %s" fileName2
+        System.Reflection.Assembly.LoadFile(fileName2)
+      else
+        printfn "Resolve %s" "null"
+        null
+    else
+      null
+  )
+
+  AppDomain.CurrentDomain.add_ReflectionOnlyAssemblyResolve(resolver)
+ 
   tssettings.TypeScriptGeneratorSettings.ExtensionCode <- ReadFileAsString (projectRoot @@ "Build" @@ "generate-webapi-client.extension-code.ts")
   tssettings.TypeScriptGeneratorSettings.TypeScriptVersion <- 2.3m
   tssettings.TypeScriptGeneratorSettings.GenerateCloneMethod <- true
@@ -54,5 +74,5 @@ let generate inputAssembly outputApiTs =
 
 !! "./Backend/src/SSAH.Infrastructure.Api/bin/Release/netcoreapp2.0/publish/SSAH.Infrastructure.Api.dll"
 |> SetBaseDir projectRoot
-|> Seq.map System.Reflection.Assembly.LoadFrom
+|> Seq.map System.Reflection.Assembly.ReflectionOnlyLoadFrom
 |> Seq.iter (fun assembly -> generate assembly (projectRoot @@ "/Frontend/src/app/api.ts"))

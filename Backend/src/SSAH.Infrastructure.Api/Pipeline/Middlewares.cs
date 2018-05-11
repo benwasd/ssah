@@ -22,12 +22,12 @@ namespace SSAH.Infrastructure.Api.Pipeline
                 catch (OperationCanceledException)
                 {
                 }
-                catch (Exception ex)
-                {
-                    // log.Error("Global exception handler middleware caught an exception.", ex);
+                //catch (Exception ex)
+                //{
+                //    // log.Error("Global exception handler middleware caught an exception.", ex);
 
-                    throw;
-                }
+                //    throw;
+                //}
             });
 
             return app;
