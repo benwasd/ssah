@@ -8,28 +8,29 @@ using Autofac;
 using SSAH.Core.Extensions;
 using SSAH.Core.Messaging;
 
-namespace SSAH.Core.Domain
+namespace SSAH.Core.Domain.Messages
 {
     public class MessageObserverTest : AutoAttachMessageObserverBase
     {
         protected override IEnumerable<IDisposable> SetupCore(IQueue queue, IContainer rootContainer)
         {
             yield return queue
-                .Where(r => r.Id == Guid.Empty)
-                .SubscribeInUnitOfWorkScope<IMessage, Handler>(rootContainer);
+                .OfType<PartipiantRegistredMessage>()
+                .SubscribeInUnitOfWorkScope<PartipiantRegistredMessage, Handler>(rootContainer);
         }
 
-        public class Handler : ObserverBase<IMessage>
+        public class Handler : ObserverBase<PartipiantRegistredMessage>
         {
-            private readonly ISeasonRepository _seasonRepository;
+            private readonly ICourseRepository _courseRepository;
 
-            public Handler(ISeasonRepository seasonRepository)
+            public Handler(ICourseRepository courseRepository)
             {
-                _seasonRepository = seasonRepository;
+                _courseRepository = courseRepository;
             }
 
-            protected override void OnNextCore(IMessage value)
+            protected override void OnNextCore(PartipiantRegistredMessage value)
             {
+                var course = _courseRepository.GetById(value.ProposalCourseId);
             }
 
             protected override void OnErrorCore(Exception error)

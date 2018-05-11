@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Microsoft.EntityFrameworkCore;
 
 using SSAH.Core.Domain;
@@ -23,7 +24,6 @@ namespace SSAH.Infrastructure.DbAccess.Domain
         {
             return _set;
         }
-
 
         public T GetById(Guid id)
         {
