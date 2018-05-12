@@ -18,7 +18,7 @@ open NSwag.SwaggerGeneration.WebApi
 
 let projectRoot = __SOURCE_DIRECTORY__ @@ ".."
 
-let generate inputAssembly outputApiTs =
+let generate (inputAssembly: System.Reflection.Assembly) outputApiTs =
   printfn "generate api ts %A to %s" inputAssembly outputApiTs
 
   let settings =
@@ -35,7 +35,7 @@ let generate inputAssembly outputApiTs =
       UseTransformResultMethod = true,
       UseGetBaseUrlMethod = true,
       ClientBaseClass = "ApiProxyBase",
-      Template = TypeScriptTemplate.Angular,
+      Template = TypeScriptTemplate.Fetch,
       InjectionTokenType = InjectionTokenType.InjectionToken,
       GenerateOptionalParameters = true
     )
@@ -52,7 +52,7 @@ let generate inputAssembly outputApiTs =
   let code = generator.GenerateFile()
   File.WriteAllText(outputApiTs, code)
 
-!! "./Backend/src/SSAH.Infrastructure.Api/bin/Release/netcoreapp2.0/publish/SSAH.Infrastructure.Api.dll"
+!! "./Backend/src/SSAH.Infrastructure.Api/bin/Release/netstandard2.0/publish/SSAH.Infrastructure.Api.dll"
 |> SetBaseDir projectRoot
 |> Seq.map System.Reflection.Assembly.LoadFrom
-|> Seq.iter (fun assembly -> generate assembly (projectRoot @@ "/Frontend/src/app/api.ts"))
+|> Seq.iter (fun assembly -> generate assembly (projectRoot @@ "/Frontend/src/api.ts"))

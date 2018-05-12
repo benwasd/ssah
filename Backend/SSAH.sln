@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SSAH.Startup", "src\SSAH.St
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SSAH.Infrastructure.Api", "src\SSAH.Infrastructure.Api\SSAH.Infrastructure.Api.csproj", "{5F1951EF-56BC-480B-831F-891D1EF2BD22}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SSAH.Tests.Unit", "test\SSAH.Tests.Unit\SSAH.Tests.Unit.csproj", "{1B84BF06-76D3-4854-BE22-6F3FA2805293}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SSAH.Tests.Unit", "test\SSAH.Tests.Unit\SSAH.Tests.Unit.csproj", "{1B84BF06-76D3-4854-BE22-6F3FA2805293}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

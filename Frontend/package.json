@@ -1,0 +1,36 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/react": "^16.3.14",
+    "@types/react-dom": "^16.0.5",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "semantic-ui-less": "^2.3.1",
+    "semantic-ui-react": "^0.80.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^8.4.1",
+    "awesome-typescript-loader": "^5.0.0",
+    "css-loader": "^0.28.11",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "file-loader": "^1.1.11",
+    "less": "^2.7.3",
+    "less-loader": "^4.1.0",
+    "postcss-flexbugs-fixes": "^3.3.1",
+    "postcss-loader": "^2.1.5",
+    "source-map-loader": "^0.2.3",
+    "typescript": "^2.8.3",
+    "url-loader": "^1.0.1",
+    "webpack": "^4.8.1",
+    "webpack-cli": "^2.1.3"
+  }
+}
