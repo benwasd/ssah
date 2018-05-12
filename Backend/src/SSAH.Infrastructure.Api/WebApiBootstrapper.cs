@@ -17,16 +17,24 @@ namespace SSAH.Infrastructure.Api
     {
         public static void AddSnowSchoolAdministrationHub(this IServiceCollection services)
         {
-            var mvcBuilder = services.AddMvc();
+            services.AddCors();
+            services.AddMvc()
+                .AddJsonOptions(options => options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore);
 
-            // Add custoim controller activator
-            mvcBuilder.Services.Replace(ServiceDescriptor.Transient<IControllerActivator, UnitOfWorkControllerActivator>());
-            mvcBuilder.AddJsonOptions(options => options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore);
+            // Add custom controller activator
+            services.Replace(ServiceDescriptor.Transient<IControllerActivator, UnitOfWorkControllerActivator>());
         }
 
         public static void UseSnowSchoolAdministrationHub(this IApplicationBuilder app, IHostingEnvironment env, IContainer container)
         {
             app.UseGlobalExceptionHandler();
+            app.UseCors(corsPolicyBuilder =>
+            {
+                corsPolicyBuilder.AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+            });
 
             if (env.IsDevelopment())
             {

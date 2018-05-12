@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 using Autofac;
 
@@ -15,6 +16,8 @@ namespace SSAH.Infrastructure.Api.Pipeline
         {
             app.Use(async (context, next) =>
             {
+                // TODO: log global exceptions
+
                 try
                 {
                     await next();
@@ -22,12 +25,6 @@ namespace SSAH.Infrastructure.Api.Pipeline
                 catch (OperationCanceledException)
                 {
                 }
-                //catch (Exception ex)
-                //{
-                //    // log.Error("Global exception handler middleware caught an exception.", ex);
-
-                //    throw;
-                //}
             });
 
             return app;

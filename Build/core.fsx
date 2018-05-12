@@ -9,7 +9,7 @@ Target "Rebuild-Test-All" DoNothing
 "Clean" ?=> "Build-Backend"
 "Clean" ==> "Rebuild-Test-All"
 
-"Generate-WebApi-Client" ==> "Build-Frontend"
+"Build-Backend" ==> "Generate-WebApi-Client" ==> "Build-Frontend"
 "Build-Frontend" ==> "Test-Frontend" ==> "Rebuild-Test-All"
 "Build-Backend" ==> "Test-Backend" ==> "Rebuild-Test-All"
 "Build-Backend" ==> "Integration-Test-Backend" ==> "Rebuild-Test-All"
