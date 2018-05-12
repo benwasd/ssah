@@ -4,13 +4,29 @@ import * as ReactDOM from "react-dom";
 import './styling/semantic.less';
 
 import { Hello } from "./components/Hello";
-import { RegistrationApiProxy, RegistrationDto } from "./api";
+import { RegistrationApiProxy, RegistrationDto, RegistrationParticipantDto, Discipline, CourseType } from "./api";
 
-var l = new RegistrationApiProxy();
-var y = new RegistrationDto();
-y.givenname = "Benjamin";
-y.surname = "Müller";
-l.register(y);
+var registrationApi = new RegistrationApiProxy();
+
+var participant = new RegistrationParticipantDto();
+participant.discipline = Discipline.Snowboard;
+participant.courseType = CourseType.Group;
+participant.name = "Andrina";
+participant.niveauId = 200;
+
+var registraion = new RegistrationDto();
+registraion.givenname = "Benjamin";
+registraion.surname = "MÃ¼ller";
+registraion.residence = "Thun";
+registraion.availableTo = new Date
+registraion.availableFrom = new Date
+registraion.phoneNumber = "+41 2222";
+registraion.participants = [
+    participant
+];
+
+registrationApi.register(registraion);
+
 
 ReactDOM.render(
     <Hello />,
