@@ -1,6 +1,8 @@
 import * as React from "react";
 import { Flag, Button, Grid, Header, List, Segment, Accordion, Icon, Modal, } from 'semantic-ui-react';
 
+import './Hello.less';
+
 export interface HelloProps { }
 
 export class Hello extends React.Component<HelloProps, {}> {
@@ -19,7 +21,7 @@ export class Hello extends React.Component<HelloProps, {}> {
 
         return (
             <div>
-                <div className="ui attached stackable menu">
+                <div className="ui attached stackable menu wuwu">
                     <div className="ui container">
                         <a className="item">
                             <i className="home icon"></i> Home

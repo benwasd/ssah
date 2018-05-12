@@ -2,16 +2,13 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const autoprefixer = require('autoprefixer')
 const path = require('path')
 
-const isDev = true
+const isDev = true;
+const bundleFilename = isDev ? 'static/js/bundle.js' : 'static/js/bundle.[hash:8].js'
 const cssFilename = isDev ? 'static/css/[name].css' : 'static/css/[name].[hash:8].css'
-const cssClassName = isDev ? '[path][name]__[local]--[hash:base64:5]' : '[hash:base64:5]'
+const cssClassName = '[local]'
 
-// Heads up!
-// We use ExtractTextPlugin to extract LESS content in production environment,
-// we will still use fallback to style-loader in development.
 const extractLess = new ExtractTextPlugin({
-    filename: cssFilename,
-    disable: false
+    filename: cssFilename
 });
 
 // Options for autoPrefixer
@@ -29,7 +26,7 @@ module.exports = {
     entry: "./src/index.tsx",
     mode: isDev ? "development" : "production",
     output: {
-        filename: "bundle.js",
+        filename: bundleFilename,
         path: path.resolve('./dist/'),
     },
 
