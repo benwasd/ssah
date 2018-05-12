@@ -1,4 +1,19 @@
-const autoprefixer = require('autoprefixer');
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const autoprefixer = require('autoprefixer')
+const path = require('path')
+
+const isDev = true
+const cssFilename = isDev ? 'static/css/[name].css' : 'static/css/[name].[hash:8].css'
+const cssClassName = isDev ? '[path][name]__[local]--[hash:base64:5]' : '[hash:base64:5]'
+
+// Heads up!
+// We use ExtractTextPlugin to extract LESS content in production environment,
+// we will still use fallback to style-loader in development.
+const extractLess = new ExtractTextPlugin({
+    filename: cssFilename,
+    disable: false
+});
+
 // Options for autoPrefixer
 const autoprefixerOptions = {
     browsers: [
@@ -10,39 +25,12 @@ const autoprefixerOptions = {
     flexbox: 'no-2009',
 };
 
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const path = require('path')
-const paths = require('./paths')
-
-const isDev = process.env.NODE_ENV === 'development'
-const cssFilename = 'static/css/[name].css'
-const cssClassName = isDev ? '[path][name]__[local]--[hash:base64:5]' : '[hash:base64:5]'
-
-// Heads up!
-// We use ExtractTextPlugin to extract LESS content in production environment,
-// we will still use fallback to style-loader in development.
-const extractLess = new ExtractTextPlugin({
-    filename: cssFilename,
-    disable: isDev
-});
-
-console.log(paths.servedPath);
-
-// ExtractTextPlugin expects the build output to be flat.
-// (See https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/27)
-// However, our output is structured with css, js and media folders.
-// To have this structure working with relative paths, we have to use custom options.
-const extractTextPluginOptions = { publicPath: Array(cssFilename.split('/').length).join('../') };
-
-// Source maps are resource heavy and can cause out of memory issue for large source files.
-const shouldUseSourceMap = process.env.NODE_ENV === 'production' && process.env.GENERATE_SOURCEMAP !== 'false'
-
 module.exports = {
-    entry: paths.appIndexTsx,
-    mode: "development",
+    entry: "./src/index.tsx",
+    mode: isDev ? "development" : "production",
     output: {
         filename: "bundle.js",
-        path: paths.dist
+        path: path.resolve('./dist/'),
     },
 
     // Enable sourcemaps for debugging webpack's output.
@@ -52,8 +40,8 @@ module.exports = {
         // Add '.ts' and '.tsx' as resolvable extensions.
         extensions: [".ts", ".tsx", ".js", ".json"],
         alias: {
-            '../../theme.config$': path.resolve(paths.appSrc, 'styling/theme.config'),
-            heading: path.resolve(paths.appSrc, 'styling/heading.less'),
+            '../../theme.config$': path.resolve('./src/', 'styling/theme.config'),
+            heading: path.resolve('./src/', 'styling/heading.less'),
         }
     },
 
@@ -67,16 +55,17 @@ module.exports = {
             {
                 test: /\.less$/,
                 exclude: [
-                    path.resolve(paths.appSrc, 'components'),
+                    path.resolve('./src/', 'components'),
                 ],
                 use: extractLess.extract({
+                    publicPath: Array(cssFilename.split('/').length).join('../'),
                     use: [
                         {
                             loader: require.resolve('css-loader'),
                             options: {
                                 importLoaders: 1,
-                                minimize: process.env.NODE_ENV === 'production',
-                                sourceMap: shouldUseSourceMap
+                                minimize: !isDev,
+                                sourceMap: true
                             },
                         },
                         {
@@ -94,8 +83,40 @@ module.exports = {
                         { 
                             loader: require.resolve('less-loader')
                         }
-                    ],
-                    ...extractTextPluginOptions
+                    ]
+                }),
+            },
+            {
+                test: /\.less$/,
+                include: [
+                    path.resolve('./src/', 'components'),
+                ],
+                use: extractLess.extract({
+                    use: [
+                    {
+                        loader: require.resolve('css-loader'),
+                        options: {
+                            importLoaders: 1,
+                            localIdentName: cssClassName,
+                            modules: true,
+                            minimize: !isDev,
+                            sourceMap: true,
+                        },
+                    },
+                    {
+                        loader: require.resolve('postcss-loader'),
+                        options: {
+                            // Necessary for external CSS imports to work
+                            // https://github.com/facebookincubator/create-react-app/issues/2677
+                            ident: 'postcss',
+                            plugins: () => [
+                                require('postcss-flexbugs-fixes'),
+                                autoprefixer(autoprefixerOptions),
+                            ],
+                        },
+                    },
+                    { loader: require.resolve('less-loader') }
+                  ],
                 }),
             },
             // "url" loader works like "file" loader except that it embeds assets
