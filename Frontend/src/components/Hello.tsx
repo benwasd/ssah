@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Flag, Button, Grid, Header, List, Segment, Accordion, Icon, Modal, } from 'semantic-ui-react';
 
-export interface HelloProps { compiler: string; framework: string; }
+export interface HelloProps { }
 
 export class Hello extends React.Component<HelloProps, {}> {
     state = { activeIndex: 0 }
@@ -19,71 +19,36 @@ export class Hello extends React.Component<HelloProps, {}> {
 
         return (
             <div>
-                {false && (
-                        <Header as='h2' icon>
-                            <Icon name='settings' />
-                            Account Settings
-                            <Header.Subheader>
-                                Manage your account settings and set e-mail preferences.
-                            </Header.Subheader>
-                        </Header>
-                    )
-                }
-
-
-                <Accordion fluid styled>
-                    <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
-                        <Icon name='dropdown' />
-                        <Flag name='switzerland' />
-                        What is a dog?
-                    </Accordion.Title>
-                    <Accordion.Content active={activeIndex === 0}>
-                        <p>
-                            A dog is a type of domesticated animal. Known for its loyalty and faithfulness, it can be found as a
-                            {' '}welcome guest in many households across the world.
-                        </p>
-                    </Accordion.Content>
-
-                    <Accordion.Title active={activeIndex === 1} index={1} onClick={this.handleClick}>
-                        <Icon name='dropdown' />
-                        What kinds of dogs are there?
-                    </Accordion.Title>
-                    <Accordion.Content active={activeIndex === 1}>
-                        <p>
-                            There are many breeds of dogs. Each breed varies in size and temperament. Owners often select a breed of
-                            {' '}dog that they find to be compatible with their own lifestyle and desires from a companion.
-                        </p>
-                    </Accordion.Content>
-
-                    <Accordion.Title active={activeIndex === 2} index={2} onClick={this.handleClick}>
-                        <Icon name='dropdown' />
-                        How do you acquire a dog?
-                    </Accordion.Title>
-                    <Accordion.Content active={activeIndex === 2}>
-                        <p>
-                            Three common ways for a prospective owner to acquire a dog is from pet shops, private owners, or shelters.
-                        </p>
-                        <p>
-                            A pet shop may be the most convenient way to buy a dog. Buying a dog from a private owner allows you to
-                            {' '}assess the pedigree and upbringing of your dog before choosing to take it home. Lastly, finding your
-                            {' '}dog from a shelter, helps give a good home to a dog who may not find one so readily.
-                        </p>
-                    </Accordion.Content>
-                </Accordion>
-                <Modal basic size='small' trigger={<Button>Basic Modal</Button>}>
-                    <Header icon='archive' content='Archive Old Messages' />
-                    <Modal.Content>
-                        <p>Your inbox is getting full, would you like us to enable automatic archiving of old messages?</p>
-                    </Modal.Content>
-                    <Modal.Actions>
-                        <Button basic color='red' inverted>
-                            <Icon name='remove' /> No
-                        </Button>
-                        <Button color='green' inverted>
-                            <Icon name='checkmark' /> Yes
-                        </Button>
-                    </Modal.Actions>
-                </Modal>
+                <div className="ui attached stackable menu">
+                    <div className="ui container">
+                        <a className="item">
+                            <i className="home icon"></i> Home
+                        </a>
+                        <a className="item">
+                            <i className="grid layout icon"></i> Browse
+                        </a>
+                        <a className="item">
+                            <i className="mail icon"></i> Messages
+                        </a>
+                        <div className="ui simple dropdown item">
+                            More
+                            <i className="dropdown icon"></i>
+                            <div className="menu">
+                                <a className="item"><i className="edit icon"></i> Edit Profile</a>
+                                <a className="item"><i className="globe icon"></i> Choose Language</a>
+                                <a className="item"><i className="settings icon"></i> Account Settings</a>
+                            </div>
+                        </div>
+                        <div className="right item">
+                            <div className="ui input">
+                                <input type="text" placeholder="Search..."/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="ui raised segment">
+                    <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
+                </div>
             </div>
         );
     }

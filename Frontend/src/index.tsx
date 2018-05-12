@@ -7,7 +7,7 @@ import { Hello } from "./components/Hello";
 
 ReactDOM.render(
     <div>
-        <Hello compiler="TypeScript" framework="React" />
+        <Hello />
     </div>,
     document.getElementById("example")
 );
