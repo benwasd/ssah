@@ -1,15 +1,7 @@
-import { combineReducers, Reducer } from 'redux';
+import { combineReducers, Reducer, Action } from 'redux';
 
-import { DECREMENT, INCREMENT, IncrementDecrementAction } from '../actions';
-
-export interface State {
-    counter: number;
-    counter2: number;
-}
-
-export interface ReducerTree {
-    counter?: Reducer<number, IncrementDecrementAction>;
-}
+import { DECREMENT, INCREMENT, IncrementDecrementAction, APPLICANT_CHANGE, ApplicantChangeAction } from '../actions';
+import { ApplicantState } from '../state';
 
 const handleCount: Reducer<number, IncrementDecrementAction> = (state, action) => {
     if (state === undefined) {
@@ -26,6 +18,25 @@ const handleCount: Reducer<number, IncrementDecrementAction> = (state, action) =
     }
 }
 
+const handleApplicant: Reducer<ApplicantState, Action> = (state, action) => {
+    if (state === undefined) {
+        return { givenname: "wuwas", surname: "", residence: "", phoneNumber: "" };
+    }
+    
+    switch (action.type) {
+        case APPLICANT_CHANGE: 
+            return Object.assign({}, state, (<ApplicantChangeAction>action).change);
+        default:
+            return state;
+    }
+}
+
+export interface ReducerTree {
+    counter?: Reducer<number, IncrementDecrementAction>;
+    applicant?: Reducer<ApplicantState, Action>;
+}
+
 export const reducer = combineReducers(<ReducerTree>{
-    counter: handleCount
+    counter: handleCount,
+    applicant: handleApplicant
 })

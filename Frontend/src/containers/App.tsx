@@ -3,9 +3,9 @@ import { Provider } from 'react-redux';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 import { createStore } from 'redux';
 
+import { ApplicantContainer } from '../registration/containers/ApplicantContainer';
 import { CounterContainer } from '../registration/containers/CounterContainer';
 import { reducer as registrationReducer } from '../registration/reducers';
-import { EmptyPage } from './../components/EmptyPage';
 
 const registrationStore = createStore(registrationReducer);
 
@@ -15,8 +15,8 @@ export class App extends React.Component {
             <Provider store={registrationStore}>
                 <HashRouter>
                     <Switch>
-                        <Route exact path="/" component={CounterContainer} />
-                        <Route path="/login" component={EmptyPage} />
+                        <Route exact path="/" component={ApplicantContainer} />
+                        <Route path="/login" component={CounterContainer} />
                     </Switch>
                 </HashRouter>
             </Provider>

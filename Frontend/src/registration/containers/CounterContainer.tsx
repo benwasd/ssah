@@ -2,7 +2,7 @@ import { connect, Dispatch } from 'react-redux';
 
 import { decrement, increment } from '../actions';
 import { Counter, CounterProps } from '../components/Counter';
-import { State } from '../reducers';
+import { State } from '../state';
 
 const mapStateToProps: (state: State) => Partial<CounterProps> = state => {
     return { 
