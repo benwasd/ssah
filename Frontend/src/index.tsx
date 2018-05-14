@@ -1,34 +1,19 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
 
 import './styling/semantic.less';
 
-import { Hello } from "./components/Hello";
-import { RegistrationApiProxy, RegistrationDto, RegistrationParticipantDto, Discipline, CourseType } from "./api";
+import reducers from './reducers'
+import { App } from "./components/App";
+import { State } from "./store/state";
 
-var registrationApi = new RegistrationApiProxy();
-
-var participant = new RegistrationParticipantDto();
-participant.discipline = Discipline.Snowboard;
-participant.courseType = CourseType.Group;
-participant.name = "Andrina";
-participant.niveauId = 200;
-
-var registraion = new RegistrationDto();
-registraion.givenname = "Benjamin";
-registraion.surname = "Müller";
-registraion.residence = "Thun";
-registraion.availableTo = new Date
-registraion.availableFrom = new Date
-registraion.phoneNumber = "+41 2222";
-registraion.participants = [
-    participant
-];
-
-registrationApi.register(registraion);
-
+const store = createStore(reducers, {counter:0});
 
 ReactDOM.render(
-    <Hello />,
-    document.getElementById("example")
+    <Provider store={store}>
+        <App />
+    </Provider>,
+    document.getElementById('root')
 );
