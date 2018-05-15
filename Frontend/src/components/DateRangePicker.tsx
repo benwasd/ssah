@@ -5,10 +5,11 @@ import * as momentPropTypes from 'react-moment-proptypes';
 import { omit } from 'lodash';
 import {
   DateRangePicker as ReactDatesDateRangePicker,
-  DateRangePickerPhrases,
   DateRangePickerShape,
   isInclusivelyAfterDay,
 } from 'react-dates';
+
+import DateRangePickerPhrases from './DateRangePickerPhrases';
 
 import './DateRangePicker.less';
 import 'react-dates/initialize';
@@ -39,9 +40,9 @@ export class DateRangePicker extends React.Component {
       
         // input related props
         startDateId: "startDate",
-        startDatePlaceholderText: 'Start Date',
+        startDatePlaceholderText: 'Von Datum',
         endDateId: "endDate",
-        endDatePlaceholderText: 'End Date',
+        endDatePlaceholderText: 'Bis Datum',
         disabled: false,
         required: false,
         screenReaderInputMessage: '',
