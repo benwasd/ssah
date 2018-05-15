@@ -12,6 +12,7 @@ namespace SSAH.Startup
             SSAH.Infrastructure.DependencyRegistry.Configure(containerBuilder);
             SSAH.Infrastructure.Api.DependencyRegistry.Configure(containerBuilder);
             SSAH.Infrastructure.DbAccess.DependencyRegistry.Configure(containerBuilder);
+            SSAH.Infrastructure.Solver.DependencyRegistry.Configure(containerBuilder);
 
             containerBuilder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
 
