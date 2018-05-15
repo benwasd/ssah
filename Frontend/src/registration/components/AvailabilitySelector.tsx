@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Form } from 'semantic-ui-react';
 
 import { ApplicantState } from '../state';
-import DateRangePickerWrapper from './DateRangePickerWrapper';
+import { DateRangePicker} from '../../components/DateRangePicker';
 
 export interface AvailabilitySelectorProps {
     availableFrom: Date;
@@ -13,7 +13,7 @@ export interface AvailabilitySelectorProps {
 export class AvailabilitySelector extends React.Component<AvailabilitySelectorProps> {
     render() {
         return (
-            <DateRangePickerWrapper />
+            <DateRangePicker />
         );
     }
 }
