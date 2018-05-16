@@ -12,6 +12,7 @@
     <ProjectReference Include="..\..\src\SSAH.Core\SSAH.Core.csproj" />
     <ProjectReference Include="..\..\src\SSAH.Infrastructure.Api\SSAH.Infrastructure.Api.csproj" />
     <ProjectReference Include="..\..\src\SSAH.Infrastructure.DbAccess\SSAH.Infrastructure.DbAccess.csproj" />
+    <ProjectReference Include="..\..\src\SSAH.Infrastructure.Solver\SSAH.Infrastructure.Solver.csproj" />
     <ProjectReference Include="..\..\src\SSAH.Infrastructure\SSAH.Infrastructure.csproj" />
   </ItemGroup>
 
