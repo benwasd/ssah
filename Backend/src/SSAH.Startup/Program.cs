@@ -6,27 +6,27 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 
 using SSAH.Infrastructure.DbAccess.DbModel;
-using SSAH.Infrastructure.Solver;
 
 namespace SSAH.Startup
 {
     public class Program
     {
+        private static IContainer s_dbAccesssContainer;
         private static IContainer s_rootContainer;
 
         public static void Main(string[] args)
         {
-            CourseCreationService.Main();
+            s_dbAccesssContainer = Bootstrapper.BootstrapDbAccessContainer();
 
-            //s_rootContainer = Bootstrapper.BootstrapContainer();
+            DbInitializer.Initialize(s_dbAccesssContainer);
 
-            //DbInitializer.Initialize(s_rootContainer);
+            s_rootContainer = Bootstrapper.BootstrapContainer();
 
-            //CreateDefaultBuilder(args)
-            //    .ConfigureServices(services => services.AddSingleton(s_rootContainer))
-            //    .UseStartup<Startup>()
-            //    .Build()
-            //    .Run();
+            CreateDefaultBuilder(args)
+                .ConfigureServices(services => services.AddSingleton(s_rootContainer))
+                .UseStartup<Startup>()
+                .Build()
+                .Run();
         }
 
         public static IWebHostBuilder CreateDefaultBuilder(string[] args)

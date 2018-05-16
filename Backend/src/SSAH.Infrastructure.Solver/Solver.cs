@@ -11,12 +11,12 @@ namespace SSAH.Infrastructure.Solver
         public SolverResult Solve(SolverParam param)
         {
             // readonly
-            int[] yearOfParticipants = param.Participants.Select(p => p.Year).ToArray();
+            int[] ageGroupOfParticipants = param.Participants.Select(p => p.AgeGroup).ToArray();
             int[] languageOfParticipants = param.Participants.Select(p => (int)p.Language).ToArray();
             int[] coursesCountInSameNiveauOfParticipants = param.Participants.Select(p => p.CoursesCountInSameNiveau).ToArray();
 
             var courses = Enumerable.Range(1, param.CourseCount).ToArray();
-            var participants = Enumerable.Range(0, yearOfParticipants.Length).ToArray();
+            var participants = Enumerable.Range(0, ageGroupOfParticipants.Length).ToArray();
 
             // mutated
             int[] courseOfParticipant;
@@ -31,11 +31,11 @@ namespace SSAH.Infrastructure.Solver
                 var value = courses
                     .Select(k =>
                     {
-                        var year = YearStandardDeviation(courseOfParticipant, yearOfParticipants, k);
+                        var ageGroup = AgeGroupStandardDeviation(courseOfParticipant, ageGroupOfParticipants, k);
                         var language = UniqueLanguages(courseOfParticipant, languageOfParticipants, k);
                         var coursesCountInSameNiveau = CoursesCountInSameNiveauStandardDeviation(courseOfParticipant, coursesCountInSameNiveauOfParticipants, k);
 
-                        var valueForCourse = year * language * coursesCountInSameNiveau;
+                        var valueForCourse = ageGroup * language * coursesCountInSameNiveau;
 
                         return valueForCourse;
                     })
@@ -57,24 +57,24 @@ namespace SSAH.Infrastructure.Solver
             return new SolverResult(x.Item2, y);
         }
 
-        public static double YearStandardDeviation(int[] courseOfParticipant, int[] yearOfParticipants, int courseFilter)
+        public static double AgeGroupStandardDeviation(int[] courseOfParticipant, int[] ageGroupOfParticipants, int courseFilter)
         {
-            var jahrgaenge = courseOfParticipant.Zip(yearOfParticipants, (course, year) => new { course, year })
+            var ageGroups = courseOfParticipant.Zip(ageGroupOfParticipants, (course, ageGroup) => new { course, ageGroup })
                 .Where(ak => ak.course == courseFilter)
-                .Select(ak => ak.year)
+                .Select(ak => ak.ageGroup)
                 .ToList();
 
-            return StandardDeviation(jahrgaenge, 3) + 1;
+            return StandardDeviation(ageGroups, 3) + 1;
         }
 
         public static double UniqueLanguages(int[] courseOfParticipant, int[] languageOfParticipants, int courseFilter)
         {
-            var sprachen = courseOfParticipant.Zip(languageOfParticipants, (course, language) => new { course, language })
+            var languages = courseOfParticipant.Zip(languageOfParticipants, (course, language) => new { course, language })
                 .Where(ak => ak.course == courseFilter)
                 .Select(ak => ak.language)
                 .ToList();
 
-            var count = sprachen.Distinct().Count();
+            var count = languages.Distinct().Count();
 
             if (count == 0)
             {
@@ -86,12 +86,12 @@ namespace SSAH.Infrastructure.Solver
 
         public static double CoursesCountInSameNiveauStandardDeviation(int[] kursOfTeilnehmer, int[] coursesCountInSameNiveauOfParticipants, int courseFilter)
         {
-            var besuchteKurstageAufGleichemNiveau = kursOfTeilnehmer.Zip(coursesCountInSameNiveauOfParticipants, (kurs, coursesCountInSameNiveau) => new { kurs, coursesCountInSameNiveau })
+            var coursesCountInSameNiveaus = kursOfTeilnehmer.Zip(coursesCountInSameNiveauOfParticipants, (kurs, coursesCountInSameNiveau) => new { kurs, coursesCountInSameNiveau })
                 .Where(ak => ak.kurs == courseFilter)
                 .Select(ak => ak.coursesCountInSameNiveau)
                 .ToList();
 
-            return StandardDeviation(besuchteKurstageAufGleichemNiveau, 3) + 1;
+            return StandardDeviation(coursesCountInSameNiveaus, 3) + 1;
         }
 
         public static double StandardDeviation(ICollection<int> sequence, int digits)
