@@ -1,8 +1,8 @@
 import { Reducer } from "redux";
 
 export interface State {
-    counter: number;
     applicant: ApplicantState;
+    availability: AvailabilityState;
 }
 
 export interface ApplicantState {
@@ -10,4 +10,9 @@ export interface ApplicantState {
     givenname: string;
     residence: string;
     phoneNumber: string;
+}
+
+export interface AvailabilityState {
+    availableFrom: Date;
+    availableTo: Date;
 }

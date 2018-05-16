@@ -4,8 +4,7 @@ import { HashRouter, Route, Switch } from 'react-router-dom';
 import { createStore } from 'redux';
 
 import { AvailabilitySelector } from '../registration/components/AvailabilitySelector';
-import { ApplicantContainer } from '../registration/containers/ApplicantContainer';
-import { CounterContainer } from '../registration/containers/CounterContainer';
+import { RegistrationContainer } from '../registration/containers/RegistrationContainer';
 import { reducer as registrationReducer } from '../registration/reducers';
 
 const registrationStore = createStore(registrationReducer);
@@ -16,9 +15,9 @@ export class App extends React.Component {
             <Provider store={registrationStore}>
                 <HashRouter>
                     <Switch>
-                        <Route exact path="/" component={ApplicantContainer} />
+                        <Route exact path="/" component={RegistrationContainer} />
                         <Route path="/w" component={AvailabilitySelector} />
-                        <Route path="/login" component={CounterContainer} />
+                        <Route path="/login" />
                     </Switch>
                 </HashRouter>
             </Provider>

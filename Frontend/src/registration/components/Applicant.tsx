@@ -13,7 +13,7 @@ export interface ApplicantProps {
 
 export class Applicant extends React.Component<ApplicantProps, Partial<ApplicantProps>> {
     componentDidMount() {
-        this.setState({  })
+        this.setState({ })
     }
 
     handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,7 +25,7 @@ export class Applicant extends React.Component<ApplicantProps, Partial<Applicant
         this.props.change({ [name]: value });
     }
     
-    isEmptyAndChanged(propertySelector: (ApplicantProps) => string) {
+    isEmptyAndChanged = (propertySelector: (ApplicantProps) => string) => {
         const isEmpty = propertySelector(this.props) == "";
         const hasChanged = propertySelector(this.state || {}) === "change";
         return isEmpty && hasChanged;

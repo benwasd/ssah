@@ -1,25 +1,7 @@
 import { Dispatch } from 'react-redux';
 import { Action } from 'redux';
 
-import { ApplicantState } from '../state';
-
-export const INCREMENT = 'INCREMENT';
-export const DECREMENT = 'DECREMENT';
-
-export interface IncrementDecrementAction extends Action {
-    count: number
-}
-
-export const increment = (dispatch: Dispatch) => (count: number) => {
-    const action: IncrementDecrementAction = { type: INCREMENT, count: count };
-    dispatch(action);
-}
-
-export const decrement = (dispatch: Dispatch) => (count: number) => {
-    const action: IncrementDecrementAction = { type: DECREMENT, count: count };
-    dispatch(action);
-}
-
+import { ApplicantState, AvailabilityState } from '../state';
 
 export const APPLICANT_CHANGE = 'APPLICANT_CHANGE';
 
@@ -29,5 +11,16 @@ export interface ApplicantChangeAction extends Action {
 
 export const applicantChange = (dispatch: Dispatch) => (change: Partial<ApplicantState>) => {
     const action: ApplicantChangeAction = { type: APPLICANT_CHANGE, change: change };
+    dispatch(action);
+}
+
+export const AVAILABILITY_CHANGE = 'AVAILABILITY_CHANGE';
+
+export interface AvailabilityChangeAction extends Action {
+    change: AvailabilityState
+}
+
+export const availabilityChange = (dispatch: Dispatch) => (change: AvailabilityState) => {
+    const action: AvailabilityChangeAction = { type: AVAILABILITY_CHANGE, change: change };
     dispatch(action);
 }

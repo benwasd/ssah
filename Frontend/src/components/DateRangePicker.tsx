@@ -3,18 +3,25 @@ import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import * as momentPropTypes from 'react-moment-proptypes';
 import { omit } from 'lodash';
-import {
-  DateRangePicker as ReactDatesDateRangePicker,
-  DateRangePickerShape,
-  isInclusivelyAfterDay,
-} from 'react-dates';
+import { DateRangePicker as ReactDatesDateRangePicker, DateRangePickerShape, isInclusivelyAfterDay } from 'react-dates';
 
 import DateRangePickerPhrases from './DateRangePickerPhrases';
 
 import './DateRangePicker.less';
 import 'react-dates/initialize';
 
-export class DateRangePicker extends React.Component {
+export interface DateRangePickerPropsDateChange {
+    startDate: moment.Moment;
+    endDate: moment.Moment;
+}
+
+export interface DateRangePickerProps {
+    initialStartDate: moment.Moment;
+    initialEndDate: moment.Moment;
+    onDatesChange: (dateChange: DateRangePickerPropsDateChange) => void;
+}
+
+export class DateRangePicker extends React.Component<DateRangePickerProps> {
     static propTypes = {
         // example props for the demo
         autoFocus: PropTypes.bool,
@@ -108,20 +115,20 @@ export class DateRangePicker extends React.Component {
             startDate: props.initialStartDate,
             endDate: props.initialEndDate,
         };
-
-        this.onDatesChange = this.onDatesChange.bind(this);
-        this.onFocusChange = this.onFocusChange.bind(this);
     }
 
-    onDatesChange({ startDate, endDate }) {
-        const { stateDateWrapper } = this.props as any;;
+    onDatesChange = ({ startDate, endDate }) => {
+        const { stateDateWrapper } = this.props as any;
+
         this.setState({
             startDate: startDate && stateDateWrapper(startDate),
             endDate: endDate && stateDateWrapper(endDate),
         });
+
+        this.props.onDatesChange({startDate, endDate});
     }
 
-    onFocusChange(focusedInput) {
+    onFocusChange = (focusedInput) => {
         this.setState({ focusedInput });
     }
 
