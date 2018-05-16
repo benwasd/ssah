@@ -11,7 +11,7 @@ namespace SSAH.Infrastructure.Solver
         public static void Main()
         {
             // readonly
-            int[] jahrgangOfTeilnehmer = { 1960, 1990, 1980, 1982, 2001, 2003, 2010, 2004, 2002, 1998, 1999, 1993, 1992, 1991, 1989/*, 1993, 1950*/ };
+            int[] jahrgangOfTeilnehmer = { 1960, 1990, 1980, 1982, 2001, 2003, 2010, 2004, 2002, 1998, 1999, 1993, 1992, 1991, 1989, 1993/*, 1950*/ };
             int[] spracheOfTeilnehmer = { 1, 1, 2, 2, 2, 3, 3, 2, 1, 2, 1, 1, 4, 4, 3/*, 2, 2*/ };
             int[] besuchteKurstageAufGleichemNiveauOfTeilnehmer = { 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 1, 1, 1/*, 1, 5*/ };
 
@@ -21,14 +21,14 @@ namespace SSAH.Infrastructure.Solver
             // mutated
             int[] kursOfTeilnehmer; // { 1, 1, 1, 1 };
 
-            Debug.WriteLine("www1 {0}", (object)PatternStamp(new[] { 1, 1 }));
-            Debug.WriteLine("www1 {0}", (object)PatternStamp(new[] { 3, 4 }));
-            Debug.WriteLine("www1 {0}", (object)PatternStamp(new[] { 0, 1, 0, 4 }));
-            Debug.WriteLine("www1 {0}", (object)PatternStamp(new[] { 0, 1, 0, 2 }));
-            Debug.WriteLine("www1 {0}", (object)PatternStamp(new[] { 2, 1, 2, 1, 2 }));
-            Debug.WriteLine("www2 {0}", (object)PatternStamp(new[] { 1, 2, 1, 2, 4 }));
-            Debug.WriteLine("www3 {0}", (object)PatternStamp(new[] { 1, 2, 1, 2, 4 }));
-            Debug.WriteLine("www4 {0}", (object)PatternStamp(new[] { 2, 1, 2, 1, 8 }));
+            //Debug.WriteLine("www1 {0}", (object)PatternStamp(new[] { 1, 1 }));
+            //Debug.WriteLine("www1 {0}", (object)PatternStamp(new[] { 3, 4 }));
+            //Debug.WriteLine("www1 {0}", (object)PatternStamp(new[] { 0, 1, 0, 4 }));
+            //Debug.WriteLine("www1 {0}", (object)PatternStamp(new[] { 0, 1, 0, 2 }));
+            //Debug.WriteLine("www1 {0}", (object)PatternStamp(new[] { 2, 1, 2, 1, 2 }));
+            //Debug.WriteLine("www2 {0}", (object)PatternStamp(new[] { 1, 2, 1, 2, 4 }));
+            //Debug.WriteLine("www3 {0}", (object)PatternStamp(new[] { 1, 2, 1, 2, 4 }));
+            //Debug.WriteLine("www4 {0}", (object)PatternStamp(new[] { 2, 1, 2, 1, 8 }));
 
             // solve
             var solutions = new List<Tuple<int[], double>>();
@@ -78,10 +78,10 @@ namespace SSAH.Infrastructure.Solver
 
              */
 
-            //Debug.WriteLine("Permutationen Start {0}", DateTime.Now);
-            //var pers = GetPermutationsYield(kurse, teilnehmers.Length).Distinct(new X()).Count();
-            //Debug.WriteLine("Permutationen {0}", pers);
-            //Debug.WriteLine("Permutationen End {0}", DateTime.Now);
+            Debug.WriteLine("Permutationen Start {0}", DateTime.Now);
+            var pers = Combinator.PermutationsWithDublicatePatternsFiltering(kurse, teilnehmers.Length).Count();
+            Debug.WriteLine("Permutationen {0}", pers);
+            Debug.WriteLine("Permutationen End {0}", DateTime.Now);
 
             //Debug.WriteLine("Permutationen Start {0}", DateTime.Now);
             //var pers2 = GetPermutationsYield2(kurse, teilnehmers.Length).Count();
@@ -93,7 +93,9 @@ namespace SSAH.Infrastructure.Solver
             //Debug.WriteLine("Kombs {0}", combs);
             //Debug.WriteLine("Kombs End {0}", DateTime.Now);
 
-            foreach (var x in GetPermutationsYield2(kurse, teilnehmers.Length))
+            return;
+
+            foreach (var x in Combinator.PermutationsWithDublicatePatternsFiltering(kurse, teilnehmers.Length))
             {
                 kursOfTeilnehmer = x.ToArray();
 
@@ -115,7 +117,6 @@ namespace SSAH.Infrastructure.Solver
 
             var bestSolutions = solutions.OrderBy(s => s.Item2).Take(10).ToArray();
 
-            Console.ReadLine();
         }
 
         /*
@@ -302,9 +303,9 @@ namespace SSAH.Infrastructure.Solver
 
         public static double StandartabweichungJahrgaenge(int[] kursOfTeilnehmer, int[] jahrgangOfTeilnehmer, int kursFilter)
         {
-            var jahrgaenge = kursOfTeilnehmer.Zip(jahrgangOfTeilnehmer, (kurs, jahrgang) => new { kurs, jahrgang })
+            var jahrgaenge = kursOfTeilnehmer.Zip(jahrgangOfTeilnehmer, (kurs, jahrgang) => new { kurs, year = jahrgang })
                 .Where(ak => ak.kurs == kursFilter)
-                .Select(ak => ak.jahrgang)
+                .Select(ak => ak.year)
                 .ToList();
 
             return Standardabweichung(jahrgaenge, 3) + 1;
@@ -312,9 +313,9 @@ namespace SSAH.Infrastructure.Solver
 
         public static double EindeutigeSprachen(int[] kursOfTeilnehmer, int[] spracheOfTeilnehmer, int kursFilter)
         {
-            var sprachen = kursOfTeilnehmer.Zip(spracheOfTeilnehmer, (kurs, sprache) => new { kurs, sprache })
+            var sprachen = kursOfTeilnehmer.Zip(spracheOfTeilnehmer, (kurs, sprache) => new { kurs, language = sprache })
                 .Where(ak => ak.kurs == kursFilter)
-                .Select(ak => ak.sprache)
+                .Select(ak => ak.language)
                 .ToList();
 
             var count = sprachen.Distinct().Count();
