@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.7.0" />
-    <PackageReference Include="Decider" Version="0.3.4" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.0.1" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="2.0.1" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0-rc1" />
