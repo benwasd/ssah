@@ -11,9 +11,9 @@ namespace SSAH.Infrastructure.Solver
         public static void Main()
         {
             // readonly
-            int[] jahrgangOfTeilnehmer = { 1960, 1990, 1980, 1982, 2001, 2003, 2010, 2004, 2002, 1998, 1999, 1993, 1992 /*, 1991, 1989, 1993, 1950*/ };
-            int[] spracheOfTeilnehmer = { 1, 1, 2, 2, 2, 3, 3, 2, 1, 2/*, 1, 1, 4, 4, 3, 2, 2 */};
-            int[] besuchteKurstageAufGleichemNiveauOfTeilnehmer = { 4, 4, 4, 4, 4, 4, 4, 5, 5, 5/*, 5, 5, 1, 1, 1, 1, 5*/ };
+            int[] jahrgangOfTeilnehmer = { 1960, 1990, 1980, 1982, 2001, 2003, 2010, 2004, 2002, 1998, 1999, 1993, 1992, 1991, 1989/*, 1993, 1950*/ };
+            int[] spracheOfTeilnehmer = { 1, 1, 2, 2, 2, 3, 3, 2, 1, 2, 1, 1, 4, 4, 3/*, 2, 2*/ };
+            int[] besuchteKurstageAufGleichemNiveauOfTeilnehmer = { 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 1, 1, 1/*, 1, 5*/ };
 
             var teilnehmers = Enumerable.Range(0, jahrgangOfTeilnehmer.Length).ToArray(); // 0-3
             var kurse = Enumerable.Range(1, 3).ToArray(); // 1-3
@@ -31,8 +31,6 @@ namespace SSAH.Infrastructure.Solver
             Debug.WriteLine("www4 {0}", (object)PatternStamp(new[] { 2, 1, 2, 1, 8 }));
 
             // solve
-            
-
             var solutions = new List<Tuple<int[], double>>();
 
             /*
@@ -60,6 +58,24 @@ namespace SSAH.Infrastructure.Solver
                     Permutationen End 16.05.2018 14:24:15
                     ~6 sec
 
+                    15:
+                    Permutationen Start 16.05.2018 14:28:33
+                    Permutationen 2391485
+                    Permutationen End 16.05.2018 14:29:38
+                    ~1 min
+
+                    16: 
+                    Permutationen Start 16.05.2018 14:46:45
+                    Permutationen 7174454
+                    Permutationen End 16.05.2018 14:49:26
+                    ~2.5 min
+
+                    17:
+                    Permutationen Start 16.05.2018 14:50:47
+                    Permutationen 21523361
+                    Permutationen End 16.05.2018 14:59:04
+                    ~9min
+
              */
 
             //Debug.WriteLine("Permutationen Start {0}", DateTime.Now);
@@ -67,39 +83,35 @@ namespace SSAH.Infrastructure.Solver
             //Debug.WriteLine("Permutationen {0}", pers);
             //Debug.WriteLine("Permutationen End {0}", DateTime.Now);
 
-            Debug.WriteLine("Permutationen Start {0}", DateTime.Now);
-            var pers2 = GetPermutationsYield2(kurse, teilnehmers.Length).Count();
-            Debug.WriteLine("Permutationen {0}", pers2);
-            Debug.WriteLine("Permutationen End {0}", DateTime.Now);
+            //Debug.WriteLine("Permutationen Start {0}", DateTime.Now);
+            //var pers2 = GetPermutationsYield2(kurse, teilnehmers.Length).Count();
+            //Debug.WriteLine("Permutationen {0}", pers2);
+            //Debug.WriteLine("Permutationen End {0}", DateTime.Now);
 
             //Debug.WriteLine("Kombs Start {0}", DateTime.Now);
             //var combs = GetKCombsWithRept(kurse, teilnehmers.Length).Distinct(new X()).Count();
             //Debug.WriteLine("Kombs {0}", combs);
             //Debug.WriteLine("Kombs End {0}", DateTime.Now);
 
-            /*
             foreach (var x in GetPermutationsYield2(kurse, teilnehmers.Length))
             {
                 kursOfTeilnehmer = x.ToArray();
 
-                Debug.WriteLine(String.Join(",", kursOfTeilnehmer));
+                var value = kurse
+                    .Select(k =>
+                    {
+                        var jahrgang = StandartabweichungJahrgaenge(kursOfTeilnehmer, jahrgangOfTeilnehmer, k);
+                        var sprache = EindeutigeSprachen(kursOfTeilnehmer, spracheOfTeilnehmer, k);
+                        var besuchteKurstageAufGleichemNiveau = StandartabweichungBesuchteKurstageAufGleichemNiveau(kursOfTeilnehmer, besuchteKurstageAufGleichemNiveauOfTeilnehmer, k);
 
-                //    //var value = kurse
-                //    //    .Select(k =>
-                //    //    {
-                //    //        var jahrgang = StandartabweichungJahrgaenge(kursOfTeilnehmer, jahrgangOfTeilnehmer, k);
-                //    //        var sprache = EindeutigeSprachen(kursOfTeilnehmer, spracheOfTeilnehmer, k);
-                //    //        var besuchteKurstageAufGleichemNiveau = StandartabweichungBesuchteKurstageAufGleichemNiveau(kursOfTeilnehmer, besuchteKurstageAufGleichemNiveauOfTeilnehmer, k);
+                        var valueForCourse = jahrgang * sprache * besuchteKurstageAufGleichemNiveau;
 
-                //    //        var valueForCourse = jahrgang * sprache * besuchteKurstageAufGleichemNiveau;
+                        return valueForCourse;
+                    })
+                    .Sum();
 
-                //    //        return valueForCourse;
-                //    //    })
-                //    //    .Sum();
-
-                //    //solutions.Add(Tuple.Create(kursOfTeilnehmer, value));
+                solutions.Add(Tuple.Create(kursOfTeilnehmer, value));
             }
-            */
 
             var bestSolutions = solutions.OrderBy(s => s.Item2).Take(10).ToArray();
 
@@ -137,7 +149,7 @@ namespace SSAH.Infrastructure.Solver
         }
         */
 
-        public static IEnumerable<ICollection<int>> GetPermutationsYield2(ICollection<int> list, int count)
+        public static IEnumerable<ICollection<int>> GetPermutationsYield2(ICollection<int> list, int count, bool root = true)
         {
             if (count == 0)
             {
@@ -145,16 +157,28 @@ namespace SSAH.Infrastructure.Solver
             }
             else
             {
-                var producedPatterns = new HashSet<string>();
+                HashSet<string> producedPatterns = null;
+
+                if (count % 3 == 0 || root)
+                {
+                    producedPatterns = new HashSet<string>();
+                }
 
                 foreach (var element in list)
                 {
-                    foreach (var subElements in GetPermutationsYield2(list, count - 1))
+                    foreach (var subElements in GetPermutationsYield2(list, count - 1, root: false))
                     {
                         var x = Concat(element, subElements).ToArray();
-                        var pattern = PatternStamp(x);
 
-                        if (producedPatterns.Add(pattern))
+                        if (producedPatterns != null)
+                        {
+                            var pattern = PatternStamp(x);
+                            if (producedPatterns.Add(pattern))
+                            {
+                                yield return x;
+                            }
+                        }
+                        else
                         {
                             yield return x;
                         }
