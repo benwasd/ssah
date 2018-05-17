@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Form, Input, Dropdown } from 'semantic-ui-react';
+import { Form, Input, Dropdown, DropdownItemProps } from 'semantic-ui-react';
 
 import { ApplicantState, AvailabilityState } from '../state';
 import { DateRangePicker, DateRangePickerPropsDateChange} from '../../components/DateRangePicker';
@@ -13,12 +13,21 @@ export interface PartipiantState {
 }
 
 export class Partipiant extends React.Component<PartipiantProps, PartipiantState> {
-    get getCourseTypeOptions() {
+    get courseTypeOptions() {
         return getEnumElementsAsDropdownItemProps(CourseType, ["Gruppenkurs"]);
     }
 
-    get getDisciplineOptions() {
+    get disciplineOptions() {
         return getEnumElementsAsDropdownItemProps(Discipline);
+    }
+
+    get niveauOptions(): DropdownItemProps[] {
+        return [
+            { text: "Kids Village", value: 100 },
+            { text: "Blue Prince/Princess", value: 110 },
+            { text: "Blue King/Queen", value: 111 },
+            { text: "Blue Star", value: 112 },
+        ];
     }
 
     handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,14 +46,17 @@ export class Partipiant extends React.Component<PartipiantProps, PartipiantState
     render() {
         return (<>
             <div className="row">
-                <div className="three wide column">
+                <div className="four wide column">
                     <Input name='name' placeholder='Name' onChange={this.handleInputChange} />
                 </div>
-                <div className="three wide column">
-                    <Dropdown name='courseType' placeholder='Kurstyp' selection basic options={this.getCourseTypeOptions} onChange={this.handleDropDownChange} />
+                <div className="four wide column">
+                    <Dropdown name='courseType' placeholder='Kurstyp' selection basic options={this.courseTypeOptions} onChange={this.handleDropDownChange} />
                 </div>
-                <div className="three wide column">
-                    <Dropdown name='discipline' placeholder='Disziplin' selection basic options={this.getDisciplineOptions} onChange={this.handleDropDownChange} />
+                <div className="four wide column">
+                    <Dropdown name='discipline' placeholder='Disziplin' selection basic options={this.disciplineOptions} onChange={this.handleDropDownChange} />
+                </div>
+                <div className="four wide column">
+                    <Dropdown name='niveauId' placeholder='Niveau' selection basic options={this.niveauOptions} onChange={this.handleDropDownChange} />
                 </div>
             </div>
             <div className="row">
