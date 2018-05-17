@@ -31,29 +31,13 @@ const AvailabilitySelectorContainer = connect(
 
 export class RegistrationContainer extends React.Component {
     render() {
-        return (
-            <div>
-                <ApplicantContainer/>
-                <AvailabilitySelectorContainer />
-                <table className='ui definition table'>
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Arguments</th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>reset rating</td>
-                            <td>None</td>
-                            <td>Resets rating to default value</td>
-                        </tr>
-                        <Partipiant />
-                    </tbody>
-                </table>
-                
+        return (<>
+            <ApplicantContainer/>
+            <AvailabilitySelectorContainer />
+
+            <div className="ui internally celled grid">
+                <Partipiant />
             </div>
-        )
+        </>);
     }
 }

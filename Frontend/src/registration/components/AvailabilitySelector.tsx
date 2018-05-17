@@ -20,18 +20,16 @@ export class AvailabilitySelector extends React.Component<AvailabilitySelectorPr
     }
 
     render() {
-        return (
-            <div style={{margin: '1em 0em 0em'}}>
-                <Form>
-                    <Form.Field required>
-                        <label>Verfügbarkeit</label>
-                    </Form.Field>
-                </Form>
-                <DateRangePicker 
-                    initialStartDate={this.props.availableFrom == null ? null : moment(this.props.availableFrom)} 
-                    initialEndDate={this.props.availableTo == null ? null : moment(this.props.availableTo)}
-                    onDatesChange={this.onDatesChange} />
-            </div>
-        );
+        return (<>
+            <Form style={{margin: '1em 0em 0em'}}>
+                <Form.Field required>
+                    <label>Verfügbarkeit</label>
+                </Form.Field>
+            </Form>
+            <DateRangePicker 
+                initialStartDate={this.props.availableFrom == null ? null : moment(this.props.availableFrom)} 
+                initialEndDate={this.props.availableTo == null ? null : moment(this.props.availableTo)}
+                onDatesChange={this.onDatesChange} />
+        </>);
     }
 }
