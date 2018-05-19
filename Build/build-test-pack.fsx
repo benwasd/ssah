@@ -18,7 +18,8 @@ let msbuild target projectOrSolutionFiles =
   MSBuildReleaseExt "" [("TreatWarningsAsErrors", "true")] target projectOrSolutionFiles |> ignore
 
 let npm command dir = 
-  Npm (fun p -> { p with NpmFilePath = """C:\Users\appveyor\AppData\Roaming\npm\npm.cmd"""; Command = command; WorkingDirectory = dir })
+  let appData = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData)
+  Npm (fun p -> { p with NpmFilePath = appData @@ "npm" @@ "npm.cmd"; Command = command; WorkingDirectory = dir })
 
 let nunit resultFilePrefix testAssemblies = 
   let nunit3Exe = findToolInSubPath "nunit3-console.exe" buildDir
