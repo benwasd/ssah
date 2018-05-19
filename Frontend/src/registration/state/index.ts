@@ -26,9 +26,9 @@ export interface PartipiantState {
     id?: string;
     timestamp?: string;
     name: string;
-    courseType: CourseType;
-    discipline: Discipline;
-    niveauId: number;
+    courseType?: CourseType;
+    discipline?: Discipline;
+    niveauId?: number;
     commiting?: {
         language: Language;
         ageGroup: number;

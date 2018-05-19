@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 
-import { applicantChange, availabilityChange, changePartipiant } from '../actions';
+import { applicantChange, availabilityChange, changePartipiant, loadRegistration } from '../actions';
 import { State } from '../state';
 import { Applicant } from '../components/Applicant';
 import { AvailabilitySelector } from '../components/AvailabilitySelector';
@@ -49,3 +49,33 @@ export class RegistrationContainer extends React.Component {
         </>);
     }
 }
+
+export interface OpenRegistrationContainerProps {
+    match: { params: { id: string } }
+    loadRegistration(id: string);
+}
+
+export class OpenRegistration extends React.Component<OpenRegistrationContainerProps> {
+    componentDidMount() {
+        this.props.loadRegistration(this.props.match.params.id);
+
+    }
+
+    render() {
+        console.log(this.props.match.params.id);
+        return (<>
+            <div>Lol</div>
+        </>);
+    }
+}
+
+export const OpenRegistrationContainer = connect(
+    (state: State) => {
+        return {};
+    },
+    (dispatch: Dispatch) => {
+        return {
+            loadRegistration: loadRegistration(dispatch)
+        };
+    }
+)(OpenRegistration)

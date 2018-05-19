@@ -1,6 +1,6 @@
 import { combineReducers, Reducer, Action } from 'redux';
 
-import { APPLICANT_CHANGE, ApplicantChangeAction, AVAILABILITY_CHANGE, AvailabilityChangeAction, PARTIPIENT_CHANGE, PartipientChangeAction } from '../actions';
+import { APPLICANT_CHANGE, ApplicantChangeAction, AVAILABILITY_CHANGE, AvailabilityChangeAction, PARTIPIENT_CHANGE, PartipientChangeAction, REGISTRATION_LOADED } from '../actions';
 import { ApplicantState, AvailabilityState, PartipiantState } from '../state';
 import { CourseType, Discipline } from '../../api';
 
@@ -34,29 +34,29 @@ const handleAvailability: Reducer<AvailabilityState, Action> = (state, action) =
 
 const handlePartipiants: Reducer<PartipiantState[], Action> = (state, action) => {
     if (state === undefined) {
-        return [
-            { name: "", courseType: CourseType.Group, discipline: Discipline.Ski, niveauId: 0 },
-            { name: "", courseType: CourseType.Group, discipline: Discipline.Ski, niveauId: 0 },
-            { name: "", courseType: CourseType.Group, discipline: Discipline.Ski, niveauId: 0 },
-        ];
+        return [ { name: "" }, { name: "" }, { name: "" } ];
     }
 
     switch (action.type) {
         case PARTIPIENT_CHANGE:
             const l = action as PartipientChangeAction;
-            let wu = update(state, { [l.partipiantIndex]: { $merge: l.change } });
+            let newState = update(state, { [l.partipiantIndex]: { $merge: l.change } });
 
-            if (wu.every(e => e.name != "")) {
-                wu = wu.concat({ name: "", courseType: CourseType.Group, discipline: Discipline.Ski, niveauId: 0 });
+            if (newState.every(p => hasAllRegistrationProperties(p))) {
+                newState = newState.concat({ name: "" });
             }
 
-            return wu as PartipiantState[];
+            return newState as PartipiantState[];
+
+        case REGISTRATION_LOADED:
+            console.log(action);
+
         default: 
             return state;
     }
 
-    function defaultPartipiant() {
-        return 
+    function hasAllRegistrationProperties(p: PartipiantState) {
+        return p.name != "" && p.niveauId != null && p.courseType != null && p.discipline != null;
     }
 }
 

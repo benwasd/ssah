@@ -2,6 +2,7 @@ import { Dispatch } from 'react-redux';
 import { Action } from 'redux';
 
 import { ApplicantState, AvailabilityState, PartipiantState } from '../state';
+import { RegistrationApiProxy, RegistrationDto } from '../../api';
 
 export const APPLICANT_CHANGE = 'APPLICANT_CHANGE';
 
@@ -35,4 +36,18 @@ export interface PartipientChangeAction extends Action {
 export const changePartipiant = (dispatch: Dispatch) => (partipiantIndex: number, change: Partial<PartipiantState>) => {
     const action: PartipientChangeAction = { type: PARTIPIENT_CHANGE, partipiantIndex: partipiantIndex, change: change };
     dispatch(action);
+}
+
+export const REGISTRATION_LOADED = 'REGISTRATION_LOADED';
+
+export interface RegistrationLoadedAction extends Action {
+    registration: RegistrationDto;
+}
+
+export const loadRegistration = (dispatch: Dispatch) => (id: string) => {
+    const apiProxy = new RegistrationApiProxy();
+    apiProxy.getRegistration(id).then(r => {
+        const action: RegistrationLoadedAction = { type: REGISTRATION_LOADED, registration: r };
+        dispatch(action);
+    })
 }

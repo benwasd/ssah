@@ -293,18 +293,18 @@ export class RegistrationDto implements IRegistrationDto {
 
     init(data?: any) {
         if (data) {
-            this.registrationId = data["RegistrationId"];
-            this.applicantId = data["ApplicantId"];
-            this.surname = data["Surname"];
-            this.givenname = data["Givenname"];
-            this.residence = data["Residence"];
-            this.phoneNumber = data["PhoneNumber"];
-            this.preferSimultaneousCourseExecutionForPartipiants = data["PreferSimultaneousCourseExecutionForPartipiants"];
-            this.availableFrom = data["AvailableFrom"] ? new Date(data["AvailableFrom"].toString()) : <any>undefined;
-            this.availableTo = data["AvailableTo"] ? new Date(data["AvailableTo"].toString()) : <any>undefined;
-            if (data["Participants"] && data["Participants"].constructor === Array) {
+            this.registrationId = data["registrationId"];
+            this.applicantId = data["applicantId"];
+            this.surname = data["surname"];
+            this.givenname = data["givenname"];
+            this.residence = data["residence"];
+            this.phoneNumber = data["phoneNumber"];
+            this.preferSimultaneousCourseExecutionForPartipiants = data["preferSimultaneousCourseExecutionForPartipiants"];
+            this.availableFrom = data["availableFrom"] ? new Date(data["availableFrom"].toString()) : <any>undefined;
+            this.availableTo = data["availableTo"] ? new Date(data["availableTo"].toString()) : <any>undefined;
+            if (data["participants"] && data["participants"].constructor === Array) {
                 this.participants = [];
-                for (let item of data["Participants"])
+                for (let item of data["participants"])
                     this.participants.push(RegistrationParticipantDto.fromJS(item));
             }
         }
@@ -319,19 +319,19 @@ export class RegistrationDto implements IRegistrationDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["RegistrationId"] = this.registrationId;
-        data["ApplicantId"] = this.applicantId;
-        data["Surname"] = this.surname;
-        data["Givenname"] = this.givenname;
-        data["Residence"] = this.residence;
-        data["PhoneNumber"] = this.phoneNumber;
-        data["PreferSimultaneousCourseExecutionForPartipiants"] = this.preferSimultaneousCourseExecutionForPartipiants;
-        data["AvailableFrom"] = this.availableFrom ? this.availableFrom.toISOString() : <any>undefined;
-        data["AvailableTo"] = this.availableTo ? this.availableTo.toISOString() : <any>undefined;
+        data["registrationId"] = this.registrationId;
+        data["applicantId"] = this.applicantId;
+        data["surname"] = this.surname;
+        data["givenname"] = this.givenname;
+        data["residence"] = this.residence;
+        data["phoneNumber"] = this.phoneNumber;
+        data["preferSimultaneousCourseExecutionForPartipiants"] = this.preferSimultaneousCourseExecutionForPartipiants;
+        data["availableFrom"] = this.availableFrom ? this.availableFrom.toISOString() : <any>undefined;
+        data["availableTo"] = this.availableTo ? this.availableTo.toISOString() : <any>undefined;
         if (this.participants && this.participants.constructor === Array) {
-            data["Participants"] = [];
+            data["participants"] = [];
             for (let item of this.participants)
-                data["Participants"].push(item.toJSON());
+                data["participants"].push(item.toJSON());
         }
         return data; 
     }
@@ -372,8 +372,8 @@ export class EntityDto implements IEntityDto {
 
     init(data?: any) {
         if (data) {
-            this.id = data["Id"];
-            this.rowVersion = data["RowVersion"];
+            this.id = data["id"];
+            this.rowVersion = data["rowVersion"];
         }
     }
 
@@ -386,8 +386,8 @@ export class EntityDto implements IEntityDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["Id"] = this.id;
-        data["RowVersion"] = this.rowVersion;
+        data["id"] = this.id;
+        data["rowVersion"] = this.rowVersion;
         return data; 
     }
 
@@ -417,10 +417,10 @@ export class RegistrationParticipantDto extends EntityDto implements IRegistrati
     init(data?: any) {
         super.init(data);
         if (data) {
-            this.name = data["Name"];
-            this.courseType = data["CourseType"];
-            this.discipline = data["Discipline"];
-            this.niveauId = data["NiveauId"];
+            this.name = data["name"];
+            this.courseType = data["courseType"];
+            this.discipline = data["discipline"];
+            this.niveauId = data["niveauId"];
         }
     }
 
@@ -433,10 +433,10 @@ export class RegistrationParticipantDto extends EntityDto implements IRegistrati
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["Name"] = this.name;
-        data["CourseType"] = this.courseType;
-        data["Discipline"] = this.discipline;
-        data["NiveauId"] = this.niveauId;
+        data["name"] = this.name;
+        data["courseType"] = this.courseType;
+        data["discipline"] = this.discipline;
+        data["niveauId"] = this.niveauId;
         super.toJSON(data);
         return data; 
     }
@@ -480,8 +480,8 @@ export class RegistrationResultDto implements IRegistrationResultDto {
 
     init(data?: any) {
         if (data) {
-            this.applicantId = data["ApplicantId"];
-            this.registrationId = data["RegistrationId"];
+            this.applicantId = data["applicantId"];
+            this.registrationId = data["registrationId"];
         }
     }
 
@@ -494,8 +494,8 @@ export class RegistrationResultDto implements IRegistrationResultDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["ApplicantId"] = this.applicantId;
-        data["RegistrationId"] = this.registrationId;
+        data["applicantId"] = this.applicantId;
+        data["registrationId"] = this.registrationId;
         return data; 
     }
 
@@ -532,12 +532,12 @@ export class PossibleCourseDto implements IPossibleCourseDto {
 
     init(data?: any) {
         if (data) {
-            this.registrationPartipiantId = data["RegistrationPartipiantId"];
-            this.identifier = data["Identifier"];
-            this.startDate = data["StartDate"] ? new Date(data["StartDate"].toString()) : <any>undefined;
-            if (data["CoursePeriods"] && data["CoursePeriods"].constructor === Array) {
+            this.registrationPartipiantId = data["registrationPartipiantId"];
+            this.identifier = data["identifier"];
+            this.startDate = data["startDate"] ? new Date(data["startDate"].toString()) : <any>undefined;
+            if (data["coursePeriods"] && data["coursePeriods"].constructor === Array) {
                 this.coursePeriods = [];
-                for (let item of data["CoursePeriods"])
+                for (let item of data["coursePeriods"])
                     this.coursePeriods.push(Period.fromJS(item));
             }
         }
@@ -552,13 +552,13 @@ export class PossibleCourseDto implements IPossibleCourseDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["RegistrationPartipiantId"] = this.registrationPartipiantId;
-        data["Identifier"] = this.identifier;
-        data["StartDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
+        data["registrationPartipiantId"] = this.registrationPartipiantId;
+        data["identifier"] = this.identifier;
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
         if (this.coursePeriods && this.coursePeriods.constructor === Array) {
-            data["CoursePeriods"] = [];
+            data["coursePeriods"] = [];
             for (let item of this.coursePeriods)
-                data["CoursePeriods"].push(item.toJSON());
+                data["coursePeriods"].push(item.toJSON());
         }
         return data; 
     }
@@ -594,9 +594,9 @@ export class Period implements IPeriod {
 
     init(data?: any) {
         if (data) {
-            this.start = data["Start"] ? new Date(data["Start"].toString()) : <any>undefined;
-            this.duration = data["Duration"];
-            this.end = data["End"] ? new Date(data["End"].toString()) : <any>undefined;
+            this.start = data["start"] ? new Date(data["start"].toString()) : <any>undefined;
+            this.duration = data["duration"];
+            this.end = data["end"] ? new Date(data["end"].toString()) : <any>undefined;
         }
     }
 
@@ -609,9 +609,9 @@ export class Period implements IPeriod {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["Start"] = this.start ? this.start.toISOString() : <any>undefined;
-        data["Duration"] = this.duration;
-        data["End"] = this.end ? this.end.toISOString() : <any>undefined;
+        data["start"] = this.start ? this.start.toISOString() : <any>undefined;
+        data["duration"] = this.duration;
+        data["end"] = this.end ? this.end.toISOString() : <any>undefined;
         return data; 
     }
 
@@ -648,11 +648,11 @@ export class CommitRegistrationDto implements ICommitRegistrationDto {
 
     init(data?: any) {
         if (data) {
-            this.registrationId = data["RegistrationId"];
-            this.payment = data["Payment"];
-            if (data["Participants"] && data["Participants"].constructor === Array) {
+            this.registrationId = data["registrationId"];
+            this.payment = data["payment"];
+            if (data["participants"] && data["participants"].constructor === Array) {
                 this.participants = [];
-                for (let item of data["Participants"])
+                for (let item of data["participants"])
                     this.participants.push(CommitRegistrationParticipantDto.fromJS(item));
             }
         }
@@ -667,12 +667,12 @@ export class CommitRegistrationDto implements ICommitRegistrationDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["RegistrationId"] = this.registrationId;
-        data["Payment"] = this.payment;
+        data["registrationId"] = this.registrationId;
+        data["payment"] = this.payment;
         if (this.participants && this.participants.constructor === Array) {
-            data["Participants"] = [];
+            data["participants"] = [];
             for (let item of this.participants)
-                data["Participants"].push(item.toJSON());
+                data["participants"].push(item.toJSON());
         }
         return data; 
     }
@@ -704,10 +704,10 @@ export class CommitRegistrationParticipantDto extends EntityDto implements IComm
     init(data?: any) {
         super.init(data);
         if (data) {
-            this.language = data["Language"];
-            this.ageGroup = data["AgeGroup"];
-            this.courseIdentifier = data["CourseIdentifier"];
-            this.courseStartDate = data["CourseStartDate"] ? new Date(data["CourseStartDate"].toString()) : <any>undefined;
+            this.language = data["language"];
+            this.ageGroup = data["ageGroup"];
+            this.courseIdentifier = data["courseIdentifier"];
+            this.courseStartDate = data["courseStartDate"] ? new Date(data["courseStartDate"].toString()) : <any>undefined;
         }
     }
 
@@ -720,10 +720,10 @@ export class CommitRegistrationParticipantDto extends EntityDto implements IComm
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["Language"] = this.language;
-        data["AgeGroup"] = this.ageGroup;
-        data["CourseIdentifier"] = this.courseIdentifier;
-        data["CourseStartDate"] = this.courseStartDate ? this.courseStartDate.toISOString() : <any>undefined;
+        data["language"] = this.language;
+        data["ageGroup"] = this.ageGroup;
+        data["courseIdentifier"] = this.courseIdentifier;
+        data["courseStartDate"] = this.courseStartDate ? this.courseStartDate.toISOString() : <any>undefined;
         super.toJSON(data);
         return data; 
     }

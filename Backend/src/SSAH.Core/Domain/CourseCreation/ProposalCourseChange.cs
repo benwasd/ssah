@@ -20,8 +20,8 @@ namespace SSAH.Core.Domain.CourseCreation
                 .OfType<PartipiantRegistredMessage>()
                 .SubscribeInUnitOfWorkScope<PartipiantRegistredMessage, Handler>(rootContainer);
 
-            yield return Observable.Timer(TimeSpan.FromSeconds(2))
-                .Subscribe(x => queue.Publish(new PartipiantRegistredMessage(Guid.NewGuid(), Guid.Empty)));
+            //yield return Observable.Timer(TimeSpan.FromSeconds(2))
+            //    .Subscribe(x => queue.Publish(new PartipiantRegistredMessage(Guid.NewGuid(), Guid.Empty)));
         }
 
         public class Handler : ObserverBase<PartipiantRegistredMessage>
@@ -37,10 +37,10 @@ namespace SSAH.Core.Domain.CourseCreation
 
             protected override void OnNextCore(PartipiantRegistredMessage value)
             {
-                var x = _courseRepository.GetById(value.ProposalCourseId);
-                var solverParticipants = x.Participants.Select(p => new SolverParticipant(p.Participant)).ToArray();
+                //var x = _courseRepository.GetById(value.ProposalCourseId);
+                //var solverParticipants = x.Participants.Select(p => new SolverParticipant(p.Participant)).ToArray();
 
-                var result = _solver.Solve(new SolverParam(5, solverParticipants));
+                //var result = _solver.Solve(new SolverParam(5, solverParticipants));
             }
 
             protected override void OnErrorCore(Exception error)
