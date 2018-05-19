@@ -1,10 +1,20 @@
 import { combineReducers, Reducer, Action } from 'redux';
 
-import { APPLICANT_CHANGE, ApplicantChangeAction, AVAILABILITY_CHANGE, AvailabilityChangeAction, PARTIPIENT_CHANGE, PartipientChangeAction, REGISTRATION_LOADED } from '../actions';
-import { ApplicantState, AvailabilityState, PartipiantState } from '../state';
+import { APPLICANT_CHANGE, ApplicantChangeAction, AVAILABILITY_CHANGE, AvailabilityChangeAction, PARTIPIENT_CHANGE, PartipientChangeAction, REGISTRATION_LOADED, RegistrationLoadedAction } from '../actions';
+import { ApplicantState, AvailabilityState, PartipiantState, RegistrationState } from '../state';
 import { CourseType, Discipline } from '../../api';
 
 import update from 'immutability-helper';
+
+function noopReducer<T>(defaultState: T): Reducer<T, Action> {
+    return (s: T, a: Action) => {
+        if (s === undefined) {
+            return defaultState;
+        }
+
+        return s;
+    }
+}
 
 const handleApplicant: Reducer<ApplicantState, Action> = (state, action) => {
     if (state === undefined) {
@@ -39,8 +49,8 @@ const handlePartipiants: Reducer<PartipiantState[], Action> = (state, action) =>
 
     switch (action.type) {
         case PARTIPIENT_CHANGE:
-            const l = action as PartipientChangeAction;
-            let newState = update(state, { [l.partipiantIndex]: { $merge: l.change } });
+            const changeAction = action as PartipientChangeAction;
+            let newState = update(state, { [changeAction.partipiantIndex]: { $merge: changeAction.change } });
 
             if (newState.every(p => hasAllRegistrationProperties(p))) {
                 newState = newState.concat({ name: "" });
@@ -48,8 +58,7 @@ const handlePartipiants: Reducer<PartipiantState[], Action> = (state, action) =>
 
             return newState as PartipiantState[];
 
-        case REGISTRATION_LOADED:
-            console.log(action);
+
 
         default: 
             return state;
@@ -60,14 +69,59 @@ const handlePartipiants: Reducer<PartipiantState[], Action> = (state, action) =>
     }
 }
 
-export interface ReducerTree {
+const handleRegistration: Reducer<RegistrationState, Action> = (state, action) => {
+    if (state == undefined) {
+        return {
+            applicant: handleApplicant(undefined, null),
+            availability: handleAvailability(undefined, null),
+            partipiants: handlePartipiants(undefined, null)
+        };
+    }
+
+    switch (action.type) {
+        case REGISTRATION_LOADED:
+            const loadedAction = action as RegistrationLoadedAction;
+
+            return {
+                id: loadedAction.registration.registrationId,
+                applicant: {
+                    surname: loadedAction.registration.surname,
+                    givenname: loadedAction.registration.givenname,
+                    residence: loadedAction.registration.residence,
+                    phoneNumber: loadedAction.registration.phoneNumber,
+                    preferSimultaneousCourseExecutionForPartipiants: loadedAction.registration.preferSimultaneousCourseExecutionForPartipiants
+                },
+                availability: {
+                    availableFrom: loadedAction.registration.availableFrom,
+                    availableTo: loadedAction.registration.availableTo
+                },
+                partipiants: loadedAction.registration.participants.map(p => {
+                    return {
+                        id: p.id,
+                        rowVersion: p.rowVersion,
+                        name: p.name,
+                        courseType: p.courseType,
+                        discipline: p.discipline,
+                        niveauId: p.niveauId
+                    }
+                })
+            }
+        default: 
+            return state;
+    }
+}
+
+export interface RegistrationReducerTree {
     applicant: Reducer<ApplicantState, Action>;
     availability: Reducer<AvailabilityState, Action>;
     partipiants: Reducer<PartipiantState[], Action>;
 }
 
-export const reducer = combineReducers(<ReducerTree>{
+export const reducer = combineReducers(<RegistrationReducerTree>{
+    id: noopReducer(null),
     applicant: handleApplicant,
     availability: handleAvailability,
     partipiants: handlePartipiants
 })
+
+export const rootReducer = handleRegistration;

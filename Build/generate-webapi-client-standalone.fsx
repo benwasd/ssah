@@ -41,13 +41,11 @@ let generate (inputAssembly: System.Reflection.Assembly) outputApiTs =
       InjectionTokenType = InjectionTokenType.InjectionToken,  
       GenerateOptionalParameters = true
     )
-    
 
   tssettings.TypeScriptGeneratorSettings.ExtensionCode <- ReadFileAsString (projectRoot @@ "Build" @@ "generate-webapi-client.extension-code.ts")
   tssettings.TypeScriptGeneratorSettings.TypeScriptVersion <- 2.3m
   tssettings.TypeScriptGeneratorSettings.GenerateCloneMethod <- true
   tssettings.TypeScriptGeneratorSettings.GenerateConstructorInterface <- true
-
 
   let controllers = Seq.collect WebApiToSwaggerGenerator.GetControllerClasses [inputAssembly]
   let generator = WebApiToSwaggerGenerator(settings)

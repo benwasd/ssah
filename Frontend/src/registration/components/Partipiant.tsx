@@ -15,7 +15,6 @@ export interface PartipiantProps {
 }
 
 export interface PartipiantState {
-
 }
 
 export class Partipiant extends React.Component<PartipiantProps, PartipiantState> {
@@ -47,10 +46,10 @@ export class Partipiant extends React.Component<PartipiantProps, PartipiantState
     render() {
         return (<>
             <tr>
-                <td><Input name='name' placeholder='Name' onChange={this.handleChange} fluid /></td>
-                <td><Dropdown name='courseType' placeholder='Kurstyp' selection basic options={this.courseTypeOptions} onChange={this.handleNumberChange} fluid /></td>
-                <td><Dropdown name='discipline' placeholder='Disziplin' selection basic options={this.disciplineOptions} onChange={this.handleNumberChange} fluid /></td>
-                <td><Dropdown name='niveauId' placeholder='Niveau' selection basic options={this.niveauOptions} onChange={this.handleNumberChange} fluid /></td>
+                <td><Input name='name' placeholder='Name' value={this.props.name} onChange={this.handleChange} fluid /></td>
+                <td><Dropdown name='courseType' placeholder='Kurstyp' selection basic options={this.courseTypeOptions} value={this.props.courseType} onChange={this.handleNumberChange} fluid /></td>
+                <td><Dropdown name='discipline' placeholder='Disziplin' selection basic options={this.disciplineOptions} value={this.props.discipline} onChange={this.handleNumberChange} fluid /></td>
+                <td><Dropdown name='niveauId' placeholder='Niveau' selection basic options={this.niveauOptions} value={this.props.niveauId} onChange={this.handleNumberChange} fluid /></td>
             </tr>
         </>);
     }

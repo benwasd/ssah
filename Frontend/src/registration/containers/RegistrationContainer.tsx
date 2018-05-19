@@ -2,14 +2,15 @@ import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 
 import { applicantChange, availabilityChange, changePartipiant, loadRegistration } from '../actions';
-import { State } from '../state';
+import { State } from '../../state';
 import { Applicant } from '../components/Applicant';
 import { AvailabilitySelector } from '../components/AvailabilitySelector';
 import { PartipiantList } from '../components/PartipiantList';
+import { Dimmer, Loader } from 'semantic-ui-react';
 
 const ApplicantContainer = connect(
     (state: State) => {
-        return state.applicant;
+        return state.registration.applicant;
     },
     (dispatch: Dispatch) => {
         return {
@@ -20,7 +21,7 @@ const ApplicantContainer = connect(
 
 const AvailabilitySelectorContainer = connect(
     (state: State) => {
-        return state.availability;
+        return state.registration.availability;
     },
     (dispatch: Dispatch) => {
         return {
@@ -31,7 +32,7 @@ const AvailabilitySelectorContainer = connect(
 
 const PartipiantListContainer = connect(
     (state: State) => {
-        return { partipiants: state.partipiants };
+        return { partipiants: state.registration.partipiants };
     },
     (dispatch: Dispatch) => {
         return {
@@ -49,33 +50,3 @@ export class RegistrationContainer extends React.Component {
         </>);
     }
 }
-
-export interface OpenRegistrationContainerProps {
-    match: { params: { id: string } }
-    loadRegistration(id: string);
-}
-
-export class OpenRegistration extends React.Component<OpenRegistrationContainerProps> {
-    componentDidMount() {
-        this.props.loadRegistration(this.props.match.params.id);
-
-    }
-
-    render() {
-        console.log(this.props.match.params.id);
-        return (<>
-            <div>Lol</div>
-        </>);
-    }
-}
-
-export const OpenRegistrationContainer = connect(
-    (state: State) => {
-        return {};
-    },
-    (dispatch: Dispatch) => {
-        return {
-            loadRegistration: loadRegistration(dispatch)
-        };
-    }
-)(OpenRegistration)
