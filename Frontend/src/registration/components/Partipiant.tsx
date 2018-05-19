@@ -3,7 +3,7 @@ import { Form, Input, Dropdown, DropdownItemProps } from 'semantic-ui-react';
 
 import { ApplicantState, AvailabilityState } from '../state';
 import { DateRangePicker, DateRangePickerPropsDateChange} from '../../components/DateRangePicker';
-import { getEnumElementsAsDropdownItemProps } from '../../utils';
+import { getEnumElementsAsDropdownItemProps, toDropdownValue, fromDropdownValue } from '../../utils';
 import { Discipline, CourseType } from '../../api';
 
 export interface PartipiantProps {
@@ -28,10 +28,10 @@ export class Partipiant extends React.Component<PartipiantProps, PartipiantState
 
     get niveauOptions(): DropdownItemProps[] {
         return [
-            { text: "Kids Village", value: 100 },
-            { text: "Blue Prince/Princess", value: 110 },
-            { text: "Blue King/Queen", value: 111 },
-            { text: "Blue Star", value: 112 },
+            { text: "Kids Village", value: toDropdownValue(100) },
+            { text: "Blue Prince/Princess", value: toDropdownValue(110) },
+            { text: "Blue King/Queen", value: toDropdownValue(111) },
+            { text: "Blue Star", value: toDropdownValue(112) },
         ];
     }
     
@@ -40,16 +40,17 @@ export class Partipiant extends React.Component<PartipiantProps, PartipiantState
     }
 
     handleNumberChange = (event: React.ChangeEvent<HTMLInputElement>, { name, value }) => {
-        this.props.change({ [name]: parseInt(value) });
+        this.props.change({ [name]: fromDropdownValue(parseInt(value)) });
     }
 
     render() {
+        console.log("RENDER", this.props.courseType, this.props.discipline);
         return (<>
             <tr>
                 <td><Input name='name' placeholder='Name' value={this.props.name} onChange={this.handleChange} fluid /></td>
-                <td><Dropdown name='courseType' placeholder='Kurstyp' selection basic options={this.courseTypeOptions} value={this.props.courseType} onChange={this.handleNumberChange} fluid /></td>
-                <td><Dropdown name='discipline' placeholder='Disziplin' selection basic options={this.disciplineOptions} value={this.props.discipline} onChange={this.handleNumberChange} fluid /></td>
-                <td><Dropdown name='niveauId' placeholder='Niveau' selection basic options={this.niveauOptions} value={this.props.niveauId} onChange={this.handleNumberChange} fluid /></td>
+                <td><Dropdown name='courseType' placeholder='Kurstyp' selection options={this.courseTypeOptions} value={toDropdownValue(this.props.courseType)} selectOnBlur={false} onChange={this.handleNumberChange} fluid /></td>
+                <td><Dropdown name='discipline' placeholder='Disziplin' selection options={this.disciplineOptions} value={toDropdownValue(this.props.discipline)} selectOnBlur={false} onChange={this.handleNumberChange} fluid /></td>
+                <td><Dropdown name='niveauId' placeholder='Niveau' selection options={this.niveauOptions} value={toDropdownValue(this.props.niveauId)} selectOnBlur={false} onChange={this.handleNumberChange} fluid /></td>
             </tr>
         </>);
     }
