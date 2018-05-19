@@ -6,4 +6,4 @@ install:
 - npm install npm@6.0.1 --g
 
 build_script:
-- cmd: fake Rebuild-Test-All"
+- cmd: fake Rebuild-Test-Pack-All"
