@@ -262,3 +262,6 @@ __pycache__/
 
 # Frontend dist
 Frontend/dist/
+
+# Output
+Build/temp
