@@ -18,7 +18,7 @@ let msbuild target projectOrSolutionFiles =
   MSBuildReleaseExt "" [("TreatWarningsAsErrors", "true")] target projectOrSolutionFiles |> ignore
 
 let npm command dir = 
-  Npm (fun p -> { p with NpmFilePath = """C:\Program Files (x86)\nodejs\node_modules\npm\bin\npm.cmd"""; Command = command; WorkingDirectory = dir })
+  Npm (fun p -> { p with Command = command; WorkingDirectory = dir })
 
 let nunit resultFilePrefix testAssemblies = 
   let nunit3Exe = findToolInSubPath "nunit3-console.exe" buildDir
