@@ -3,6 +3,5 @@ skip_branch_with_pr: true
 image: Visual Studio 2017
 
 build_script:
-- cmd: npm
 - cmd: node -e "console.log(process.argv[0], process.arch, process.versions)"
 - cmd: fake Rebuild-Test-All
