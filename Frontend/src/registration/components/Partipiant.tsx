@@ -7,9 +7,15 @@ import { getEnumElementsAsDropdownItemProps } from '../../utils';
 import { Discipline, CourseType } from '../../api';
 
 export interface PartipiantProps {
+    name: string;
+    courseType: CourseType;
+    discipline: Discipline;
+    niveauId: number;
+    change(obj: Partial<PartipiantState>);
 }
 
 export interface PartipiantState {
+
 }
 
 export class Partipiant extends React.Component<PartipiantProps, PartipiantState> {
@@ -29,47 +35,23 @@ export class Partipiant extends React.Component<PartipiantProps, PartipiantState
             { text: "Blue Star", value: 112 },
         ];
     }
-
-    handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const target = event.target;
-        const name = target.name;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
     
-        console.log(name, value);
+    handleChange = (event: React.ChangeEvent<HTMLInputElement>, { name, value }) => {
+        this.props.change({ [name]: value });
     }
 
-    
-    handleDropDownChange = (event: React.ChangeEvent<HTMLInputElement>, { name, value }) => {
-        console.log(name, value);
+    handleNumberChange = (event: React.ChangeEvent<HTMLInputElement>, { name, value }) => {
+        this.props.change({ [name]: parseInt(value) });
     }
 
     render() {
         return (<>
-            <div className="row">
-                <div className="four wide column">
-                    <Input name='name' placeholder='Name' onChange={this.handleInputChange} />
-                </div>
-                <div className="four wide column">
-                    <Dropdown name='courseType' placeholder='Kurstyp' selection basic options={this.courseTypeOptions} onChange={this.handleDropDownChange} />
-                </div>
-                <div className="four wide column">
-                    <Dropdown name='discipline' placeholder='Disziplin' selection basic options={this.disciplineOptions} onChange={this.handleDropDownChange} />
-                </div>
-                <div className="four wide column">
-                    <Dropdown name='niveauId' placeholder='Niveau' selection basic options={this.niveauOptions} onChange={this.handleDropDownChange} />
-                </div>
-            </div>
-            <div className="row">
-                <div className="three wide column">
-                    <img/>
-                </div>
-                <div className="ten wide column">
-                    <p></p>
-                </div>
-                <div className="three wide column">
-                    <img/>
-                </div>
-            </div>
+            <tr>
+                <td><Input name='name' placeholder='Name' onChange={this.handleChange} fluid /></td>
+                <td><Dropdown name='courseType' placeholder='Kurstyp' selection basic options={this.courseTypeOptions} onChange={this.handleNumberChange} fluid /></td>
+                <td><Dropdown name='discipline' placeholder='Disziplin' selection basic options={this.disciplineOptions} onChange={this.handleNumberChange} fluid /></td>
+                <td><Dropdown name='niveauId' placeholder='Niveau' selection basic options={this.niveauOptions} onChange={this.handleNumberChange} fluid /></td>
+            </tr>
         </>);
     }
 }

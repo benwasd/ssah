@@ -274,6 +274,7 @@ export class RegistrationDto implements IRegistrationDto {
     givenname: string;
     residence: string;
     phoneNumber: string;
+    preferSimultaneousCourseExecutionForPartipiants: boolean;
     availableFrom: Date;
     availableTo: Date;
     participants: RegistrationParticipantDto[];
@@ -298,6 +299,7 @@ export class RegistrationDto implements IRegistrationDto {
             this.givenname = data["Givenname"];
             this.residence = data["Residence"];
             this.phoneNumber = data["PhoneNumber"];
+            this.preferSimultaneousCourseExecutionForPartipiants = data["PreferSimultaneousCourseExecutionForPartipiants"];
             this.availableFrom = data["AvailableFrom"] ? new Date(data["AvailableFrom"].toString()) : <any>undefined;
             this.availableTo = data["AvailableTo"] ? new Date(data["AvailableTo"].toString()) : <any>undefined;
             if (data["Participants"] && data["Participants"].constructor === Array) {
@@ -323,6 +325,7 @@ export class RegistrationDto implements IRegistrationDto {
         data["Givenname"] = this.givenname;
         data["Residence"] = this.residence;
         data["PhoneNumber"] = this.phoneNumber;
+        data["PreferSimultaneousCourseExecutionForPartipiants"] = this.preferSimultaneousCourseExecutionForPartipiants;
         data["AvailableFrom"] = this.availableFrom ? this.availableFrom.toISOString() : <any>undefined;
         data["AvailableTo"] = this.availableTo ? this.availableTo.toISOString() : <any>undefined;
         if (this.participants && this.participants.constructor === Array) {
@@ -348,6 +351,7 @@ export interface IRegistrationDto {
     givenname: string;
     residence: string;
     phoneNumber: string;
+    preferSimultaneousCourseExecutionForPartipiants: boolean;
     availableFrom: Date;
     availableTo: Date;
     participants: RegistrationParticipantDto[];

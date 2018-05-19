@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 
-import { applicantChange, availabilityChange } from '../actions';
+import { applicantChange, availabilityChange, changePartipiant } from '../actions';
 import { State } from '../state';
 import { Applicant } from '../components/Applicant';
 import { AvailabilitySelector } from '../components/AvailabilitySelector';
-import { Partipiant } from '../components/Partipiant';
+import { PartipiantList } from '../components/PartipiantList';
 
 const ApplicantContainer = connect(
     (state: State) => {
@@ -29,15 +29,23 @@ const AvailabilitySelectorContainer = connect(
     }
 )(AvailabilitySelector)
 
+const PartipiantListContainer = connect(
+    (state: State) => {
+        return { partipiants: state.partipiants };
+    },
+    (dispatch: Dispatch) => {
+        return {
+            changePartipiant: changePartipiant(dispatch)
+        };
+    }
+)(PartipiantList)
+
 export class RegistrationContainer extends React.Component {
     render() {
         return (<>
             <ApplicantContainer/>
             <AvailabilitySelectorContainer />
-
-            <div className="ui internally celled grid">
-                <Partipiant />
-            </div>
+            <PartipiantListContainer />
         </>);
     }
 }

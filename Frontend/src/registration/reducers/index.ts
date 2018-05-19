@@ -1,12 +1,14 @@
 import { combineReducers, Reducer, Action } from 'redux';
 
-import { APPLICANT_CHANGE, ApplicantChangeAction, AVAILABILITY_CHANGE, AvailabilityChangeAction } from '../actions';
+import { APPLICANT_CHANGE, ApplicantChangeAction, AVAILABILITY_CHANGE, AvailabilityChangeAction, PARTIPIENT_CHANGE, PartipientChangeAction } from '../actions';
 import { ApplicantState, AvailabilityState, PartipiantState } from '../state';
 import { CourseType, Discipline } from '../../api';
 
+import update from 'immutability-helper';
+
 const handleApplicant: Reducer<ApplicantState, Action> = (state, action) => {
     if (state === undefined) {
-        return { givenname: "", surname: "", residence: "", phoneNumber: "" };
+        return { givenname: "", surname: "", residence: "", phoneNumber: "", preferSimultaneousCourseExecutionForPartipiants: true };
     }
     
     switch (action.type) {
@@ -30,23 +32,38 @@ const handleAvailability: Reducer<AvailabilityState, Action> = (state, action) =
     }
 }
 
-const handlePartipiants: Reducer<PartipiantState, Action> = (state, action) => {
+const handlePartipiants: Reducer<PartipiantState[], Action> = (state, action) => {
     if (state === undefined) {
-        return { name: "", courseType: CourseType.Group, discipline: Discipline.Ski, niveauId: 0 };
+        return [
+            { name: "", courseType: CourseType.Group, discipline: Discipline.Ski, niveauId: 0 },
+            { name: "", courseType: CourseType.Group, discipline: Discipline.Ski, niveauId: 0 },
+            { name: "", courseType: CourseType.Group, discipline: Discipline.Ski, niveauId: 0 },
+        ];
     }
 
-    console.log("handlePartipiants", action);
-
     switch (action.type) {
+        case PARTIPIENT_CHANGE:
+            const l = action as PartipientChangeAction;
+            let wu = update(state, { [l.partipiantIndex]: { $merge: l.change } });
+
+            if (wu.every(e => e.name != "")) {
+                wu = wu.concat({ name: "", courseType: CourseType.Group, discipline: Discipline.Ski, niveauId: 0 });
+            }
+
+            return wu as PartipiantState[];
         default: 
             return state;
+    }
+
+    function defaultPartipiant() {
+        return 
     }
 }
 
 export interface ReducerTree {
     applicant: Reducer<ApplicantState, Action>;
     availability: Reducer<AvailabilityState, Action>;
-    partipiants: Reducer<PartipiantState, Action>;
+    partipiants: Reducer<PartipiantState[], Action>;
 }
 
 export const reducer = combineReducers(<ReducerTree>{
