@@ -93,8 +93,6 @@ namespace SSAH.Infrastructure.Solver
             //Debug.WriteLine("Kombs {0}", combs);
             //Debug.WriteLine("Kombs End {0}", DateTime.Now);
 
-            return;
-
             foreach (var x in Combinator.PermutationsWithDublicatePatternsFiltering(kurse, teilnehmers.Length))
             {
                 kursOfTeilnehmer = x.ToArray();

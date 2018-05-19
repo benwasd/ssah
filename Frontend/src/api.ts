@@ -267,212 +267,9 @@ export class RegistrationApiProxy extends ApiProxyBase {
     }
 }
 
-export class ValuesApiProxy extends ApiProxyBase {
-    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
-    private baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
-
-    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
-        super();
-        this.http = http ? http : <any>window;
-        this.baseUrl = baseUrl ? baseUrl : this.getBaseUrl("");
-    }
-
-    getAll(): Promise<string[]> {
-        let url_ = this.baseUrl + "/api/Values";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ = <RequestInit>{
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json", 
-                "Accept": "application/json"
-            }
-        };
-
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
-            return this.transformResult(url_, _response, (_response: Response) => this.processGetAll(_response));
-        });
-    }
-
-    protected processGetAll(response: Response): Promise<string[]> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (resultData200 && resultData200.constructor === Array) {
-                result200 = [];
-                for (let item of resultData200)
-                    result200.push(item);
-            }
-            return result200;
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<string[]>(<any>null);
-    }
-
-    post(value: string): Promise<void> {
-        let url_ = this.baseUrl + "/api/Values";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(value);
-
-        let options_ = <RequestInit>{
-            body: content_,
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json", 
-            }
-        };
-
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
-            return this.transformResult(url_, _response, (_response: Response) => this.processPost(_response));
-        });
-    }
-
-    protected processPost(response: Response): Promise<void> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<void>(<any>null);
-    }
-
-    get(id: number): Promise<string> {
-        let url_ = this.baseUrl + "/api/Values/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ = <RequestInit>{
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json", 
-                "Accept": "application/json"
-            }
-        };
-
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
-            return this.transformResult(url_, _response, (_response: Response) => this.processGet(_response));
-        });
-    }
-
-    protected processGet(response: Response): Promise<string> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 !== undefined ? resultData200 : <any>null;
-            return result200;
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<string>(<any>null);
-    }
-
-    put(id: number, value: string): Promise<void> {
-        let url_ = this.baseUrl + "/api/Values/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(value);
-
-        let options_ = <RequestInit>{
-            body: content_,
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json", 
-            }
-        };
-
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
-            return this.transformResult(url_, _response, (_response: Response) => this.processPut(_response));
-        });
-    }
-
-    protected processPut(response: Response): Promise<void> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<void>(<any>null);
-    }
-
-    delete(id: number): Promise<void> {
-        let url_ = this.baseUrl + "/api/Values/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ = <RequestInit>{
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json", 
-            }
-        };
-
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
-            return this.transformResult(url_, _response, (_response: Response) => this.processDelete(_response));
-        });
-    }
-
-    protected processDelete(response: Response): Promise<void> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<void>(<any>null);
-    }
-}
-
 export class RegistrationDto implements IRegistrationDto {
     registrationId?: string | undefined;
+    applicantId?: string | undefined;
     surname: string;
     givenname: string;
     residence: string;
@@ -496,6 +293,7 @@ export class RegistrationDto implements IRegistrationDto {
     init(data?: any) {
         if (data) {
             this.registrationId = data["RegistrationId"];
+            this.applicantId = data["ApplicantId"];
             this.surname = data["Surname"];
             this.givenname = data["Givenname"];
             this.residence = data["Residence"];
@@ -520,6 +318,7 @@ export class RegistrationDto implements IRegistrationDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["RegistrationId"] = this.registrationId;
+        data["ApplicantId"] = this.applicantId;
         data["Surname"] = this.surname;
         data["Givenname"] = this.givenname;
         data["Residence"] = this.residence;
@@ -544,6 +343,7 @@ export class RegistrationDto implements IRegistrationDto {
 
 export interface IRegistrationDto {
     registrationId?: string | undefined;
+    applicantId?: string | undefined;
     surname: string;
     givenname: string;
     residence: string;
