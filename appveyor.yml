@@ -5,4 +5,4 @@ build_script:
 - cmd: fake Rebuild-Test-All
 
 install:
-- npm
+- cmd: echo %PATH%
