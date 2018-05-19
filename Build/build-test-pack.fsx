@@ -95,4 +95,8 @@ Target "Collect-Output" (fun _ ->
   ReadFileAsString (outputDir @@ "Frontend" @@ "index.html")
   |> replace "\r\n        <base href=\"../dist/\">" ""
   |> WriteStringToFile false (outputDir @@ "Frontend" @@ "index.html")
+
+  !! "./**/*"
+    |> SetBaseDir outputDir
+    |> Zip outputDir (tempDir @@ "SSAH.zip")
 )

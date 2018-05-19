@@ -9,4 +9,4 @@ build_script:
 - cmd: fake Rebuild-Test-Pack-All"
 
 artifacts:
-- path: ./Build/temp/Output/**/*
+- path: ./Build/temp/SSAH.zip
