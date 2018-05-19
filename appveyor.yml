@@ -6,8 +6,4 @@ install:
 - npm install npm@6.0.1 --g
 
 build_script:
-- cmd: node -e "console.log(process.argv[0], process.arch, process.versions)"
-- cmd: cd "C:\Program Files (x86)\nodejs\node_modules\npm" && dir
-- cmd: cd "C:\Program Files (x86)\nodejs\node_modules\npm\bin" && dir
-- cmd: cd "C:\Users\appveyor\AppData\Roaming\npm" && dir
-- cmd: npm
+- cmd: fake Rebuild-Test-All"
