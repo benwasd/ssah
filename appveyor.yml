@@ -1,0 +1,9 @@
+version: 1.0.{build}
+skip_branch_with_pr: true
+image: Visual Studio 2017
+
+install:
+- npm install npm@6.0.1 --g
+
+build_script:
+- cmd: fake Rebuild-Test-All"
