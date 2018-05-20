@@ -1,14 +1,16 @@
 import * as React from 'react';
+import { Radio } from 'semantic-ui-react';
 
 import { PossibleCourseDto } from '../../api';
-import { PartipiantState, hasAllRegistrationProperties } from '../state';
+import { throwIfUndefined } from '../../utils';
+import { hasAllRegistrationProperties, PartipiantState } from '../state';
 import { CourseDateVisualizer } from './CourseDatesVisualizer';
-import { Checkbox, Button } from 'semantic-ui-react';
 
-interface SelectionKey { 
-    participantId: string;
-    identifier: number;
-    startDate: Date; 
+export interface SelectionMap { 
+    [participantId: string]: {
+        identifier: number; 
+        startDate: Date; 
+    }
 }
 
 export interface CourseSelectionProps {
@@ -16,47 +18,32 @@ export interface CourseSelectionProps {
     partipiants: PartipiantState[];
     possibleCourses: PossibleCourseDto[];
     loadPossibleCourses();
-    initalSelectedCourses: SelectionKey[];
-    selectCoursesForParticipants(selectedCourses: SelectionKey[]);
+    selectCoursesForParticipants(selectedCoursesByParticipant: SelectionMap);
 }
 
 export interface CourseSelectionState {
-    selectedCourses: SelectionKey[]
+    selectedCourses: SelectionMap
 }
 
 export class CourseSelection extends React.Component<CourseSelectionProps, CourseSelectionState> {
-    componentDidMount() {
+    componentWillMount() {
         this.props.loadPossibleCourses();
-    }
-
-    componentWillReceiveProps() {
-        this.setState({ selectedCourses: this.props.initalSelectedCourses });
+        this.setStateByParticipants();
     }
     
     toggleSelection = (participantId: string, identifier: number, startDate: Date) => {
-        let current = this.state.selectedCourses.concat();
-        const index = this.indexOf(participantId, identifier, startDate, current);
-        if (index >= 0) {
-            current.splice(index, 1);
-        }
-        else {
-            current = current.concat({ participantId, identifier, startDate });
-        }
+        let newSelection = Object.assign({}, this.state.selectedCourses);
+        newSelection[participantId] = { identifier, startDate};
 
-        console.log("PRE", this.state);
-        this.setState({ selectedCourses: current }, () => { console.log("POST", this.state); });
+        this.setState({ selectedCourses: newSelection });
+        this.props.selectCoursesForParticipants(newSelection);
     }
 
-    send = () => {
-        this.props.selectCoursesForParticipants(this.state.selectedCourses);
-    }
-
-    indexOf(participantId: string, identifier: number, startDate: Date, seq: SelectionKey[]): number {
-        return seq.findIndex(
-            sc => sc.participantId === participantId 
-               && sc.identifier === identifier 
-               && sc.startDate.getTime() === startDate.getTime()
-        );
+    isCombinationChecked = (participantId: string, identifier: number, startDate: Date) => {
+        const participant = this.state.selectedCourses[participantId];
+        return participant 
+            && participant.identifier === identifier
+            && participant.startDate.getTime() === startDate.getTime();
     }
 
     render() {
@@ -71,15 +58,27 @@ export class CourseSelection extends React.Component<CourseSelectionProps, Cours
                             .map(c =>
                                 <div key={c.identifier + "" + c.startDate}>
                                     <CourseDateVisualizer periods={c.coursePeriods} />
-                                    <Checkbox 
-                                        onClick={() => this.toggleSelection(p.id as any, c.identifier, c.startDate)} 
-                                        defaultChecked={this.indexOf(p.id as any, c.identifier, c.startDate, this.props.initalSelectedCourses) >= 0} />
+                                    <Radio
+                                        onClick={() => this.toggleSelection(p.id as string, c.identifier, c.startDate)} 
+                                        checked={this.isCombinationChecked(p.id as string, c.identifier, c.startDate)} />
                                     <div className="ui divider"></div>
                                 </div>
                             )}
                     </div>
                 )}
-            <Button onClick={this.send}>Send</Button>
         </>);
+    }
+
+    private setStateByParticipants() {
+        const map: SelectionMap = {};
+
+        this.props.partipiants.filter(p => p.commiting).forEach(p => {
+            map[p.id as string] = {
+                identifier: throwIfUndefined(p.commiting).courseIdentifier,
+                startDate: throwIfUndefined(p.commiting).courseStartDate
+            };
+        });
+
+        this.setState({ selectedCourses: map });
     }
 }

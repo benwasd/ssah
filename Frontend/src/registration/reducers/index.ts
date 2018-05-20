@@ -68,14 +68,24 @@ const handlePartipiants: Reducer<PartipiantState[], Action> = (state, action) =>
             return newState as PartipiantState[];
         case PARTIPIENT_SELECT_COURSE:
             const selectCourseAction = action as PartipientSelectCourseAction;
-            const x = selectCourseAction.selectedCourses[0];
+            const participantIds = Object.getOwnPropertyNames(selectCourseAction.selectedCoursesByParticipant);
 
-            let participantIndex = state.findIndex(p => p.id === x.participantId);
-            let newState2 = update(state, { [participantIndex]: { $merge: { commiting: { courseIdentifier: x.identifier, courseStartDate: x.startDate } } } });
-            console.log(newState2);
+            let newState2 = state;
+            participantIds.forEach(participantId => {
+                let participantIndex = state.findIndex(p => p.id === participantId);
+                let courseSelection = selectCourseAction.selectedCoursesByParticipant[participantId];
+                newState2 = update(
+                    newState2, 
+                    { [participantIndex]: { $merge: { 
+                        commiting: { 
+                            courseIdentifier: courseSelection.identifier,
+                            courseStartDate: courseSelection.startDate
+                        }
+                    } } }
+                ) as PartipiantState[];
+            });
             
-            return newState2 as PartipiantState[];
-
+            return newState2;
         default: 
             return state;
     }

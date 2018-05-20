@@ -23,7 +23,7 @@ class InternalRegistrationContainer extends React.Component<InternalRegistration
             ? (<RegistrationStep1Container />)
             : status === RegistrationStatus.CourseSelection
                 ? (<RegistrationStep2Container />)
-                : (<h1>WUuu</h1>);
+                : (<h1>Last Step</h1>);
 
         return (<>
             <RegistrationSteps 

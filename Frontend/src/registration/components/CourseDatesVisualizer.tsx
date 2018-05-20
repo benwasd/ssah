@@ -1,8 +1,8 @@
 import * as moment from 'moment';
 import * as React from 'react';
+import { groupBy, map } from 'lodash';
 
 import { Period } from '../../api';
-import { groupBy, forEach, map } from 'lodash';
 
 export interface CourseDateVisualizerProps {
     periods: Period[];

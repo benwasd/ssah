@@ -19,7 +19,9 @@ const AvailabilitySelectorContainer = connect(
 
 const PartipiantListContainer = connect(
     (state: State): Partial<PartipiantListProps> => {
-        return { partipiants: state.registration.partipiants };
+        return {
+            partipiants: state.registration.partipiants
+        };
     },
     { changePartipiant }
 )(PartipiantList)
