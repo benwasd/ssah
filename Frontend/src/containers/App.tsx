@@ -1,13 +1,14 @@
 import * as React from 'react';
+import thunk from 'redux-thunk';
+import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import { HashRouter, Route, Switch } from 'react-router-dom';
-import { createStore } from 'redux';
 
-import { RegistrationContainer } from '../registration/containers/RegistrationContainer';
+import { RegisterContainer } from '../registration/containers/RegisterContainer';
 import { OpenRegistrationContainer } from '../registration/containers/OpenRegistrationContainer';
 import { reducer } from '../reducers';
 
-const store = createStore(reducer);
+const store = createStore(reducer, applyMiddleware(thunk));
 
 export class App extends React.Component {
     render() {
@@ -15,7 +16,7 @@ export class App extends React.Component {
             <Provider store={store}>
                 <HashRouter>
                     <Switch>
-                        <Route exact path="/register" component={RegistrationContainer} />
+                        <Route exact path="/register" component={RegisterContainer} />
                         <Route path="/registration/:id" component={OpenRegistrationContainer} />
                         <Route path="/login" />
                     </Switch>

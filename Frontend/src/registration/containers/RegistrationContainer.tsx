@@ -9,36 +9,20 @@ import { PartipiantList } from '../components/PartipiantList';
 import { Dimmer, Loader } from 'semantic-ui-react';
 
 const ApplicantContainer = connect(
-    (state: State) => {
-        return state.registration.applicant;
-    },
-    (dispatch: Dispatch) => {
-        return {
-            change: applicantChange(dispatch)
-        };
-    }
+    (state: State) => state.registration.applicant,
+    { change: applicantChange }
 )(Applicant)
 
 const AvailabilitySelectorContainer = connect(
-    (state: State) => {
-        return state.registration.availability;
-    },
-    (dispatch: Dispatch) => {
-        return {
-            change: availabilityChange(dispatch)
-        };
-    }
+    (state: State) => state.registration.availability,
+    { change: availabilityChange }
 )(AvailabilitySelector)
 
 const PartipiantListContainer = connect(
     (state: State) => {
         return { partipiants: state.registration.partipiants };
     },
-    (dispatch: Dispatch) => {
-        return {
-            changePartipiant: changePartipiant(dispatch)
-        };
-    }
+    { changePartipiant }
 )(PartipiantList)
 
 export class RegistrationContainer extends React.Component {

@@ -37,9 +37,5 @@ export const OpenRegistrationContainer = connect(
     (state: State) => {
         return { id: state.registration.id };
     },
-    (dispatch: Dispatch) => {
-        return {
-            loadRegistration: loadRegistration(dispatch)
-        };
-    }
+    { loadRegistration: loadRegistration }
 )(InternalOpenRegistrationContainer)

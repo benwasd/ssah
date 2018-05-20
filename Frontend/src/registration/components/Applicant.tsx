@@ -13,10 +13,6 @@ export interface ApplicantProps {
 }
 
 export class Applicant extends React.Component<ApplicantProps, Partial<ApplicantProps>> {
-    componentDidMount() {
-        this.setState({ })
-    }
-
     handleChange = (event: React.ChangeEvent<HTMLInputElement>, { name, value }) => {
         this.setState({ [name]: "change" });
         this.props.change({ [name]: value });

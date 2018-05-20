@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "webpack",
+    "build": "del \"node_modules\\redux-thunk\\index.d.ts\" && webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -28,6 +28,7 @@
     "react-router-dom": "^4.2.2",
     "reduce-reducers": "^0.3.0",
     "redux": "^4.0.0",
+    "redux-thunk": "^2.2.0",
     "semantic-ui-less": "^2.3.1",
     "semantic-ui-react": "^0.80.0"
   },
