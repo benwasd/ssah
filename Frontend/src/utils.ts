@@ -22,10 +22,9 @@ export function toDropdownValue(value?: number) {
 }
 
 export function throwIfUndefined<T>(value?: T): T {
-    if (value) {
-        return value;
-    }
-    else {
+    if (value === undefined || value === null) {
         throw new Error("Should not be null");
     }
+    
+    return value;
 }

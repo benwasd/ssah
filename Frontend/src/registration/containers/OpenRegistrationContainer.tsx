@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { match } from 'react-router';
-import { Dimmer, Loader, Button } from 'semantic-ui-react';
+import { Button, Dimmer, Loader } from 'semantic-ui-react';
 
 import { State } from '../../state';
 import { loadRegistration, submitOrUpdateRegistration } from '../actions';
-import { RegistrationContainer } from '../containers/RegistrationContainer';
+import { RegistrationContainer } from './RegistrationContainer';
 
 interface InternalOpenRegistrationContainerProps {
     match: match<{ id: string }>;
-    id: string;
+    id: string | null;
     loadRegistration(id: string);
     updateRegistration();
 }
@@ -22,7 +22,7 @@ class InternalOpenRegistrationContainer extends React.Component<InternalOpenRegi
     render() {
         if (this.props.id) {
             return (<>
-                <RegistrationContainer />.
+                <RegistrationContainer />
                 <Button onClick={this.props.updateRegistration} />
             </>);
         }

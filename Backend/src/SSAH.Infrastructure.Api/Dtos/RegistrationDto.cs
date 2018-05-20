@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using SSAH.Core.Domain.Objects;
+
 namespace SSAH.Infrastructure.Api.Dtos
 {
     public class RegistrationDto
@@ -22,6 +24,8 @@ namespace SSAH.Infrastructure.Api.Dtos
         public DateTime AvailableFrom { get; set; }
 
         public DateTime AvailableTo { get; set; }
+
+        public RegistrationStatus Status { get; set; }
 
         public ICollection<RegistrationParticipantDto> Participants { get; set; }
     }

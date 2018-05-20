@@ -2,7 +2,7 @@ import { combineReducers, Reducer, Action } from 'redux';
 
 import { APPLICANT_CHANGE, ApplicantChangeAction, AVAILABILITY_CHANGE, AvailabilityChangeAction, PARTIPIENT_CHANGE, PartipientChangeAction, REGISTRATION_LOADED, RegistrationLoadedAction } from '../actions';
 import { ApplicantState, AvailabilityState, PartipiantState, RegistrationState, hasAllRegistrationProperties } from '../state';
-import { CourseType, Discipline } from '../../api';
+import { CourseType, Discipline, RegistrationStatus } from '../../api';
 
 import update from 'immutability-helper';
 
@@ -14,6 +14,10 @@ function noopReducer<T>(defaultState: T): Reducer<T, Action> {
 
         return s;
     }
+}
+
+function noopAction(): Action {
+    return { type: "" }
 }
 
 const handleApplicant: Reducer<ApplicantState, Action> = (state, action) => {
@@ -68,9 +72,11 @@ const handlePartipiants: Reducer<PartipiantState[], Action> = (state, action) =>
 const handleRegistration: Reducer<RegistrationState, Action> = (state, action) => {
     if (state == undefined) {
         return {
-            applicant: handleApplicant(undefined, { type: "" }),
-            availability: handleAvailability(undefined, { type: "" }),
-            partipiants: handlePartipiants(undefined, { type: "" })
+            id: null,
+            status: RegistrationStatus.Registration,
+            applicant: handleApplicant(undefined, noopAction()),
+            availability: handleAvailability(undefined, noopAction()),
+            partipiants: handlePartipiants(undefined, noopAction())
         };
     }
 
@@ -79,7 +85,8 @@ const handleRegistration: Reducer<RegistrationState, Action> = (state, action) =
             const loadedAction = action as RegistrationLoadedAction;
 
             return {
-                id: loadedAction.registration.registrationId,
+                id: loadedAction.registration.registrationId ? loadedAction.registration.registrationId : null,
+                status: loadedAction.registration.status,
                 applicant: {
                     surname: loadedAction.registration.surname,
                     givenname: loadedAction.registration.givenname,
@@ -110,6 +117,8 @@ const handleRegistration: Reducer<RegistrationState, Action> = (state, action) =
 }
 
 export interface RegistrationReducerTree {
+    id: Reducer<string | null, Action>;
+    status: Reducer<RegistrationStatus, Action>;
     applicant: Reducer<ApplicantState, Action>;
     availability: Reducer<AvailabilityState, Action>;
     partipiants: Reducer<PartipiantState[], Action>;
@@ -117,6 +126,7 @@ export interface RegistrationReducerTree {
 
 export const reducer = combineReducers(<RegistrationReducerTree>{
     id: noopReducer(null),
+    status: noopReducer(RegistrationStatus.Registration),
     applicant: handleApplicant,
     availability: handleAvailability,
     partipiants: handlePartipiants

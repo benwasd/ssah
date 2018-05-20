@@ -67,7 +67,7 @@ export const submitOrUpdateRegistration = (onSubmitted: (registrationId: string)
 
     const registrationDto = new RegistrationDto();
     registrationDto.init(registrationState.applicant);
-    registrationDto.registrationId = registrationState.id;
+    registrationDto.registrationId = registrationState.id ? registrationState.id : undefined;
     registrationDto.preferSimultaneousCourseExecutionForPartipiants = registrationState.applicant.preferSimultaneousCourseExecutionForPartipiants;
     registrationDto.availableFrom = throwIfUndefined(registrationState.availability.availableFrom);
     registrationDto.availableTo = throwIfUndefined(registrationState.availability.availableTo);

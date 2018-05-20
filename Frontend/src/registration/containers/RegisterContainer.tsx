@@ -5,7 +5,7 @@ import { Button } from 'semantic-ui-react';
 
 import { State } from '../../state';
 import { submitOrUpdateRegistration } from '../actions';
-import { RegistrationContainer } from '../containers/RegistrationContainer';
+import { RegistrationContainer } from './RegistrationContainer';
 
 interface InternalRegisterContainerProps {
     submitRegistration(submittedCallback: (id: string) => void);

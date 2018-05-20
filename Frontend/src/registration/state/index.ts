@@ -1,8 +1,9 @@
 import { Reducer } from "redux";
-import { Discipline, CourseType, Language } from "../../api";
+import { Discipline, CourseType, Language, RegistrationStatus } from "../../api";
 
 export interface RegistrationState {
-    id?: string;
+    id: string | null;
+    status: RegistrationStatus;
     applicant: ApplicantState;
     availability: AvailabilityState;
     partipiants: PartipiantState[];

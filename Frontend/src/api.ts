@@ -277,6 +277,7 @@ export class RegistrationDto implements IRegistrationDto {
     preferSimultaneousCourseExecutionForPartipiants: boolean;
     availableFrom: Date;
     availableTo: Date;
+    status: RegistrationStatus;
     participants: RegistrationParticipantDto[];
 
     constructor(data?: IRegistrationDto) {
@@ -302,6 +303,7 @@ export class RegistrationDto implements IRegistrationDto {
             this.preferSimultaneousCourseExecutionForPartipiants = data["preferSimultaneousCourseExecutionForPartipiants"];
             this.availableFrom = data["availableFrom"] ? new Date(data["availableFrom"].toString()) : <any>undefined;
             this.availableTo = data["availableTo"] ? new Date(data["availableTo"].toString()) : <any>undefined;
+            this.status = data["status"];
             if (data["participants"] && data["participants"].constructor === Array) {
                 this.participants = [];
                 for (let item of data["participants"])
@@ -328,6 +330,7 @@ export class RegistrationDto implements IRegistrationDto {
         data["preferSimultaneousCourseExecutionForPartipiants"] = this.preferSimultaneousCourseExecutionForPartipiants;
         data["availableFrom"] = this.availableFrom ? this.availableFrom.toISOString() : <any>undefined;
         data["availableTo"] = this.availableTo ? this.availableTo.toISOString() : <any>undefined;
+        data["status"] = this.status;
         if (this.participants && this.participants.constructor === Array) {
             data["participants"] = [];
             for (let item of this.participants)
@@ -354,7 +357,14 @@ export interface IRegistrationDto {
     preferSimultaneousCourseExecutionForPartipiants: boolean;
     availableFrom: Date;
     availableTo: Date;
+    status: RegistrationStatus;
     participants: RegistrationParticipantDto[];
+}
+
+export enum RegistrationStatus {
+    Registration = 0, 
+    CourseSelection = 1, 
+    Commitment = 2, 
 }
 
 export class EntityDto implements IEntityDto {
