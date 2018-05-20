@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 using SSAH.Core.Domain.Objects;
 
@@ -9,9 +10,11 @@ namespace SSAH.Core.Domain.Entities
     {
         protected Course()
         {
+            Participants = new Collection<CourseParticipant>();
         }
 
         protected Course(Discipline discipline, CourseStatus status, int niveauId, DateTime startDate)
+            : this()
         {
             Discipline = discipline;
             Status = status;

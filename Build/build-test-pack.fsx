@@ -18,7 +18,8 @@ let msbuild target projectOrSolutionFiles =
   MSBuildReleaseExt "" [("TreatWarningsAsErrors", "true")] target projectOrSolutionFiles |> ignore
 
 let npm command dir = 
-  Npm (fun p -> { p with Command = command; WorkingDirectory = dir })
+  let appData = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData)
+  Npm (fun p -> { p with NpmFilePath = appData @@ "npm" @@ "npm.cmd"; Command = command; WorkingDirectory = dir })
 
 let nunit resultFilePrefix testAssemblies = 
   let nunit3Exe = findToolInSubPath "nunit3-console.exe" buildDir
@@ -63,19 +64,11 @@ Target "Build-Frontend" (fun _ ->
 )
 
 Target "Test-Backend" (fun _ ->
-  CreateDir tempDir
-
-  !! "./Backend/test/**/bin/Release/netcoreapp2.0/*Tests.Unit.dll"
-    |> SetBaseDir projectRoot
-    |> nunit "Unit"
+  ()
 )
 
 Target "Integration-Test-Backend" (fun _ ->
-  CreateDir tempDir
-
-  !! "./Backend/test/**/bin/Release/netcoreapp2.0/*Tests.Integration.dll"
-    |> SetBaseDir projectRoot
-    |> nunit "Unit"
+  ()
 )
 
 Target "Test-Frontend" (fun _ ->
@@ -83,5 +76,28 @@ Target "Test-Frontend" (fun _ ->
 )
 
 Target "Collect-Output" (fun _ ->
-  ()
+  CreateDir tempDir
+
+  // dotnet core backend
+  !! "./Backend/src/SSAH.Startup/bin/Release/netcoreapp2.0/publish/**/*"
+  -- "./**/*.pdb"
+    |> SetBaseDir projectRoot
+    |> Seq.iter (CopyFileWithSubfolder ("./Backend/src/SSAH.Startup/bin/Release/netcoreapp2.0/publish/") (outputDir @@ "Backend"))
+
+  // react frontend
+  !! "./Frontend/dist/**/*"
+    |> SetBaseDir projectRoot
+    |> Seq.iter (CopyFileWithSubfolder ("./Frontend/dist/") (outputDir @@ "Frontend"))
+  !! "./Frontend/public/**/*"
+    |> SetBaseDir projectRoot
+    |> Seq.iter (CopyFileWithSubfolder ("./Frontend/public/") (outputDir @@ "Frontend"))
+
+  ReadFileAsString (outputDir @@ "Frontend" @@ "index.html")
+  |> replace "\r\n        <base href=\"../dist/\">" ""
+  |> replace "\n        <base href=\"../dist/\">" ""
+  |> WriteStringToFile false (outputDir @@ "Frontend" @@ "index.html")
+
+  !! "./**/*"
+    |> SetBaseDir outputDir
+    |> Zip outputDir (tempDir @@ "SSAH.zip")
 )
