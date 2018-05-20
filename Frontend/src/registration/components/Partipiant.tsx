@@ -44,7 +44,6 @@ export class Partipiant extends React.Component<PartipiantProps, PartipiantState
     }
 
     render() {
-        console.log("RENDER", this.props.courseType, this.props.discipline);
         return (<>
             <tr>
                 <td><Input name='name' placeholder='Name' value={this.props.name} onChange={this.handleChange} fluid /></td>
