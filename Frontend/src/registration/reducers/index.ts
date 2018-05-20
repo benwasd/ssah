@@ -1,6 +1,6 @@
 import { combineReducers, Reducer, Action } from 'redux';
 
-import { APPLICANT_CHANGE, ApplicantChangeAction, AVAILABILITY_CHANGE, AvailabilityChangeAction, PARTIPIENT_CHANGE, PartipientChangeAction, REGISTRATION_LOADED, RegistrationLoadedAction, PARTIPIENT_SELECT_COURSE, REGISTRATION_POSSIBLE_COURSES_LOADED, RegistrationPossibleCoursesLoadedAction } from '../actions';
+import { APPLICANT_CHANGE, ApplicantChangeAction, AVAILABILITY_CHANGE, AvailabilityChangeAction, PARTIPIENT_CHANGE, PartipientChangeAction, REGISTRATION_LOADED, RegistrationLoadedAction, PARTIPIENT_SELECT_COURSE, REGISTRATION_POSSIBLE_COURSES_LOADED, RegistrationPossibleCoursesLoadedAction, PartipientSelectCourseAction } from '../actions';
 import { ApplicantState, AvailabilityState, PartipiantState, RegistrationState, hasAllRegistrationProperties } from '../state';
 import { CourseType, Discipline, RegistrationStatus, PossibleCourseDto } from '../../api';
 
@@ -67,7 +67,15 @@ const handlePartipiants: Reducer<PartipiantState[], Action> = (state, action) =>
 
             return newState as PartipiantState[];
         case PARTIPIENT_SELECT_COURSE:
-            console.log(action);
+            const selectCourseAction = action as PartipientSelectCourseAction;
+            const x = selectCourseAction.selectedCourses[0];
+
+            let participantIndex = state.findIndex(p => p.id === x.participantId);
+            let newState2 = update(state, { [participantIndex]: { $merge: { commiting: { courseIdentifier: x.identifier, courseStartDate: x.startDate } } } });
+            console.log(newState2);
+            
+            return newState2 as PartipiantState[];
+
         default: 
             return state;
     }

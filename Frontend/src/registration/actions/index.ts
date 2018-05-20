@@ -43,12 +43,12 @@ export const changePartipiant = (partipiantIndex: number, change: Partial<Partip
 export const PARTIPIENT_SELECT_COURSE = 'PARTIPIENT_SELECT_COURSE';
 
 export interface PartipientSelectCourseAction extends Action {
-    partipiantId: string;
-    selectedCourses: { identifier: number; startDate: Date; }[];
+    selectedCourses: { participantId: string; identifier: number; startDate: Date; }[];
 }
 
-export const selectCoursesForPartipiant = (partipiantId: string, selectedCourses: { identifier: number; startDate: Date; }[]) => (dispatch: Dispatch) => {
-    const action: PartipientSelectCourseAction = { type: PARTIPIENT_SELECT_COURSE, partipiantId, selectedCourses };
+export const selectCoursesForParticipants = (selectedCourses: { participantId: string; identifier: number; startDate: Date; }[]) => (dispatch: Dispatch) => {
+    const action: PartipientSelectCourseAction = { type: PARTIPIENT_SELECT_COURSE, selectedCourses };
+    dispatch(action);
 }
 
 export const REGISTRATION_LOADED = 'REGISTRATION_LOADED';
