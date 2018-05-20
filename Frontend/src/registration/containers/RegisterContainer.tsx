@@ -8,7 +8,7 @@ import { submitOrUpdateRegistration } from '../actions';
 import { RegistrationContainer } from './RegistrationContainer';
 
 interface InternalRegisterContainerProps {
-    submitRegistration(submittedCallback: (id: string) => void);
+    submitRegistration(onSubmitted: (id: string) => void);
     history: H.History;
 }
 

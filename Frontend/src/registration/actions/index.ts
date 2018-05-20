@@ -72,44 +72,52 @@ export interface RegistrationSubmittedAction extends Action {
     applicantId: string;
 }
 
-export const submitOrUpdateRegistration = (onSubmitted: (registrationId: string) => void) => (dispatch: Dispatch, getState: () => State) => {
+export const submitOrUpdateRegistration = (onSubmittedOrUpdated?: (registrationId: string) => void) => (dispatch: Dispatch, getState: () => State) => {
     const apiProxy = new RegistrationApiProxy();
     const registrationState = getState().registration;
 
-    const registrationDto: RegistrationDto = {
-        registrationId: registrationState.id ? registrationState.id : undefined,
-        surname: registrationState.applicant.surname,
-        givenname: registrationState.applicant.givenname,
-        phoneNumber: registrationState.applicant.phoneNumber,
-        residence: registrationState.applicant.residence,
-        preferSimultaneousCourseExecutionForPartipiants: registrationState.applicant.preferSimultaneousCourseExecutionForPartipiants,
-        availableFrom: throwIfUndefined(registrationState.availability.availableFrom),
-        availableTo: throwIfUndefined(registrationState.availability.availableTo),
-        status: registrationState.status,
-        participants: registrationState.partipiants.filter(hasAllRegistrationProperties).map(p => {
-            return <RegistrationParticipantDto>{
-                name: p.name,
-                courseType: p.courseType,
-                discipline: p.discipline,
-                niveauId: p.niveauId,
-                ageGroup: parseInt(p.ageGroup),
-                language: registrationState.applicant.language
-            };
-        })
-    }
+    const registrationDto = new RegistrationDto();
+    registrationDto.registrationId = registrationState.id ? registrationState.id : undefined;
+    registrationDto.surname = registrationState.applicant.surname;
+    registrationDto.givenname = registrationState.applicant.givenname;
+    registrationDto.phoneNumber = registrationState.applicant.phoneNumber;
+    registrationDto.residence = registrationState.applicant.residence;
+    registrationDto.preferSimultaneousCourseExecutionForPartipiants = registrationState.applicant.preferSimultaneousCourseExecutionForPartipiants;
+    registrationDto.availableFrom = throwIfUndefined(registrationState.availability.availableFrom);
+    registrationDto.availableTo = throwIfUndefined(registrationState.availability.availableTo);
+    registrationDto.status = registrationState.status;
+    registrationDto.participants = registrationState.partipiants
+        .filter(hasAllRegistrationProperties)
+        .map(p => {
+            const partipiantDto = new RegistrationParticipantDto();
+            partipiantDto.name = p.name;
+            partipiantDto.courseType = throwIfUndefined(p.courseType);
+            partipiantDto.discipline = throwIfUndefined(p.discipline);
+            partipiantDto.niveauId = throwIfUndefined(p.niveauId);
+            partipiantDto.ageGroup = parseInt(p.ageGroup);
+            partipiantDto.language = registrationState.applicant.language;
+
+            return partipiantDto;
+        });
 
     if (registrationDto.registrationId) {
         apiProxy.update(registrationDto).then(r => {
             const action: RegistrationSubmittedAction = { type: REGISTRATION_SUBMIT, applicantId: r.applicantId, registrationId: r.registrationId };
             dispatch(action);
-            onSubmitted(action.registrationId);
+
+            if (onSubmittedOrUpdated) {
+                onSubmittedOrUpdated(action.registrationId);
+            }
         });
     }
     else {
         apiProxy.register(registrationDto).then(r => {
             const action: RegistrationSubmittedAction = { type: REGISTRATION_SUBMIT, applicantId: r.applicantId, registrationId: r.registrationId };
             dispatch(action);
-            onSubmitted(action.registrationId);
+
+            if (onSubmittedOrUpdated) {
+                onSubmittedOrUpdated(action.registrationId);
+            }
         });
     }
 }

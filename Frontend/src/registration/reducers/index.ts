@@ -66,7 +66,7 @@ const handlePartipiants: Reducer<PartipiantState[], Action> = (state, action) =>
             }
 
             return newState as PartipiantState[];
-        case PARTIPIENT_SELECT_COURSE :
+        case PARTIPIENT_SELECT_COURSE:
             console.log(action);
         default: 
             return state;
@@ -81,7 +81,6 @@ const handlePossibleCourses: Reducer<PossibleCourseDto[], Action> = (state, acti
     switch (action.type) {
         case REGISTRATION_POSSIBLE_COURSES_LOADED:
             const loadedAction = action as RegistrationPossibleCoursesLoadedAction;
-            console.log(loadedAction);
             return loadedAction.possibleCourses;
         default:
             return state;

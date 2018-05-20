@@ -14,7 +14,7 @@ const CourseSelectionContainer = connect(
             possibleCourses: state.registration.possibleCourses
         }
     },
-    { 
+    {
         selectCoursesForPartipiant,
         loadPossibleCourses
     }

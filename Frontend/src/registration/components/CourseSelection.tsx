@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { Form, Checkbox } from 'semantic-ui-react';
 
-import { ApplicantState, PartipiantState } from '../state';
-import { toDropdownValue, getEnumElementsAsDropdownItemProps, fromDropdownValue } from '../../utils';
-import { Language, PossibleCourseDto } from '../../api';
+import { PossibleCourseDto } from '../../api';
+import { PartipiantState, hasAllRegistrationProperties } from '../state';
+import { CourseDateVisualizer } from './CourseDatesVisualizer';
 
 export interface CourseSelectionProps {
     preferSimultaneousCourseExecutionForPartipiants: boolean;
@@ -20,14 +19,21 @@ export class CourseSelection extends React.Component<CourseSelectionProps> {
 
     render() {
         return (
-            this.props.partipiants.map(p => 
-                <div key={p.id}>
-                    {p.name} {p.id}
-                    {this.props.possibleCourses
-                        .filter(c => c.registrationPartipiantId === p.id)
-                        .map(c => <div key={c.identifier}>{c.startDate} X {c.identifier}</div>)}
-                </div>
-            )
+            this.props.partipiants
+                .filter(hasAllRegistrationProperties)
+                .map(p => 
+                    <div key={p.id}>
+                        <h1>{p.name} {p.id}</h1>
+                        {this.props.possibleCourses
+                            .filter(c => c.registrationPartipiantId === p.id)
+                            .map(c =>
+                                <div key={c.identifier + "" + c.startDate}>
+                                    <CourseDateVisualizer periods={c.coursePeriods} />
+                                    <div className="ui divider"></div>
+                                </div>
+                            )}
+                    </div>
+                )
         );
     }
 }

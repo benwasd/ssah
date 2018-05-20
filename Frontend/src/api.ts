@@ -48,7 +48,8 @@ export class RegistrationApiProxy extends ApiProxyBase {
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
-            result200 = _responseText === "" ? null : <RegistrationDto>JSON.parse(_responseText, this.jsonParseReviver);
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? RegistrationDto.fromJS(resultData200) : new RegistrationDto();
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -88,7 +89,12 @@ export class RegistrationApiProxy extends ApiProxyBase {
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
-            result200 = _responseText === "" ? null : <RegistrationDto[]>JSON.parse(_responseText, this.jsonParseReviver);
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(RegistrationDto.fromJS(item));
+            }
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -127,7 +133,8 @@ export class RegistrationApiProxy extends ApiProxyBase {
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
-            result200 = _responseText === "" ? null : <RegistrationResultDto>JSON.parse(_responseText, this.jsonParseReviver);
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? RegistrationResultDto.fromJS(resultData200) : new RegistrationResultDto();
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -166,7 +173,8 @@ export class RegistrationApiProxy extends ApiProxyBase {
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
-            result200 = _responseText === "" ? null : <RegistrationResultDto>JSON.parse(_responseText, this.jsonParseReviver);
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? RegistrationResultDto.fromJS(resultData200) : new RegistrationResultDto();
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -206,7 +214,12 @@ export class RegistrationApiProxy extends ApiProxyBase {
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
-            result200 = _responseText === "" ? null : <PossibleCourseDto[]>JSON.parse(_responseText, this.jsonParseReviver);
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(PossibleCourseDto.fromJS(item));
+            }
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -254,7 +267,7 @@ export class RegistrationApiProxy extends ApiProxyBase {
     }
 }
 
-export interface RegistrationDto {
+export class RegistrationDto {
     registrationId?: string | undefined;
     applicantId?: string | undefined;
     surname: string;
@@ -266,6 +279,53 @@ export interface RegistrationDto {
     availableTo: Date;
     status: RegistrationStatus;
     participants: RegistrationParticipantDto[];
+
+    init(data?: any) {
+        if (data) {
+            this.registrationId = data["registrationId"];
+            this.applicantId = data["applicantId"];
+            this.surname = data["surname"];
+            this.givenname = data["givenname"];
+            this.residence = data["residence"];
+            this.phoneNumber = data["phoneNumber"];
+            this.preferSimultaneousCourseExecutionForPartipiants = data["preferSimultaneousCourseExecutionForPartipiants"];
+            this.availableFrom = data["availableFrom"] ? new Date(data["availableFrom"].toString()) : <any>undefined;
+            this.availableTo = data["availableTo"] ? new Date(data["availableTo"].toString()) : <any>undefined;
+            this.status = data["status"];
+            if (data["participants"] && data["participants"].constructor === Array) {
+                this.participants = [];
+                for (let item of data["participants"])
+                    this.participants.push(RegistrationParticipantDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): RegistrationDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new RegistrationDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["registrationId"] = this.registrationId;
+        data["applicantId"] = this.applicantId;
+        data["surname"] = this.surname;
+        data["givenname"] = this.givenname;
+        data["residence"] = this.residence;
+        data["phoneNumber"] = this.phoneNumber;
+        data["preferSimultaneousCourseExecutionForPartipiants"] = this.preferSimultaneousCourseExecutionForPartipiants;
+        data["availableFrom"] = this.availableFrom ? this.availableFrom.toISOString() : <any>undefined;
+        data["availableTo"] = this.availableTo ? this.availableTo.toISOString() : <any>undefined;
+        data["status"] = this.status;
+        if (this.participants && this.participants.constructor === Array) {
+            data["participants"] = [];
+            for (let item of this.participants)
+                data["participants"].push(item.toJSON());
+        }
+        return data; 
+    }
 }
 
 export enum RegistrationStatus {
@@ -274,18 +334,70 @@ export enum RegistrationStatus {
     Commitment = 2, 
 }
 
-export interface EntityDto {
+export class EntityDto {
     id: string;
     rowVersion: string;
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+            this.rowVersion = data["rowVersion"];
+        }
+    }
+
+    static fromJS(data: any): EntityDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new EntityDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["rowVersion"] = this.rowVersion;
+        return data; 
+    }
 }
 
-export interface RegistrationParticipantDto extends EntityDto {
+export class RegistrationParticipantDto extends EntityDto {
     name: string;
     courseType: CourseType;
     discipline: Discipline;
     niveauId: number;
     language?: Language | undefined;
     ageGroup?: number | undefined;
+
+    init(data?: any) {
+        super.init(data);
+        if (data) {
+            this.name = data["name"];
+            this.courseType = data["courseType"];
+            this.discipline = data["discipline"];
+            this.niveauId = data["niveauId"];
+            this.language = data["language"];
+            this.ageGroup = data["ageGroup"];
+        }
+    }
+
+    static fromJS(data: any): RegistrationParticipantDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new RegistrationParticipantDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["courseType"] = this.courseType;
+        data["discipline"] = this.discipline;
+        data["niveauId"] = this.niveauId;
+        data["language"] = this.language;
+        data["ageGroup"] = this.ageGroup;
+        super.toJSON(data);
+        return data; 
+    }
 }
 
 export enum CourseType {
@@ -306,35 +418,170 @@ export enum Language {
     Russian = 5, 
 }
 
-export interface RegistrationResultDto {
+export class RegistrationResultDto {
     applicantId: string;
     registrationId: string;
+
+    init(data?: any) {
+        if (data) {
+            this.applicantId = data["applicantId"];
+            this.registrationId = data["registrationId"];
+        }
+    }
+
+    static fromJS(data: any): RegistrationResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new RegistrationResultDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["applicantId"] = this.applicantId;
+        data["registrationId"] = this.registrationId;
+        return data; 
+    }
 }
 
-export interface PossibleCourseDto {
+export class PossibleCourseDto {
     registrationPartipiantId: string;
     identifier: number;
     startDate: Date;
     coursePeriods: Period[];
+
+    init(data?: any) {
+        if (data) {
+            this.registrationPartipiantId = data["registrationPartipiantId"];
+            this.identifier = data["identifier"];
+            this.startDate = data["startDate"] ? new Date(data["startDate"].toString()) : <any>undefined;
+            if (data["coursePeriods"] && data["coursePeriods"].constructor === Array) {
+                this.coursePeriods = [];
+                for (let item of data["coursePeriods"])
+                    this.coursePeriods.push(Period.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PossibleCourseDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PossibleCourseDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["registrationPartipiantId"] = this.registrationPartipiantId;
+        data["identifier"] = this.identifier;
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
+        if (this.coursePeriods && this.coursePeriods.constructor === Array) {
+            data["coursePeriods"] = [];
+            for (let item of this.coursePeriods)
+                data["coursePeriods"].push(item.toJSON());
+        }
+        return data; 
+    }
 }
 
-export interface Period {
+export class Period {
     start: Date;
     duration: string;
     end: Date;
+
+    init(data?: any) {
+        if (data) {
+            this.start = data["start"] ? new Date(data["start"].toString()) : <any>undefined;
+            this.duration = data["duration"];
+            this.end = data["end"] ? new Date(data["end"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): Period {
+        data = typeof data === 'object' ? data : {};
+        let result = new Period();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["start"] = this.start ? this.start.toISOString() : <any>undefined;
+        data["duration"] = this.duration;
+        data["end"] = this.end ? this.end.toISOString() : <any>undefined;
+        return data; 
+    }
 }
 
-export interface CommitRegistrationDto {
+export class CommitRegistrationDto {
     registrationId: string;
     payment: string;
     participants: CommitRegistrationParticipantDto[];
+
+    init(data?: any) {
+        if (data) {
+            this.registrationId = data["registrationId"];
+            this.payment = data["payment"];
+            if (data["participants"] && data["participants"].constructor === Array) {
+                this.participants = [];
+                for (let item of data["participants"])
+                    this.participants.push(CommitRegistrationParticipantDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): CommitRegistrationDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CommitRegistrationDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["registrationId"] = this.registrationId;
+        data["payment"] = this.payment;
+        if (this.participants && this.participants.constructor === Array) {
+            data["participants"] = [];
+            for (let item of this.participants)
+                data["participants"].push(item.toJSON());
+        }
+        return data; 
+    }
 }
 
-export interface CommitRegistrationParticipantDto extends EntityDto {
+export class CommitRegistrationParticipantDto extends EntityDto {
     language: Language;
     ageGroup: number;
     courseIdentifier: number;
     courseStartDate: Date;
+
+    init(data?: any) {
+        super.init(data);
+        if (data) {
+            this.language = data["language"];
+            this.ageGroup = data["ageGroup"];
+            this.courseIdentifier = data["courseIdentifier"];
+            this.courseStartDate = data["courseStartDate"] ? new Date(data["courseStartDate"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): CommitRegistrationParticipantDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CommitRegistrationParticipantDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["language"] = this.language;
+        data["ageGroup"] = this.ageGroup;
+        data["courseIdentifier"] = this.courseIdentifier;
+        data["courseStartDate"] = this.courseStartDate ? this.courseStartDate.toISOString() : <any>undefined;
+        super.toJSON(data);
+        return data; 
+    }
 }
 
 export class SwaggerException extends Error {

@@ -11,7 +11,7 @@ interface InternalOpenRegistrationContainerProps {
     match: match<{ id: string }>;
     id: string | null;
     loadRegistration(id: string);
-    updateRegistration();
+    updateRegistration(onUpdated?: (id: string) => void);
 }
 
 class InternalOpenRegistrationContainer extends React.Component<InternalOpenRegistrationContainerProps> {
@@ -23,7 +23,7 @@ class InternalOpenRegistrationContainer extends React.Component<InternalOpenRegi
         if (this.props.id) {
             return (<>
                 <RegistrationContainer />
-                <Button onClick={this.props.updateRegistration} />
+                <Button onClick={() => this.props.updateRegistration(undefined)} />
             </>);
         }
         else {            
