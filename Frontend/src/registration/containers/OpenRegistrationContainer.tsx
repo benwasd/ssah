@@ -1,15 +1,16 @@
 import * as React from 'react';
-import { connect, Dispatch } from 'react-redux';
-import { Dimmer, Loader } from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import { Dimmer, Loader, Button } from 'semantic-ui-react';
 
 import { State } from '../../state';
-import { loadRegistration } from '../actions';
+import { loadRegistration, submitOrUpdateRegistration } from '../actions';
 import { RegistrationContainer } from '../containers/RegistrationContainer';
 
 interface InternalOpenRegistrationContainerProps {
     match: { params: { id: string } }
     id: string;
     loadRegistration(id: string);
+    updateRegistration();
 }
 
 class InternalOpenRegistrationContainer extends React.Component<InternalOpenRegistrationContainerProps> {
@@ -20,7 +21,8 @@ class InternalOpenRegistrationContainer extends React.Component<InternalOpenRegi
     render() {
         if (this.props.id) {
             return (<>
-                <RegistrationContainer />
+                <RegistrationContainer />.
+                <Button onClick={this.props.updateRegistration} />
             </>);
         }
         else {            
@@ -37,5 +39,8 @@ export const OpenRegistrationContainer = connect(
     (state: State): Partial<InternalOpenRegistrationContainerProps> => {
         return { id: state.registration.id };
     },
-    { loadRegistration: loadRegistration }
+    { 
+        loadRegistration,
+        updateRegistration: submitOrUpdateRegistration
+    }
 )(InternalOpenRegistrationContainer)

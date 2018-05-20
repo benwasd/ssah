@@ -25,9 +25,9 @@ namespace SSAH.Core.Domain.Entities
         /// <summary>Jahrgang</summary>
         public int? AgeGroup { get; set; }
 
-        public int CourseIdentifier { get; set; }
+        public int? CourseIdentifier { get; set; }
 
-        public DateTime CourseStartDate { get; set; }
+        public DateTime? CourseStartDate { get; set; }
 
         public Participant ToParticipant(Applicant applicant)
         {

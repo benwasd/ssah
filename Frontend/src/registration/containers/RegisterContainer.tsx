@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { connect, Dispatch } from 'react-redux';
-import { Dimmer, Loader, Button } from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import { Button } from 'semantic-ui-react';
 
 import { State } from '../../state';
-import { loadRegistration, submitRegistration } from '../actions';
+import { submitOrUpdateRegistration } from '../actions';
 import { RegistrationContainer } from '../containers/RegistrationContainer';
 
 interface InternalRegisterContainerProps {
@@ -23,5 +23,5 @@ export const RegisterContainer = connect(
     (state: State): Partial<InternalRegisterContainerProps> => {
         return { };
     },
-    { submitRegistration }
+    { submitRegistration: submitOrUpdateRegistration }
 )(InternalRegisterContainer)

@@ -34,7 +34,7 @@ namespace SSAH.Core.Domain.Entities
             foreach (var registrationPartipiant in RegistrationPartipiant)
             {
                 var courseOptions = groupCourseOptions.Value.SingleOrDefault(c => c.Identifier == registrationPartipiant.CourseIdentifier);
-                var course = GetOrCreateProposalGroupCourse(registrationPartipiant.CourseStartDate, registrationPartipiant.NiveauId, courseOptions, courseRepository, serializationService);
+                var course = GetOrCreateProposalGroupCourse(registrationPartipiant.CourseStartDate.Value, registrationPartipiant.NiveauId, courseOptions, courseRepository, serializationService);
                 var partipiant = registrationPartipiant.ToParticipant(Applicant);
 
                 var courseParticipant = new CourseParticipant { Participant = partipiant };

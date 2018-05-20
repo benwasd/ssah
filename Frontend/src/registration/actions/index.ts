@@ -61,7 +61,7 @@ export interface RegistrationSubmittedAction extends Action {
     applicantId: string;
 }
 
-export const submitRegistration = () => (dispatch: Dispatch, getState: () => State) => {
+export const submitOrUpdateRegistration = () => (dispatch: Dispatch, getState: () => State) => {
     const apiProxy = new RegistrationApiProxy();
     const registrationState = getState().registration;
 
@@ -80,8 +80,16 @@ export const submitRegistration = () => (dispatch: Dispatch, getState: () => Sta
         return registrationParticipants;
     });
 
-    apiProxy.register(registrationDto).then(r => {
-        const action: RegistrationSubmittedAction = { type: REGISTRATION_SUBMIT, applicantId: r.applicantId, registrationId: r.registrationId };
-        dispatch(action);
-    });
+    if (registrationDto.registrationId) {
+        apiProxy.update(registrationDto).then(r => {
+            const action: RegistrationSubmittedAction = { type: REGISTRATION_SUBMIT, applicantId: r.applicantId, registrationId: r.registrationId };
+            dispatch(action);
+        });
+    }
+    else {
+        apiProxy.register(registrationDto).then(r => {
+            const action: RegistrationSubmittedAction = { type: REGISTRATION_SUBMIT, applicantId: r.applicantId, registrationId: r.registrationId };
+            dispatch(action);
+        });
+    }
 }
