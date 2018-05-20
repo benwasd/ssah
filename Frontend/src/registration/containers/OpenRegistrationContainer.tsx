@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { match } from 'react-router';
 import { Dimmer, Loader, Button } from 'semantic-ui-react';
 
 import { State } from '../../state';
@@ -7,7 +8,7 @@ import { loadRegistration, submitOrUpdateRegistration } from '../actions';
 import { RegistrationContainer } from '../containers/RegistrationContainer';
 
 interface InternalOpenRegistrationContainerProps {
-    match: { params: { id: string } }
+    match: match<{ id: string }>;
     id: string;
     loadRegistration(id: string);
     updateRegistration();
