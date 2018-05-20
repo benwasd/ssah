@@ -48,8 +48,7 @@ export class RegistrationApiProxy extends ApiProxyBase {
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 ? RegistrationDto.fromJS(resultData200) : new RegistrationDto();
+            result200 = _responseText === "" ? null : <RegistrationDto>JSON.parse(_responseText, this.jsonParseReviver);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -89,12 +88,7 @@ export class RegistrationApiProxy extends ApiProxyBase {
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (resultData200 && resultData200.constructor === Array) {
-                result200 = [];
-                for (let item of resultData200)
-                    result200.push(RegistrationDto.fromJS(item));
-            }
+            result200 = _responseText === "" ? null : <RegistrationDto[]>JSON.parse(_responseText, this.jsonParseReviver);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -133,8 +127,7 @@ export class RegistrationApiProxy extends ApiProxyBase {
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 ? RegistrationResultDto.fromJS(resultData200) : new RegistrationResultDto();
+            result200 = _responseText === "" ? null : <RegistrationResultDto>JSON.parse(_responseText, this.jsonParseReviver);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -173,8 +166,7 @@ export class RegistrationApiProxy extends ApiProxyBase {
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 ? RegistrationResultDto.fromJS(resultData200) : new RegistrationResultDto();
+            result200 = _responseText === "" ? null : <RegistrationResultDto>JSON.parse(_responseText, this.jsonParseReviver);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -214,12 +206,7 @@ export class RegistrationApiProxy extends ApiProxyBase {
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (resultData200 && resultData200.constructor === Array) {
-                result200 = [];
-                for (let item of resultData200)
-                    result200.push(PossibleCourseDto.fromJS(item));
-            }
+            result200 = _responseText === "" ? null : <PossibleCourseDto[]>JSON.parse(_responseText, this.jsonParseReviver);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -267,87 +254,7 @@ export class RegistrationApiProxy extends ApiProxyBase {
     }
 }
 
-export class RegistrationDto implements IRegistrationDto {
-    registrationId?: string | undefined;
-    applicantId?: string | undefined;
-    surname: string;
-    givenname: string;
-    residence: string;
-    phoneNumber: string;
-    preferSimultaneousCourseExecutionForPartipiants: boolean;
-    availableFrom: Date;
-    availableTo: Date;
-    status: RegistrationStatus;
-    participants: RegistrationParticipantDto[];
-
-    constructor(data?: IRegistrationDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.participants = [];
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.registrationId = data["registrationId"];
-            this.applicantId = data["applicantId"];
-            this.surname = data["surname"];
-            this.givenname = data["givenname"];
-            this.residence = data["residence"];
-            this.phoneNumber = data["phoneNumber"];
-            this.preferSimultaneousCourseExecutionForPartipiants = data["preferSimultaneousCourseExecutionForPartipiants"];
-            this.availableFrom = data["availableFrom"] ? new Date(data["availableFrom"].toString()) : <any>undefined;
-            this.availableTo = data["availableTo"] ? new Date(data["availableTo"].toString()) : <any>undefined;
-            this.status = data["status"];
-            if (data["participants"] && data["participants"].constructor === Array) {
-                this.participants = [];
-                for (let item of data["participants"])
-                    this.participants.push(RegistrationParticipantDto.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): RegistrationDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new RegistrationDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["registrationId"] = this.registrationId;
-        data["applicantId"] = this.applicantId;
-        data["surname"] = this.surname;
-        data["givenname"] = this.givenname;
-        data["residence"] = this.residence;
-        data["phoneNumber"] = this.phoneNumber;
-        data["preferSimultaneousCourseExecutionForPartipiants"] = this.preferSimultaneousCourseExecutionForPartipiants;
-        data["availableFrom"] = this.availableFrom ? this.availableFrom.toISOString() : <any>undefined;
-        data["availableTo"] = this.availableTo ? this.availableTo.toISOString() : <any>undefined;
-        data["status"] = this.status;
-        if (this.participants && this.participants.constructor === Array) {
-            data["participants"] = [];
-            for (let item of this.participants)
-                data["participants"].push(item.toJSON());
-        }
-        return data; 
-    }
-
-    clone(): RegistrationDto {
-        const json = this.toJSON();
-        let result = new RegistrationDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IRegistrationDto {
+export interface RegistrationDto {
     registrationId?: string | undefined;
     applicantId?: string | undefined;
     surname: string;
@@ -367,105 +274,12 @@ export enum RegistrationStatus {
     Commitment = 2, 
 }
 
-export class EntityDto implements IEntityDto {
-    id: string;
-    rowVersion: string;
-
-    constructor(data?: IEntityDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.id = data["id"];
-            this.rowVersion = data["rowVersion"];
-        }
-    }
-
-    static fromJS(data: any): EntityDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new EntityDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["rowVersion"] = this.rowVersion;
-        return data; 
-    }
-
-    clone(): EntityDto {
-        const json = this.toJSON();
-        let result = new EntityDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IEntityDto {
+export interface EntityDto {
     id: string;
     rowVersion: string;
 }
 
-export class RegistrationParticipantDto extends EntityDto implements IRegistrationParticipantDto {
-    name: string;
-    courseType: CourseType;
-    discipline: Discipline;
-    niveauId: number;
-    language?: Language | undefined;
-    ageGroup?: number | undefined;
-
-    constructor(data?: IRegistrationParticipantDto) {
-        super(data);
-    }
-
-    init(data?: any) {
-        super.init(data);
-        if (data) {
-            this.name = data["name"];
-            this.courseType = data["courseType"];
-            this.discipline = data["discipline"];
-            this.niveauId = data["niveauId"];
-            this.language = data["language"];
-            this.ageGroup = data["ageGroup"];
-        }
-    }
-
-    static fromJS(data: any): RegistrationParticipantDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new RegistrationParticipantDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        data["courseType"] = this.courseType;
-        data["discipline"] = this.discipline;
-        data["niveauId"] = this.niveauId;
-        data["language"] = this.language;
-        data["ageGroup"] = this.ageGroup;
-        super.toJSON(data);
-        return data; 
-    }
-
-    clone(): RegistrationParticipantDto {
-        const json = this.toJSON();
-        let result = new RegistrationParticipantDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IRegistrationParticipantDto extends IEntityDto {
+export interface RegistrationParticipantDto extends EntityDto {
     name: string;
     courseType: CourseType;
     discipline: Discipline;
@@ -492,278 +306,31 @@ export enum Language {
     Russian = 5, 
 }
 
-export class RegistrationResultDto implements IRegistrationResultDto {
-    applicantId: string;
-    registrationId: string;
-
-    constructor(data?: IRegistrationResultDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.applicantId = data["applicantId"];
-            this.registrationId = data["registrationId"];
-        }
-    }
-
-    static fromJS(data: any): RegistrationResultDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new RegistrationResultDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["applicantId"] = this.applicantId;
-        data["registrationId"] = this.registrationId;
-        return data; 
-    }
-
-    clone(): RegistrationResultDto {
-        const json = this.toJSON();
-        let result = new RegistrationResultDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IRegistrationResultDto {
+export interface RegistrationResultDto {
     applicantId: string;
     registrationId: string;
 }
 
-export class PossibleCourseDto implements IPossibleCourseDto {
-    registrationPartipiantId: string;
-    identifier: number;
-    startDate: Date;
-    coursePeriods: Period[];
-
-    constructor(data?: IPossibleCourseDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.coursePeriods = [];
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.registrationPartipiantId = data["registrationPartipiantId"];
-            this.identifier = data["identifier"];
-            this.startDate = data["startDate"] ? new Date(data["startDate"].toString()) : <any>undefined;
-            if (data["coursePeriods"] && data["coursePeriods"].constructor === Array) {
-                this.coursePeriods = [];
-                for (let item of data["coursePeriods"])
-                    this.coursePeriods.push(Period.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): PossibleCourseDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new PossibleCourseDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["registrationPartipiantId"] = this.registrationPartipiantId;
-        data["identifier"] = this.identifier;
-        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
-        if (this.coursePeriods && this.coursePeriods.constructor === Array) {
-            data["coursePeriods"] = [];
-            for (let item of this.coursePeriods)
-                data["coursePeriods"].push(item.toJSON());
-        }
-        return data; 
-    }
-
-    clone(): PossibleCourseDto {
-        const json = this.toJSON();
-        let result = new PossibleCourseDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IPossibleCourseDto {
+export interface PossibleCourseDto {
     registrationPartipiantId: string;
     identifier: number;
     startDate: Date;
     coursePeriods: Period[];
 }
 
-export class Period implements IPeriod {
-    start: Date;
-    duration: string;
-    end: Date;
-
-    constructor(data?: IPeriod) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.start = data["start"] ? new Date(data["start"].toString()) : <any>undefined;
-            this.duration = data["duration"];
-            this.end = data["end"] ? new Date(data["end"].toString()) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): Period {
-        data = typeof data === 'object' ? data : {};
-        let result = new Period();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["start"] = this.start ? this.start.toISOString() : <any>undefined;
-        data["duration"] = this.duration;
-        data["end"] = this.end ? this.end.toISOString() : <any>undefined;
-        return data; 
-    }
-
-    clone(): Period {
-        const json = this.toJSON();
-        let result = new Period();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IPeriod {
+export interface Period {
     start: Date;
     duration: string;
     end: Date;
 }
 
-export class CommitRegistrationDto implements ICommitRegistrationDto {
-    registrationId: string;
-    payment: string;
-    participants: CommitRegistrationParticipantDto[];
-
-    constructor(data?: ICommitRegistrationDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.participants = [];
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.registrationId = data["registrationId"];
-            this.payment = data["payment"];
-            if (data["participants"] && data["participants"].constructor === Array) {
-                this.participants = [];
-                for (let item of data["participants"])
-                    this.participants.push(CommitRegistrationParticipantDto.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): CommitRegistrationDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new CommitRegistrationDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["registrationId"] = this.registrationId;
-        data["payment"] = this.payment;
-        if (this.participants && this.participants.constructor === Array) {
-            data["participants"] = [];
-            for (let item of this.participants)
-                data["participants"].push(item.toJSON());
-        }
-        return data; 
-    }
-
-    clone(): CommitRegistrationDto {
-        const json = this.toJSON();
-        let result = new CommitRegistrationDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface ICommitRegistrationDto {
+export interface CommitRegistrationDto {
     registrationId: string;
     payment: string;
     participants: CommitRegistrationParticipantDto[];
 }
 
-export class CommitRegistrationParticipantDto extends EntityDto implements ICommitRegistrationParticipantDto {
-    language: Language;
-    ageGroup: number;
-    courseIdentifier: number;
-    courseStartDate: Date;
-
-    constructor(data?: ICommitRegistrationParticipantDto) {
-        super(data);
-    }
-
-    init(data?: any) {
-        super.init(data);
-        if (data) {
-            this.language = data["language"];
-            this.ageGroup = data["ageGroup"];
-            this.courseIdentifier = data["courseIdentifier"];
-            this.courseStartDate = data["courseStartDate"] ? new Date(data["courseStartDate"].toString()) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): CommitRegistrationParticipantDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new CommitRegistrationParticipantDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["language"] = this.language;
-        data["ageGroup"] = this.ageGroup;
-        data["courseIdentifier"] = this.courseIdentifier;
-        data["courseStartDate"] = this.courseStartDate ? this.courseStartDate.toISOString() : <any>undefined;
-        super.toJSON(data);
-        return data; 
-    }
-
-    clone(): CommitRegistrationParticipantDto {
-        const json = this.toJSON();
-        let result = new CommitRegistrationParticipantDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface ICommitRegistrationParticipantDto extends IEntityDto {
+export interface CommitRegistrationParticipantDto extends EntityDto {
     language: Language;
     ageGroup: number;
     courseIdentifier: number;

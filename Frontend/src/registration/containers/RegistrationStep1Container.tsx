@@ -1,12 +1,11 @@
 import * as React from 'react';
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
 
-import { applicantChange, availabilityChange, changePartipiant, loadRegistration } from '../actions';
 import { State } from '../../state';
+import { applicantChange, availabilityChange, changePartipiant } from '../actions';
 import { Applicant, ApplicantProps } from '../components/Applicant';
 import { AvailabilitySelector, AvailabilitySelectorProps } from '../components/AvailabilitySelector';
 import { PartipiantList, PartipiantListProps } from '../components/PartipiantList';
-import { Dimmer, Loader } from 'semantic-ui-react';
 
 const ApplicantContainer = connect(
     (state: State): Partial<ApplicantProps> => state.registration.applicant,

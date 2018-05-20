@@ -2,7 +2,7 @@ import { Dispatch } from 'react-redux';
 import { Action } from 'redux';
 
 import { ApplicantState, AvailabilityState, PartipiantState, hasAllRegistrationProperties } from '../state';
-import { RegistrationApiProxy, RegistrationDto, RegistrationParticipantDto } from '../../api';
+import { RegistrationApiProxy, RegistrationDto, RegistrationParticipantDto, PossibleCourseDto } from '../../api';
 import { State } from '../../state';
 import { throwIfUndefined } from '../../utils';
 
@@ -40,6 +40,17 @@ export const changePartipiant = (partipiantIndex: number, change: Partial<Partip
     dispatch(action);
 }
 
+export const PARTIPIENT_SELECT_COURSE = 'PARTIPIENT_SELECT_COURSE';
+
+export interface PartipientSelectCourseAction extends Action {
+    partipiantId: string;
+    selectedCourses: { identifier: number; startDate: Date; }[];
+}
+
+export const selectCoursesForPartipiant = (partipiantId: string, selectedCourses: { identifier: number; startDate: Date; }[]) => (dispatch: Dispatch) => {
+    const action: PartipientSelectCourseAction = { type: PARTIPIENT_SELECT_COURSE, partipiantId, selectedCourses };
+}
+
 export const REGISTRATION_LOADED = 'REGISTRATION_LOADED';
 
 export interface RegistrationLoadedAction extends Action {
@@ -65,20 +76,27 @@ export const submitOrUpdateRegistration = (onSubmitted: (registrationId: string)
     const apiProxy = new RegistrationApiProxy();
     const registrationState = getState().registration;
 
-    const registrationDto = new RegistrationDto();
-    registrationDto.init(registrationState.applicant);
-    registrationDto.registrationId = registrationState.id ? registrationState.id : undefined;
-    registrationDto.preferSimultaneousCourseExecutionForPartipiants = registrationState.applicant.preferSimultaneousCourseExecutionForPartipiants;
-    registrationDto.availableFrom = throwIfUndefined(registrationState.availability.availableFrom);
-    registrationDto.availableTo = throwIfUndefined(registrationState.availability.availableTo);
-
-    registrationDto.participants = registrationState.partipiants.filter(hasAllRegistrationProperties).map(p => {
-        const registrationParticipants = new RegistrationParticipantDto();
-        registrationParticipants.init(p);
-        registrationParticipants.ageGroup = parseInt(p.ageGroup);
-        registrationParticipants.language = registrationState.applicant.language;
-        return registrationParticipants;
-    });
+    const registrationDto: RegistrationDto = {
+        registrationId: registrationState.id ? registrationState.id : undefined,
+        surname: registrationState.applicant.surname,
+        givenname: registrationState.applicant.givenname,
+        phoneNumber: registrationState.applicant.phoneNumber,
+        residence: registrationState.applicant.residence,
+        preferSimultaneousCourseExecutionForPartipiants: registrationState.applicant.preferSimultaneousCourseExecutionForPartipiants,
+        availableFrom: throwIfUndefined(registrationState.availability.availableFrom),
+        availableTo: throwIfUndefined(registrationState.availability.availableTo),
+        status: registrationState.status,
+        participants: registrationState.partipiants.filter(hasAllRegistrationProperties).map(p => {
+            return <RegistrationParticipantDto>{
+                name: p.name,
+                courseType: p.courseType,
+                discipline: p.discipline,
+                niveauId: p.niveauId,
+                ageGroup: parseInt(p.ageGroup),
+                language: registrationState.applicant.language
+            };
+        })
+    }
 
     if (registrationDto.registrationId) {
         apiProxy.update(registrationDto).then(r => {
@@ -94,4 +112,18 @@ export const submitOrUpdateRegistration = (onSubmitted: (registrationId: string)
             onSubmitted(action.registrationId);
         });
     }
+}
+
+export const REGISTRATION_POSSIBLE_COURSES_LOADED = 'REGISTRATION_POSSIBLE_COURSES_LOADED';
+
+export interface RegistrationPossibleCoursesLoadedAction extends Action {
+    possibleCourses: PossibleCourseDto[];
+}
+
+export const loadPossibleCourses = () => (dispatch: Dispatch, getState: () => State) => {
+    const apiProxy = new RegistrationApiProxy();
+    apiProxy.possibleCourseDatesPerPartipiant(throwIfUndefined<string>(getState().registration.id)).then(r => {
+        const action: RegistrationPossibleCoursesLoadedAction = { type: REGISTRATION_POSSIBLE_COURSES_LOADED, possibleCourses: r }
+        dispatch(action);
+    });
 }

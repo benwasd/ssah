@@ -1,5 +1,5 @@
-import * as React from 'react';
 import * as H from 'history';
+import * as React from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'semantic-ui-react';
 

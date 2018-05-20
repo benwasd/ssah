@@ -1,8 +1,8 @@
 import { combineReducers, Reducer, Action } from 'redux';
 
-import { APPLICANT_CHANGE, ApplicantChangeAction, AVAILABILITY_CHANGE, AvailabilityChangeAction, PARTIPIENT_CHANGE, PartipientChangeAction, REGISTRATION_LOADED, RegistrationLoadedAction } from '../actions';
+import { APPLICANT_CHANGE, ApplicantChangeAction, AVAILABILITY_CHANGE, AvailabilityChangeAction, PARTIPIENT_CHANGE, PartipientChangeAction, REGISTRATION_LOADED, RegistrationLoadedAction, PARTIPIENT_SELECT_COURSE, REGISTRATION_POSSIBLE_COURSES_LOADED, RegistrationPossibleCoursesLoadedAction } from '../actions';
 import { ApplicantState, AvailabilityState, PartipiantState, RegistrationState, hasAllRegistrationProperties } from '../state';
-import { CourseType, Discipline, RegistrationStatus } from '../../api';
+import { CourseType, Discipline, RegistrationStatus, PossibleCourseDto } from '../../api';
 
 import update from 'immutability-helper';
 
@@ -26,8 +26,9 @@ const handleApplicant: Reducer<ApplicantState, Action> = (state, action) => {
     }
     
     switch (action.type) {
-        case APPLICANT_CHANGE: 
-            return Object.assign({}, state, (<ApplicantChangeAction>action).change);
+        case APPLICANT_CHANGE:
+            const changeAction = action as ApplicantChangeAction;
+            return Object.assign({}, state, changeAction.change);
         default:
             return state;
     }
@@ -40,7 +41,8 @@ const handleAvailability: Reducer<AvailabilityState, Action> = (state, action) =
     
     switch (action.type) {
         case AVAILABILITY_CHANGE:
-            return Object.assign({}, state, (<AvailabilityChangeAction>action).change);
+            const changeAction = action as AvailabilityChangeAction;
+            return Object.assign({}, state, changeAction.change);
         default:
             return state;
     }
@@ -48,23 +50,40 @@ const handleAvailability: Reducer<AvailabilityState, Action> = (state, action) =
 
 const handlePartipiants: Reducer<PartipiantState[], Action> = (state, action) => {
     if (state === undefined) {
-        return [ { name: "", ageGroup: "" }, { name: "", ageGroup: "" }, { name: "", ageGroup: "" } ];
+        return [ 
+            { name: "", ageGroup: "" },
+            { name: "", ageGroup: "" }
+        ];
     }
 
     switch (action.type) {
         case PARTIPIENT_CHANGE:
             const changeAction = action as PartipientChangeAction;
-            let newState = update(state, { [changeAction.partipiantIndex]: { $merge: changeAction.change } });
 
+            let newState = update(state, { [changeAction.partipiantIndex]: { $merge: changeAction.change } });
             if (newState.every(p => hasAllRegistrationProperties(p))) {
                 newState = newState.concat({ name: "", ageGroup: "" });
             }
 
             return newState as PartipiantState[];
-
-
-
+        case PARTIPIENT_SELECT_COURSE :
+            console.log(action);
         default: 
+            return state;
+    }
+}
+
+const handlePossibleCourses: Reducer<PossibleCourseDto[], Action> = (state, action) => {
+    if (state === undefined) {
+        return [];
+    }
+
+    switch (action.type) {
+        case REGISTRATION_POSSIBLE_COURSES_LOADED:
+            const loadedAction = action as RegistrationPossibleCoursesLoadedAction;
+            console.log(loadedAction);
+            return loadedAction.possibleCourses;
+        default:
             return state;
     }
 }
@@ -76,7 +95,8 @@ const handleRegistration: Reducer<RegistrationState, Action> = (state, action) =
             status: RegistrationStatus.Registration,
             applicant: handleApplicant(undefined, noopAction()),
             availability: handleAvailability(undefined, noopAction()),
-            partipiants: handlePartipiants(undefined, noopAction())
+            partipiants: handlePartipiants(undefined, noopAction()),
+            possibleCourses: handlePossibleCourses(undefined, noopAction())
         };
     }
 
@@ -109,7 +129,8 @@ const handleRegistration: Reducer<RegistrationState, Action> = (state, action) =
                         niveauId: p.niveauId,
                         ageGroup: p.ageGroup ? p.ageGroup.toString() : ""
                     }
-                })
+                }),
+                possibleCourses: []
             }
         default:
             return state;
@@ -122,6 +143,7 @@ export interface RegistrationReducerTree {
     applicant: Reducer<ApplicantState, Action>;
     availability: Reducer<AvailabilityState, Action>;
     partipiants: Reducer<PartipiantState[], Action>;
+    possibleCourses: Reducer<PossibleCourseDto[], Action>;
 }
 
 export const reducer = combineReducers(<RegistrationReducerTree>{
@@ -129,7 +151,8 @@ export const reducer = combineReducers(<RegistrationReducerTree>{
     status: noopReducer(RegistrationStatus.Registration),
     applicant: handleApplicant,
     availability: handleAvailability,
-    partipiants: handlePartipiants
+    partipiants: handlePartipiants,
+    possibleCourses: handlePossibleCourses
 })
 
 export const rootReducer = handleRegistration;
