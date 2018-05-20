@@ -20,7 +20,7 @@ class InternalRegisterContainer extends React.Component<InternalRegisterContaine
 }
 
 export const RegisterContainer = connect(
-    (state: State) => {
+    (state: State): Partial<InternalRegisterContainerProps> => {
         return { };
     },
     { submitRegistration }

@@ -10,7 +10,7 @@ export interface ApplicantProps {
     givenname: string;
     residence: string;
     phoneNumber: string;
-    language: Language;
+    language?: Language;
     preferSimultaneousCourseExecutionForPartipiants: boolean;
     change(obj: Partial<ApplicantState>);
 }

@@ -14,8 +14,8 @@ export interface AvailabilitySelectorProps {
 export class AvailabilitySelector extends React.Component<AvailabilitySelectorProps> {
     onDatesChange = (dateChange: DateRangePickerPropsDateChange) => {
         this.props.change({ 
-            availableFrom: dateChange.startDate == null ? null : dateChange.startDate.toDate(),
-            availableTo: dateChange.endDate == null ? null : dateChange.endDate.toDate()
+            availableFrom: dateChange.startDate ? dateChange.startDate.toDate() : undefined,
+            availableTo: dateChange.endDate ? dateChange.endDate.toDate() : undefined
         });
     }
 
@@ -27,8 +27,8 @@ export class AvailabilitySelector extends React.Component<AvailabilitySelectorPr
                 </Form.Field>
             </Form>
             <DateRangePicker 
-                initialStartDate={this.props.availableFrom == null ? null : moment(this.props.availableFrom)} 
-                initialEndDate={this.props.availableTo == null ? null : moment(this.props.availableTo)}
+                initialStartDate={this.props.availableFrom ? moment(this.props.availableFrom) : undefined} 
+                initialEndDate={this.props.availableTo ? moment(this.props.availableTo) : undefined}
                 onDatesChange={this.onDatesChange} />
         </>);
     }

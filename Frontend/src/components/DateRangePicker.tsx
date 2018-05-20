@@ -16,8 +16,8 @@ export interface DateRangePickerPropsDateChange {
 }
 
 export interface DateRangePickerProps {
-    initialStartDate: moment.Moment;
-    initialEndDate: moment.Moment;
+    initialStartDate?: moment.Moment;
+    initialEndDate?: moment.Moment;
     onDatesChange: (dateChange: DateRangePickerPropsDateChange) => void;
 }
 
@@ -102,7 +102,7 @@ export class DateRangePicker extends React.Component<DateRangePickerProps> {
     constructor(props) {
         super(props);
 
-        let focusedInput = null;
+        let focusedInput: string | null = null;
         if (props.autoFocus) {
             focusedInput = "startDate";
         }

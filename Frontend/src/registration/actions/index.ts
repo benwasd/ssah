@@ -4,6 +4,7 @@ import { Action } from 'redux';
 import { ApplicantState, AvailabilityState, PartipiantState, hasAllRegistrationProperties } from '../state';
 import { RegistrationApiProxy, RegistrationDto, RegistrationParticipantDto } from '../../api';
 import { State } from '../../state';
+import { throwIfUndefined } from '../../utils';
 
 export const APPLICANT_CHANGE = 'APPLICANT_CHANGE';
 
@@ -68,8 +69,8 @@ export const submitRegistration = () => (dispatch: Dispatch, getState: () => Sta
     registrationDto.init(registrationState.applicant);
     registrationDto.registrationId = registrationState.id;
     registrationDto.preferSimultaneousCourseExecutionForPartipiants = registrationState.applicant.preferSimultaneousCourseExecutionForPartipiants;
-    registrationDto.availableFrom = registrationState.availability.availableFrom;
-    registrationDto.availableTo = registrationState.availability.availableTo;
+    registrationDto.availableFrom = throwIfUndefined(registrationState.availability.availableFrom);
+    registrationDto.availableTo = throwIfUndefined(registrationState.availability.availableTo);
 
     registrationDto.participants = registrationState.partipiants.filter(hasAllRegistrationProperties).map(p => {
         const registrationParticipants = new RegistrationParticipantDto();

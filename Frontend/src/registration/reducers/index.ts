@@ -18,7 +18,7 @@ function noopReducer<T>(defaultState: T): Reducer<T, Action> {
 
 const handleApplicant: Reducer<ApplicantState, Action> = (state, action) => {
     if (state === undefined) {
-        return { givenname: "", surname: "", residence: "", phoneNumber: "", language: null, preferSimultaneousCourseExecutionForPartipiants: true };
+        return { givenname: "", surname: "", residence: "", phoneNumber: "", preferSimultaneousCourseExecutionForPartipiants: true };
     }
     
     switch (action.type) {
@@ -31,7 +31,7 @@ const handleApplicant: Reducer<ApplicantState, Action> = (state, action) => {
 
 const handleAvailability: Reducer<AvailabilityState, Action> = (state, action) => {
     if (state === undefined) {
-        return {  availableFrom: null, availableTo: null };
+        return {};
     }
     
     switch (action.type) {
@@ -68,9 +68,9 @@ const handlePartipiants: Reducer<PartipiantState[], Action> = (state, action) =>
 const handleRegistration: Reducer<RegistrationState, Action> = (state, action) => {
     if (state == undefined) {
         return {
-            applicant: handleApplicant(undefined, null),
-            availability: handleAvailability(undefined, null),
-            partipiants: handlePartipiants(undefined, null)
+            applicant: handleApplicant(undefined, { type: "" }),
+            availability: handleAvailability(undefined, { type: "" }),
+            partipiants: handlePartipiants(undefined, { type: "" })
         };
     }
 
@@ -85,7 +85,7 @@ const handleRegistration: Reducer<RegistrationState, Action> = (state, action) =
                     givenname: loadedAction.registration.givenname,
                     residence: loadedAction.registration.residence,
                     phoneNumber: loadedAction.registration.phoneNumber,
-                    language: loadedAction.registration.participants.length > 0 ? loadedAction.registration.participants[0].language : null,
+                    language: loadedAction.registration.participants.length > 0 ? loadedAction.registration.participants[0].language : undefined,
                     preferSimultaneousCourseExecutionForPartipiants: loadedAction.registration.preferSimultaneousCourseExecutionForPartipiants
                 },
                 availability: {

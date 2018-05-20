@@ -34,7 +34,7 @@ class InternalOpenRegistrationContainer extends React.Component<InternalOpenRegi
 }
 
 export const OpenRegistrationContainer = connect(
-    (state: State) => {
+    (state: State): Partial<InternalOpenRegistrationContainerProps> => {
         return { id: state.registration.id };
     },
     { loadRegistration: loadRegistration }
