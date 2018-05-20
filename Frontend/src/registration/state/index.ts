@@ -13,6 +13,7 @@ export interface ApplicantState {
     givenname: string;
     residence: string;
     phoneNumber: string;
+    language: Language;
     preferSimultaneousCourseExecutionForPartipiants: boolean;
 }
 
@@ -28,10 +29,13 @@ export interface PartipiantState {
     courseType?: CourseType;
     discipline?: Discipline;
     niveauId?: number;
+    ageGroup: string;
     commiting?: {
-        language: Language;
-        ageGroup: number;
         courseIdentifier: number;
         courseStartDate: Date;
     }
+}
+
+export function hasAllRegistrationProperties(p: PartipiantState) {
+    return p.name != "" && p.niveauId != null && p.courseType != null && p.discipline != null && p.ageGroup != "";
 }

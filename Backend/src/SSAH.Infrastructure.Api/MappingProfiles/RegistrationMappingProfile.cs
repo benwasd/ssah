@@ -49,8 +49,6 @@ namespace SSAH.Infrastructure.Api.MappingProfiles
                 .ForMember(dest => dest.RegistrationId, opt => opt.Ignore())
                 .ForMember(dest => dest.ResultingParticipantId, opt => opt.Ignore())
                 .ForMember(dest => dest.ResultingParticipant, opt => opt.Ignore())
-                .ForMember(dest => dest.Language, opt => opt.Ignore())
-                .ForMember(dest => dest.AgeGroup, opt => opt.Ignore())
                 .ForMember(dest => dest.CourseIdentifier, opt => opt.Ignore())
                 .ForMember(dest => dest.CourseStartDate, opt => opt.Ignore());
 

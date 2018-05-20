@@ -409,6 +409,8 @@ export class RegistrationParticipantDto extends EntityDto implements IRegistrati
     courseType: CourseType;
     discipline: Discipline;
     niveauId: number;
+    language?: Language | undefined;
+    ageGroup?: number | undefined;
 
     constructor(data?: IRegistrationParticipantDto) {
         super(data);
@@ -421,6 +423,8 @@ export class RegistrationParticipantDto extends EntityDto implements IRegistrati
             this.courseType = data["courseType"];
             this.discipline = data["discipline"];
             this.niveauId = data["niveauId"];
+            this.language = data["language"];
+            this.ageGroup = data["ageGroup"];
         }
     }
 
@@ -437,6 +441,8 @@ export class RegistrationParticipantDto extends EntityDto implements IRegistrati
         data["courseType"] = this.courseType;
         data["discipline"] = this.discipline;
         data["niveauId"] = this.niveauId;
+        data["language"] = this.language;
+        data["ageGroup"] = this.ageGroup;
         super.toJSON(data);
         return data; 
     }
@@ -454,6 +460,8 @@ export interface IRegistrationParticipantDto extends IEntityDto {
     courseType: CourseType;
     discipline: Discipline;
     niveauId: number;
+    language?: Language | undefined;
+    ageGroup?: number | undefined;
 }
 
 export enum CourseType {
@@ -463,6 +471,15 @@ export enum CourseType {
 export enum Discipline {
     Ski = 0, 
     Snowboard = 1, 
+}
+
+export enum Language {
+    SwissGerman = 0, 
+    German = 1, 
+    French = 2, 
+    Italian = 3, 
+    English = 4, 
+    Russian = 5, 
 }
 
 export class RegistrationResultDto implements IRegistrationResultDto {
@@ -741,15 +758,6 @@ export interface ICommitRegistrationParticipantDto extends IEntityDto {
     ageGroup: number;
     courseIdentifier: number;
     courseStartDate: Date;
-}
-
-export enum Language {
-    SwissGerman = 0, 
-    German = 1, 
-    French = 2, 
-    Italian = 3, 
-    English = 4, 
-    Russian = 5, 
 }
 
 export class SwaggerException extends Error {

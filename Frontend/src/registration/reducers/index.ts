@@ -1,7 +1,7 @@
 import { combineReducers, Reducer, Action } from 'redux';
 
 import { APPLICANT_CHANGE, ApplicantChangeAction, AVAILABILITY_CHANGE, AvailabilityChangeAction, PARTIPIENT_CHANGE, PartipientChangeAction, REGISTRATION_LOADED, RegistrationLoadedAction } from '../actions';
-import { ApplicantState, AvailabilityState, PartipiantState, RegistrationState } from '../state';
+import { ApplicantState, AvailabilityState, PartipiantState, RegistrationState, hasAllRegistrationProperties } from '../state';
 import { CourseType, Discipline } from '../../api';
 
 import update from 'immutability-helper';
@@ -18,7 +18,7 @@ function noopReducer<T>(defaultState: T): Reducer<T, Action> {
 
 const handleApplicant: Reducer<ApplicantState, Action> = (state, action) => {
     if (state === undefined) {
-        return { givenname: "", surname: "", residence: "", phoneNumber: "", preferSimultaneousCourseExecutionForPartipiants: true };
+        return { givenname: "", surname: "", residence: "", phoneNumber: "", language: null, preferSimultaneousCourseExecutionForPartipiants: true };
     }
     
     switch (action.type) {
@@ -44,7 +44,7 @@ const handleAvailability: Reducer<AvailabilityState, Action> = (state, action) =
 
 const handlePartipiants: Reducer<PartipiantState[], Action> = (state, action) => {
     if (state === undefined) {
-        return [ { name: "" }, { name: "" }, { name: "" } ];
+        return [ { name: "", ageGroup: "" }, { name: "", ageGroup: "" }, { name: "", ageGroup: "" } ];
     }
 
     switch (action.type) {
@@ -53,7 +53,7 @@ const handlePartipiants: Reducer<PartipiantState[], Action> = (state, action) =>
             let newState = update(state, { [changeAction.partipiantIndex]: { $merge: changeAction.change } });
 
             if (newState.every(p => hasAllRegistrationProperties(p))) {
-                newState = newState.concat({ name: "" });
+                newState = newState.concat({ name: "", ageGroup: "" });
             }
 
             return newState as PartipiantState[];
@@ -62,10 +62,6 @@ const handlePartipiants: Reducer<PartipiantState[], Action> = (state, action) =>
 
         default: 
             return state;
-    }
-
-    function hasAllRegistrationProperties(p: PartipiantState) {
-        return p.name != "" && p.niveauId != null && p.courseType != null && p.discipline != null;
     }
 }
 
@@ -89,6 +85,7 @@ const handleRegistration: Reducer<RegistrationState, Action> = (state, action) =
                     givenname: loadedAction.registration.givenname,
                     residence: loadedAction.registration.residence,
                     phoneNumber: loadedAction.registration.phoneNumber,
+                    language: loadedAction.registration.participants.length > 0 ? loadedAction.registration.participants[0].language : null,
                     preferSimultaneousCourseExecutionForPartipiants: loadedAction.registration.preferSimultaneousCourseExecutionForPartipiants
                 },
                 availability: {
@@ -102,11 +99,12 @@ const handleRegistration: Reducer<RegistrationState, Action> = (state, action) =
                         name: p.name,
                         courseType: p.courseType,
                         discipline: p.discipline,
-                        niveauId: p.niveauId
+                        niveauId: p.niveauId,
+                        ageGroup: p.ageGroup ? p.ageGroup.toString() : ""
                     }
                 })
             }
-        default: 
+        default:
             return state;
     }
 }

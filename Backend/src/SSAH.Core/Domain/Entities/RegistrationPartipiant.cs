@@ -20,10 +20,10 @@ namespace SSAH.Core.Domain.Entities
 
         public virtual Participant ResultingParticipant { get; set; }
 
-        public Language Language { get; set; }
+        public Language? Language { get; set; }
 
         /// <summary>Jahrgang</summary>
-        public int AgeGroup { get; set; }
+        public int? AgeGroup { get; set; }
 
         public int CourseIdentifier { get; set; }
 
@@ -40,8 +40,8 @@ namespace SSAH.Core.Domain.Entities
             participant.ApplicantId = applicant.Id;
             participant.Applicant = applicant;
             participant.Name = Name;
-            participant.Language = Language;
-            participant.AgeGroup = AgeGroup;
+            participant.Language = Language.Value;
+            participant.AgeGroup = AgeGroup.Value;
 
             ResultingParticipantId = participant.Id;
             ResultingParticipant = participant;

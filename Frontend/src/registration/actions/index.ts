@@ -1,7 +1,7 @@
 import { Dispatch } from 'react-redux';
 import { Action } from 'redux';
 
-import { ApplicantState, AvailabilityState, PartipiantState } from '../state';
+import { ApplicantState, AvailabilityState, PartipiantState, hasAllRegistrationProperties } from '../state';
 import { RegistrationApiProxy, RegistrationDto, RegistrationParticipantDto } from '../../api';
 import { State } from '../../state';
 
@@ -71,9 +71,11 @@ export const submitRegistration = () => (dispatch: Dispatch, getState: () => Sta
     registrationDto.availableFrom = registrationState.availability.availableFrom;
     registrationDto.availableTo = registrationState.availability.availableTo;
 
-    registrationDto.participants = registrationState.partipiants.map(p => {
+    registrationDto.participants = registrationState.partipiants.filter(hasAllRegistrationProperties).map(p => {
         const registrationParticipants = new RegistrationParticipantDto();
         registrationParticipants.init(p);
+        registrationParticipants.ageGroup = parseInt(p.ageGroup);
+        registrationParticipants.language = registrationState.applicant.language;
         return registrationParticipants;
     });
 
