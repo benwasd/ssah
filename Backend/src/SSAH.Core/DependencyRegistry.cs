@@ -1,5 +1,6 @@
 ﻿using Autofac;
 
+using SSAH.Core.Domain.CourseCreation;
 using SSAH.Core.Domain.Demanding;
 using SSAH.Core.Domain.Messages;
 using SSAH.Core.Messaging;
@@ -13,6 +14,7 @@ namespace SSAH.Core
             // Domain
             builder.RegisterType<DemandService>().As<IDemandService>().InstancePerDependency();
             builder.RegisterType<MessageObserverTest>().As<AutoAttachMessageObserverBase>().InstancePerDependency();
+            builder.RegisterType<ProposalCourseChange>().As<AutoAttachMessageObserverBase>().InstancePerDependency();
             
             // Messaging
             builder.RegisterType<Queue>().As<IQueue>().SingleInstance();

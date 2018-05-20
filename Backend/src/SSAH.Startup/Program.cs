@@ -11,13 +11,16 @@ namespace SSAH.Startup
 {
     public class Program
     {
+        private static IContainer s_dbAccesssContainer;
         private static IContainer s_rootContainer;
 
         public static void Main(string[] args)
         {
-            s_rootContainer = Bootstrapper.BootstrapContainer();
+            s_dbAccesssContainer = Bootstrapper.BootstrapDbAccessContainer();
 
-            DbInitializer.Initialize(s_rootContainer);
+            DbInitializer.Initialize(s_dbAccesssContainer);
+
+            s_rootContainer = Bootstrapper.BootstrapContainer();
 
             CreateDefaultBuilder(args)
                 .ConfigureServices(services => services.AddSingleton(s_rootContainer))

@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SSAH.Startup", "src\SSAH.St
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SSAH.Infrastructure.Api", "src\SSAH.Infrastructure.Api\SSAH.Infrastructure.Api.csproj", "{5F1951EF-56BC-480B-831F-891D1EF2BD22}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SSAH.Tests.Unit", "test\SSAH.Tests.Unit\SSAH.Tests.Unit.csproj", "{1B84BF06-76D3-4854-BE22-6F3FA2805293}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SSAH.Tests.Unit", "test\SSAH.Tests.Unit\SSAH.Tests.Unit.csproj", "{1B84BF06-76D3-4854-BE22-6F3FA2805293}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SSAH.Infrastructure.Solver", "src\SSAH.Infrastructure.Solver\SSAH.Infrastructure.Solver.csproj", "{32654D33-2FD2-46C6-8648-4B5768316582}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{1B84BF06-76D3-4854-BE22-6F3FA2805293}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B84BF06-76D3-4854-BE22-6F3FA2805293}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B84BF06-76D3-4854-BE22-6F3FA2805293}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32654D33-2FD2-46C6-8648-4B5768316582}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32654D33-2FD2-46C6-8648-4B5768316582}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32654D33-2FD2-46C6-8648-4B5768316582}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32654D33-2FD2-46C6-8648-4B5768316582}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
