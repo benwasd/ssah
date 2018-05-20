@@ -21,6 +21,8 @@ namespace SSAH.Core.Domain.Entities
 
         public virtual Applicant Applicant { get; set; }
 
+        public bool PreferSimultaneousCourseExecutionForPartipiants { get; set; }
+
         public DateTime AvailableFrom { get; set; }
 
         public DateTime AvailableTo { get; set; }
@@ -32,7 +34,7 @@ namespace SSAH.Core.Domain.Entities
             foreach (var registrationPartipiant in RegistrationPartipiant)
             {
                 var courseOptions = groupCourseOptions.Value.SingleOrDefault(c => c.Identifier == registrationPartipiant.CourseIdentifier);
-                var course = GetOrCreateProposalGroupCourse(registrationPartipiant.CourseStartDate, registrationPartipiant.NiveauId, courseOptions, courseRepository, serializationService);
+                var course = GetOrCreateProposalGroupCourse(registrationPartipiant.CourseStartDate.Value, registrationPartipiant.NiveauId, courseOptions, courseRepository, serializationService);
                 var partipiant = registrationPartipiant.ToParticipant(Applicant);
 
                 var courseParticipant = new CourseParticipant { Participant = partipiant };

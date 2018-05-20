@@ -94,6 +94,7 @@ Target "Collect-Output" (fun _ ->
 
   ReadFileAsString (outputDir @@ "Frontend" @@ "index.html")
   |> replace "\r\n        <base href=\"../dist/\">" ""
+  |> replace "\n        <base href=\"../dist/\">" ""
   |> WriteStringToFile false (outputDir @@ "Frontend" @@ "index.html")
 
   !! "./**/*"

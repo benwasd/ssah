@@ -15,6 +15,7 @@ open System.IO
 
 open NSwag.CodeGeneration.TypeScript
 open NSwag.SwaggerGeneration.WebApi
+open NJsonSchema
 
 let projectRoot = __SOURCE_DIRECTORY__ @@ ".."
 
@@ -25,7 +26,8 @@ let generate (inputAssembly: System.Reflection.Assembly) outputApiTs =
     WebApiToSwaggerGeneratorSettings(
         DefaultReferenceTypeNullHandling = NJsonSchema.ReferenceTypeNullHandling.NotNull,
         DefaultUrlTemplate = "api/{controller}/{action}/{id}",
-        IsAspNetCore = true
+        IsAspNetCore = true,
+        DefaultPropertyNameHandling = PropertyNameHandling.CamelCase
     )
 
   let tssettings =
@@ -36,7 +38,7 @@ let generate (inputAssembly: System.Reflection.Assembly) outputApiTs =
       UseGetBaseUrlMethod = true,
       ClientBaseClass = "ApiProxyBase",
       Template = TypeScriptTemplate.Fetch,
-      InjectionTokenType = InjectionTokenType.InjectionToken,
+      InjectionTokenType = InjectionTokenType.InjectionToken,  
       GenerateOptionalParameters = true
     )
 
