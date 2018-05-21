@@ -50,6 +50,7 @@ namespace SSAH.Infrastructure.Api.Controllers
 
         public Task CloseCourse(Guid instructorId, [FromBody] CloseCourseDto closeCourseDto)
         {
+
             return null;
         }
     }

@@ -11,7 +11,7 @@ namespace SSAH.Core.Domain.Entities
     {
         public Participant()
         {
-            CompletedNiveaus = new Collection<ParticipantCompletedNiveau>();
+            VisitedCourseDays = new Collection<ParticipantVisitedCourseDay>();
         }
 
         [StringLength(Constants.StringLengths.NAME)]
@@ -27,6 +27,6 @@ namespace SSAH.Core.Domain.Entities
         /// <summary>Jahrgang</summary>
         public int AgeGroup { get; set; }
 
-        public virtual ICollection<ParticipantCompletedNiveau> CompletedNiveaus { get; set; }
+        public virtual ICollection<ParticipantVisitedCourseDay> VisitedCourseDays { get; set; }
     }
 }
