@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 
 using SSAH.Core.Domain.Entities;
-using SSAH.Core.Domain.Objects;
+using SSAH.Core.Extensions;
 using SSAH.Infrastructure.Api.Dtos;
 using SSAH.Infrastructure.Api.Mapping;
 
@@ -27,6 +27,10 @@ namespace SSAH.Infrastructure.Api.MappingProfiles
                 .ForMember(dest => dest.Participants, opt => opt.MapFrom(src => src.RegistrationPartipiant));
 
             CreateEntityToDtoMap<RegistrationPartipiant, RegistrationParticipantDto>();
+
+            CreateMap<Registration, RegistrationOverviewDto>()
+                .ForMember(dest => dest.RegistrationId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.ParticipantNames, opt => opt.MapFrom(src => src.RegistrationPartipiant.Select(p => p.Name).ToCommaSeparatedGrammaticalSequence()));
         }
 
         private void MapDtosToEntities()
