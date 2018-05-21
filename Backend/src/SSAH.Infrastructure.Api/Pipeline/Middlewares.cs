@@ -25,6 +25,9 @@ namespace SSAH.Infrastructure.Api.Pipeline
                 catch (OperationCanceledException)
                 {
                 }
+                catch (Exception ex)
+                {
+                }
             });
 
             return app;

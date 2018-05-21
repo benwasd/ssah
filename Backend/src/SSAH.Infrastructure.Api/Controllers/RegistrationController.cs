@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 
 using SSAH.Core;
 using SSAH.Core.Domain;
+using SSAH.Core.Domain.CourseCreation;
 using SSAH.Core.Domain.Demanding;
 using SSAH.Core.Domain.Entities;
 using SSAH.Core.Domain.Messages;
@@ -27,7 +28,7 @@ namespace SSAH.Infrastructure.Api.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IDemandService _demandService;
         private readonly IRegistrationRepository _registrationRepository;
-        private readonly ICourseRepository _courseRepository;
+        private readonly ICourseCreationService _courseCreationService;
         private readonly ISerializationService _serializationService;
         private readonly IMapper _mapper;
         private readonly ICollectionMapper<RegistrationParticipantDto, RegistrationParticipant> _collectionMapper;
@@ -39,7 +40,7 @@ namespace SSAH.Infrastructure.Api.Controllers
             IUnitOfWork unitOfWork,
             IDemandService demandService,
             IRegistrationRepository registrationRepository,
-            ICourseRepository courseRepository,
+            ICourseCreationService courseCreationService,
             ISerializationService serializationService,
             IMapper mapper,
             ICollectionMapper<RegistrationParticipantDto, RegistrationParticipant> collectionMapper,
@@ -50,7 +51,7 @@ namespace SSAH.Infrastructure.Api.Controllers
             _unitOfWork = unitOfWork;
             _demandService = demandService;
             _registrationRepository = registrationRepository;
-            _courseRepository = courseRepository;
+            _courseCreationService = courseCreationService;
             _serializationService = serializationService;
             _mapper = mapper;
             _collectionMapper = collectionMapper;
@@ -159,7 +160,7 @@ namespace SSAH.Infrastructure.Api.Controllers
             var registration = await _registrationRepository.GetByIdAsync(commitRegistrationDto.RegistrationId);
             _commitCollectionMapper.MapCollection(source: commitRegistrationDto.Participants, destination: registration.RegistrationParticipants);
 
-            var courseParticipants = registration.AddParticipantsToProposalCourse(_groupCourseOptions, _courseRepository, _serializationService).ToArray();
+            var courseParticipants = registration.AddParticipantsToProposalCourse(_groupCourseOptions, _courseCreationService).ToArray();
 
             _unitOfWork.Commit();
 

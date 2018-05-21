@@ -28,6 +28,7 @@ namespace SSAH.Infrastructure.Api.Controllers
             _courseRepository = courseRepository;
         }
 
+        [HttpGet]
         public async Task<CourseDto> GetMyCourse(Guid instructorId, Guid courseId)
         {
             var registration = await _courseRepository.GetByIdAsync(courseId);
@@ -40,9 +41,10 @@ namespace SSAH.Infrastructure.Api.Controllers
             return _mapper.Map<CourseDto>(registration);
         }
 
+        [HttpGet]
         public async Task<IEnumerable<CourseDto>> GetMyCourses(Guid instructorId)
         {
-            var courses = await _courseRepository.GetAllGroupCourses(instructorId, CourseStatus.Commited, DateTime.MinValue, DateTime.MaxValue);
+            var courses = await _courseRepository.GetAllGroupCourses(instructorId, CourseStatus.Committed, DateTime.MinValue, DateTime.MaxValue);
             return courses.Select(_mapper.Map<CourseDto>);
         }
 

@@ -13,6 +13,10 @@ namespace SSAH.Core.Domain
 
         GroupCourse GetGroupCourseLocalOrDefault(Discipline discipline, CourseStatus status, int niveauId, DateTime startDate, int optionsIdentifier);
 
+        GroupCourse GetBestParticipantIdMatchingGroupCourseOrDefault(Discipline discipline, CourseStatus status, int niveauId, DateTime startDate, int optionsIdentifier, Guid[] participantIds, Guid[] excludedGroupCourseIds);
+
+        IEnumerable<GroupCourse> GetMatchingGroupCourses(Discipline discipline, CourseStatus status, int niveauId, DateTime startDate, int optionsIdentifier, Guid[] excludedGroupCourseIds);
+
         IEnumerable<GroupCourse> GetAllGroupCourses(Guid instructorId, CourseStatus status);
 
         Task<IEnumerable<GroupCourse>> GetAllGroupCourses(Guid instructorId, CourseStatus status, DateTime from, DateTime to);

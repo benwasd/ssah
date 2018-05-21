@@ -18,6 +18,7 @@ namespace SSAH.Infrastructure.Api
 
             // MappingProfiles
             builder.RegisterType<RegistrationMappingProfile>().As<MappingProfileBase>().InstancePerDependency();
+            builder.RegisterType<InstructorMappingProfile>().As<MappingProfileBase>().InstancePerDependency();
         }
     }
 }

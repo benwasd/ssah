@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
+using SSAH.Core.Collections;
 using SSAH.Core.Domain.Objects;
 
 namespace SSAH.Core.Domain.Entities
@@ -33,6 +34,23 @@ namespace SSAH.Core.Domain.Entities
         public int NiveauId { get; set; }
 
         public virtual ICollection<CourseParticipant> Participants { get; set; }
+
+        public void ApplyParticipants(Guid[] newParticipantIds)
+        {
+            var delta = CollectionDeltaCalculator.CalculateCollectionDelta(newParticipantIds, Participants, s => s, d => d.ParticipantId);
+            delta.Added.ForEach(a => Participants.Add(new CourseParticipant { ParticipantId = a, CourseId = Id }));
+            delta.Removed.ForEach(r => Participants.Remove(r));
+        }
+
+        public void ApplyInstructor(Func<Instructor> newInstructorResolver)
+        {
+            if (InstructorId == null)
+            {
+                var newInstructor = newInstructorResolver();
+                InstructorId = newInstructor?.Id;
+                Instructor = newInstructor;
+            }
+        }
 
         public DateTime StartDate { get; set; }
 

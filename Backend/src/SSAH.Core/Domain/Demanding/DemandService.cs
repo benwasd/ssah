@@ -91,7 +91,7 @@ namespace SSAH.Core.Domain.Demanding
 
             foreach (var instructor in instructors)
             {
-                var coursesOfInstructor = _courseRepository.GetAllGroupCourses(instructor.Id, CourseStatus.Commited);
+                var coursesOfInstructor = _courseRepository.GetAllGroupCourses(instructor.Id, CourseStatus.Committed);
                 var isInstructorPlaned = false;
 
                 foreach (var courseOfInstructor in coursesOfInstructor)

@@ -33,13 +33,17 @@ namespace SSAH.Core.Domain.CourseCreation
             private readonly IDemandService _demandService;
             private readonly ISolver _solver;
             private readonly ISerializationService _serializationService;
+            private readonly ICourseCreationService _courseCreationService;
+            private readonly IUnitOfWork _unitOfWork;
 
-            public Handler(ICourseRepository courseRepository, IDemandService demandService, ISolver solver, ISerializationService serializationService)
+            public Handler(ICourseRepository courseRepository, IDemandService demandService, ISolver solver, ISerializationService serializationService, ICourseCreationService courseCreationService, IUnitOfWork unitOfWork)
             {
                 _courseRepository = courseRepository;
                 _demandService = demandService;
                 _solver = solver;
                 _serializationService = serializationService;
+                _courseCreationService = courseCreationService;
+                _unitOfWork = unitOfWork;
             }
 
             protected override void OnNextCore(IList<ParticipantRegistredMessage> messages)
@@ -64,12 +68,30 @@ namespace SSAH.Core.Domain.CourseCreation
                     .Select(i => _solver.Solve(new SolverParam(i, solverParticipants)))
                     .ToArray();
 
-                var efficientResult = EfficientResult(results);
-                var matchingInstructor = SelectInstructor(
-                    _demandService.GetAvailableInstructorsForGroupCourses(
-                        proposalGroupCourse.Discipline, proposalGroupCourse.GetAllCourseDates(_serializationService).ToArray()
-                    )
-                );
+                var committedGroupCourseIds = new List<Guid>();
+
+                foreach (var efficientCourse in EfficientResult(results).Courses)
+                {
+                    var participantIds = efficientCourse.Participants.Select(p => p.Id).ToArray();
+
+                    var course = _courseCreationService.GetOrCreateGroupCourse(proposalGroupCourse, participantIds, committedGroupCourseIds.ToArray());
+                    course.ApplyParticipants(participantIds);
+                    course.ApplyInstructor(() =>
+                        SelectInstructor(
+                            _demandService.GetAvailableInstructorsForGroupCourses(
+                                proposalGroupCourse.Discipline, proposalGroupCourse.GetAllCourseDates(_serializationService).ToArray()
+                            )
+                        )
+                    );
+
+                    _unitOfWork.Commit();
+
+                    committedGroupCourseIds.Add(course.Id);
+                }
+
+                _courseCreationService.RemoveUnusedButMatchingGroupCourses(proposalGroupCourse, committedGroupCourseIds.ToArray());
+
+                _unitOfWork.Commit();
             }
 
             private static SolverResult EfficientResult(IEnumerable<SolverResult> results)
