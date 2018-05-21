@@ -69,7 +69,7 @@ namespace SSAH.Infrastructure.Api.Controllers
         [HttpGet]
         public async Task<IEnumerable<RegistrationOverviewDto>> GetRegistrations(Guid applicantId)
         {
-            var registrations = await _registrationRepository.GetByApplicant(applicantId);
+            var registrations = await _registrationRepository.GetByApplicantAsync(applicantId);
             return registrations.Select(_mapper.Map<RegistrationOverviewDto>);
         }
 

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -27,6 +29,11 @@ namespace SSAH.Infrastructure.DbAccess.Domain
         public GroupCourse GetGroupCourseLocalOrDefault(Discipline discipline, CourseStatus status, int niveauId, DateTime startDate, int optionsIdentifier)
         {
             return _groupCourseSet.Local.FirstOrDefault(c => c.Discipline == discipline && c.Status == status && c.NiveauId == niveauId && c.StartDate == startDate && c.OptionsIdentifier == optionsIdentifier);
+        }
+
+        public async Task<IEnumerable<GroupCourse>> GetAllGroupCourses(Guid instructorId, CourseStatus status, DateTime from, DateTime to)
+        {
+            return await _groupCourseSet.Where(gc => gc.InstructorId == instructorId && gc.Status == status && from <= gc.StartDate && gc.StartDate <= to).ToArrayAsync();
         }
 
         public GroupCourse CreateAndAddGroupCourse()

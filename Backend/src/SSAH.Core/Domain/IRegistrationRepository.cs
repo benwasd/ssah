@@ -11,6 +11,6 @@ namespace SSAH.Core.Domain
     {
         IEnumerable<RegistrationWithPartipiant> GetRegisteredPartipiantOverlappingPeriod(Discipline discipline, DateTime from, DateTime to);
 
-        Task<IEnumerable<Registration>> GetByApplicant(Guid applicantId);
+        Task<IEnumerable<Registration>> GetByApplicantAsync(Guid applicantId);
     }
 }

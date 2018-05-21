@@ -29,7 +29,7 @@ namespace SSAH.Infrastructure.DbAccess.Domain
                 .Where(rp => from <= rp.Registration.AvailableTo && rp.Registration.AvailableFrom <= to);
         }
 
-        public async Task<IEnumerable<Registration>> GetByApplicant(Guid applicantId)
+        public async Task<IEnumerable<Registration>> GetByApplicantAsync(Guid applicantId)
         {
             return await GetQuery().Where(r => r.ApplicantId == applicantId).ToArrayAsync();
         }
