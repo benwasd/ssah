@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,20 +14,26 @@ namespace SSAH.Core.Domain.Demanding
     public class DemandService : IDemandService
     {
         private readonly IRegistrationRepository _registrationRepository;
+        private readonly ICourseRepository _courseRepository;
         private readonly ISeasonRepository _seasonRepository;
+        private readonly IRepository<Instructor> _instructorRepository;
         private readonly IOptions<GroupCourseOptionsCollection> _groupCourseOptionsCollection;
         private readonly IOptions<DemandingThresholdOptions> _demandingThresholdOptions;
         private readonly ISerializationService _serializationService;
 
         public DemandService(
             IRegistrationRepository registrationRepository,
+            ICourseRepository courseRepository,
             ISeasonRepository seasonRepository,
+            IRepository<Instructor> instructorRepository,
             IOptions<GroupCourseOptionsCollection> groupCourseOptionsCollection,
             IOptions<DemandingThresholdOptions> demandingThresholdOptions,
             ISerializationService serializationService)
         {
             _registrationRepository = registrationRepository;
+            _courseRepository = courseRepository;
             _seasonRepository = seasonRepository;
+            _instructorRepository = instructorRepository;
             _groupCourseOptionsCollection = groupCourseOptionsCollection;
             _demandingThresholdOptions = demandingThresholdOptions;
             _serializationService = serializationService;
@@ -66,10 +72,43 @@ namespace SSAH.Core.Domain.Demanding
 
                 var demand = potentialParticipantCriterias.Count(pp => courseCriterias.Match(pp));
 
-                // TODO: Add max participants, and instructor availability
+                // Feature Proposal: https://github.com/benwasd/ssah/issues/54
+                // Consider instructor availabilities here and compare with MaximalBoundedInstructorCount of early proposal and proposal courses.
+
                 if (demand >= _demandingThresholdOptions.Value.MinParticipants)
                 {
                     yield return new GroupCourseDemand { GroupCourse = potentialCourse, Demand = demand };
+                }
+            }
+        }
+
+        public IEnumerable<Instructor> GetAvailableInstructorsForGroupCourses(Discipline discipline, Period[] courseDates)
+        {
+            // Feature Proposal: https://github.com/benwasd/ssah/issues/54
+            // Respect instructor disposition here
+
+            var instructors = _instructorRepository.Get();
+
+            foreach (var instructor in instructors)
+            {
+                var coursesOfInstructor = _courseRepository.GetAllGroupCourses(instructor.Id, CourseStatus.Commited);
+                var isInstructorPlaned = false;
+
+                foreach (var courseOfInstructor in coursesOfInstructor)
+                {
+                    var courseOfInstructorDates = courseOfInstructor.GetAllCourseDates(_serializationService);
+
+                    isInstructorPlaned |= courseOfInstructorDates.Overlaps(courseDates);
+
+                    if (isInstructorPlaned)
+                    {
+                        break;
+                    }
+                }
+
+                if (!isInstructorPlaned)
+                {
+                    yield return instructor;
                 }
             }
         }

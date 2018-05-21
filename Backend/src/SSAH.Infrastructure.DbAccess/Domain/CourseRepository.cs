@@ -31,6 +31,11 @@ namespace SSAH.Infrastructure.DbAccess.Domain
             return _groupCourseSet.Local.FirstOrDefault(c => c.Discipline == discipline && c.Status == status && c.NiveauId == niveauId && c.StartDate == startDate && c.OptionsIdentifier == optionsIdentifier);
         }
 
+        public IEnumerable<GroupCourse> GetAllGroupCourses(Guid instructorId, CourseStatus status)
+        {
+            return _groupCourseSet.Where(gc => gc.InstructorId == instructorId && gc.Status == status);
+        }
+
         public async Task<IEnumerable<GroupCourse>> GetAllGroupCourses(Guid instructorId, CourseStatus status, DateTime from, DateTime to)
         {
             return await _groupCourseSet.Where(gc => gc.InstructorId == instructorId && gc.Status == status && from <= gc.StartDate && gc.StartDate <= to).ToArrayAsync();

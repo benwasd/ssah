@@ -40,5 +40,38 @@ namespace SSAH.Core.Domain.Entities
         {
             return GetPeriodsOptions(serializerService).GetCourseDatesOfOneExecution(StartDate);
         }
+
+        protected override int MaximalBoundedInstructorCountCore()
+        {
+            var participantCount = Participants.Count;
+            var result = 0;
+
+            // TODO: Move thresholds into configuration
+            // TODO: Improve handling based on the standard deviation of participiants age group
+            // TODO: Improve handling based on the standard deviation of participiants language
+
+            if (participantCount >= 25) // 21- = floor(x/8)+1 instructors
+            {
+                result = (int)Math.Floor(participantCount / 8m) + 1;
+            }
+            else if(participantCount >= 17) // 17-25 = 4 instructors
+            {
+                result = 4;
+            }
+            else if (participantCount >= 11) // 11-16 = 3 instructors
+            {
+                result = 3;
+            }
+            else if (participantCount >= 4) // 4-10 = 2 instructors
+            {
+                result = 2;
+            }
+            else if (participantCount >= 1) // 1-3 = 1 instructor
+            {
+                result = 1;
+            }
+
+            return result;
+        }
     }
 }

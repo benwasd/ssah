@@ -13,6 +13,8 @@ namespace SSAH.Core.Domain
 
         GroupCourse GetGroupCourseLocalOrDefault(Discipline discipline, CourseStatus status, int niveauId, DateTime startDate, int optionsIdentifier);
 
+        IEnumerable<GroupCourse> GetAllGroupCourses(Guid instructorId, CourseStatus status);
+
         Task<IEnumerable<GroupCourse>> GetAllGroupCourses(Guid instructorId, CourseStatus status, DateTime from, DateTime to);
         
         GroupCourse CreateAndAddGroupCourse();

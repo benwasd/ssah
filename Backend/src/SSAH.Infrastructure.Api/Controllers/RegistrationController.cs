@@ -101,6 +101,12 @@ namespace SSAH.Infrastructure.Api.Controllers
             }
 
             var model = _registrationRepository.GetById(registrationDto.RegistrationId.Value);
+
+            if (model.Status == RegistrationStatus.Committed)
+            {
+                throw new InvalidOperationException("The registration is already committed.");
+            }
+
             _mapper.Map(source: registrationDto, destination: model);
             _mapper.Map(source: registrationDto, destination: model.Applicant);
             _collectionMapper.MapCollection(source: registrationDto.Participants, destination: model.RegistrationParticipants);

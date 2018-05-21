@@ -35,5 +35,17 @@ namespace SSAH.Core.Domain.Entities
         public virtual ICollection<CourseParticipant> Participants { get; set; }
 
         public DateTime StartDate { get; set; }
+
+        public int MaximalBoundedInstructorCount()
+        {
+            if (Status != CourseStatus.Proposal)
+            {
+                throw new InvalidOperationException("This calculation is only available for proposal courses.");
+            }
+
+            return MaximalBoundedInstructorCountCore();
+        }
+
+        protected abstract int MaximalBoundedInstructorCountCore();
     }
 }

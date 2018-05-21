@@ -38,7 +38,7 @@ namespace SSAH.Core.Domain.Entities
                 }
                 else if (this.RegistrationParticipants.All(rp => rp.ResultingParticipantId.HasValue))
                 {
-                    return RegistrationStatus.Commitment;
+                    return RegistrationStatus.Committed;
                 }
                 else
                 {

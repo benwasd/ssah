@@ -14,7 +14,7 @@ namespace SSAH.Core
             // Domain
             builder.RegisterType<DemandService>().As<IDemandService>().InstancePerDependency();
             builder.RegisterType<MessageObserverTest>().As<AutoAttachMessageObserverBase>().InstancePerDependency();
-            builder.RegisterType<ProposalCourseChange>().As<AutoAttachMessageObserverBase>().InstancePerDependency();
+            builder.RegisterType<CreateCourses>().As<AutoAttachMessageObserverBase>().InstancePerDependency();
             
             // Messaging
             builder.RegisterType<Queue>().As<IQueue>().SingleInstance();
