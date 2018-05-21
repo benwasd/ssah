@@ -14,6 +14,9 @@ namespace SSAH.Core.Domain.Messages
     {
         protected override IEnumerable<IDisposable> SetupCore(IQueue queue, IContainer rootContainer)
         {
+            yield return Observable.Interval(TimeSpan.FromSeconds(3))
+                .Subscribe(x => queue.Publish(new InterestRegisteredMessage(Guid.NewGuid())));
+
             yield return queue
                 .OfType<PartipiantRegistredMessage>()
                 .SubscribeInUnitOfWorkScope<PartipiantRegistredMessage, Handler>(rootContainer);
