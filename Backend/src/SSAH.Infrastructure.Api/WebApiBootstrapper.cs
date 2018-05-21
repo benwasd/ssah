@@ -29,7 +29,7 @@ namespace SSAH.Infrastructure.Api
             services.AddSignalR();
 
             // Add custom hub activator
-            services.Replace(ServiceDescriptor.Transient<IHubActivator<PingHub>>(x => new AutofacContainerHubActivator<PingHub>(x)));
+            services.Replace(ServiceDescriptor.Transient<IHubActivator<PingHub>>(p => new AutofacContainerHubActivator<PingHub>(p)));
         }
 
         public static void UseSnowSchoolAdministrationHub(this IApplicationBuilder app, IHostingEnvironment env, IContainer container)
