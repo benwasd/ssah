@@ -23,6 +23,8 @@ namespace SSAH.Infrastructure.Api
 
             // Add custom controller activator
             services.Replace(ServiceDescriptor.Transient<IControllerActivator, UnitOfWorkControllerActivator>());
+
+            services.AddSignalR();
         }
 
         public static void UseSnowSchoolAdministrationHub(this IApplicationBuilder app, IHostingEnvironment env, IContainer container)
@@ -43,6 +45,7 @@ namespace SSAH.Infrastructure.Api
 
             app.UseScopeMiddleware(container.Resolve<IUnitOfWorkFactory<ILifetimeScope>>());
             app.UseMvc();
+            app.UseSignalR(hr => hr.MapHub<Hubs.PingHub>("/ping"));
         }
     }
 }
