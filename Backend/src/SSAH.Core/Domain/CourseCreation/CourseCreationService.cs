@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 using SSAH.Core.Domain.Entities;
 using SSAH.Core.Domain.Objects;
@@ -71,7 +72,7 @@ namespace SSAH.Core.Domain.CourseCreation
             return course;
         }
 
-        public void RemoveUnusedButMatchingGroupCourses(GroupCourse proposalGroupCourse, Guid[] usedGroupCourseIds)
+        public bool RemoveUnusedButMatchingGroupCourses(GroupCourse proposalGroupCourse, Guid[] usedGroupCourseIds)
         {
             var unusedCourses = _courseRepository.GetMatchingGroupCourses(
                 proposalGroupCourse.Discipline,
@@ -80,12 +81,14 @@ namespace SSAH.Core.Domain.CourseCreation
                 proposalGroupCourse.StartDate,
                 proposalGroupCourse.OptionsIdentifier,
                 excludedGroupCourseIds: usedGroupCourseIds
-            );
+            ).ToArray();
 
             foreach (var unusedCourse in unusedCourses)
             {
                 _courseRepository.Remove(unusedCourse);
             }
+
+            return unusedCourses.Any();
         }
     }
 }

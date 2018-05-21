@@ -11,6 +11,6 @@ namespace SSAH.Core.Domain.CourseCreation
 
         GroupCourse GetOrCreateGroupCourse(GroupCourse proposalGroupCourse, Guid[] participantIds, Guid[] usedGroupCourseIds);
 
-        void RemoveUnusedButMatchingGroupCourses(GroupCourse proposalGroupCourse, Guid[] usedGroupCourseIds);
+        bool RemoveUnusedButMatchingGroupCourses(GroupCourse proposalGroupCourse, Guid[] usedGroupCourseIds);
     }
 }

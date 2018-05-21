@@ -68,13 +68,13 @@ namespace SSAH.Core.Domain.CourseCreation
                     .Select(i => _solver.Solve(new SolverParam(i, solverParticipants)))
                     .ToArray();
 
-                var committedGroupCourseIds = new List<Guid>();
+                var committedGroupCourseIds = new Guid[0];
 
                 foreach (var efficientCourse in EfficientResult(results).Courses)
                 {
                     var participantIds = efficientCourse.Participants.Select(p => p.Id).ToArray();
 
-                    var course = _courseCreationService.GetOrCreateGroupCourse(proposalGroupCourse, participantIds, committedGroupCourseIds.ToArray());
+                    var course = _courseCreationService.GetOrCreateGroupCourse(proposalGroupCourse, participantIds, committedGroupCourseIds);
                     course.ApplyParticipants(participantIds);
                     course.ApplyInstructor(() =>
                         SelectInstructor(
@@ -86,12 +86,13 @@ namespace SSAH.Core.Domain.CourseCreation
 
                     _unitOfWork.Commit();
 
-                    committedGroupCourseIds.Add(course.Id);
+                    committedGroupCourseIds = committedGroupCourseIds.Concat(new[] { course.Id }).ToArray();
                 }
 
-                _courseCreationService.RemoveUnusedButMatchingGroupCourses(proposalGroupCourse, committedGroupCourseIds.ToArray());
-
-                _unitOfWork.Commit();
+                if (_courseCreationService.RemoveUnusedButMatchingGroupCourses(proposalGroupCourse, committedGroupCourseIds))
+                {
+                    _unitOfWork.Commit();
+                }
             }
 
             private static SolverResult EfficientResult(IEnumerable<SolverResult> results)
