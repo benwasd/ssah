@@ -267,7 +267,7 @@ export class RegistrationApiProxy extends ApiProxyBase {
     }
 }
 
-export class RegistrationDto implements IRegistrationDto {
+export class RegistrationDto {
     registrationId?: string | undefined;
     applicantId?: string | undefined;
     surname: string;
@@ -277,19 +277,8 @@ export class RegistrationDto implements IRegistrationDto {
     preferSimultaneousCourseExecutionForPartipiants: boolean;
     availableFrom: Date;
     availableTo: Date;
+    status: RegistrationStatus;
     participants: RegistrationParticipantDto[];
-
-    constructor(data?: IRegistrationDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.participants = [];
-        }
-    }
 
     init(data?: any) {
         if (data) {
@@ -302,6 +291,7 @@ export class RegistrationDto implements IRegistrationDto {
             this.preferSimultaneousCourseExecutionForPartipiants = data["preferSimultaneousCourseExecutionForPartipiants"];
             this.availableFrom = data["availableFrom"] ? new Date(data["availableFrom"].toString()) : <any>undefined;
             this.availableTo = data["availableTo"] ? new Date(data["availableTo"].toString()) : <any>undefined;
+            this.status = data["status"];
             if (data["participants"] && data["participants"].constructor === Array) {
                 this.participants = [];
                 for (let item of data["participants"])
@@ -328,6 +318,7 @@ export class RegistrationDto implements IRegistrationDto {
         data["preferSimultaneousCourseExecutionForPartipiants"] = this.preferSimultaneousCourseExecutionForPartipiants;
         data["availableFrom"] = this.availableFrom ? this.availableFrom.toISOString() : <any>undefined;
         data["availableTo"] = this.availableTo ? this.availableTo.toISOString() : <any>undefined;
+        data["status"] = this.status;
         if (this.participants && this.participants.constructor === Array) {
             data["participants"] = [];
             for (let item of this.participants)
@@ -335,40 +326,17 @@ export class RegistrationDto implements IRegistrationDto {
         }
         return data; 
     }
-
-    clone(): RegistrationDto {
-        const json = this.toJSON();
-        let result = new RegistrationDto();
-        result.init(json);
-        return result;
-    }
 }
 
-export interface IRegistrationDto {
-    registrationId?: string | undefined;
-    applicantId?: string | undefined;
-    surname: string;
-    givenname: string;
-    residence: string;
-    phoneNumber: string;
-    preferSimultaneousCourseExecutionForPartipiants: boolean;
-    availableFrom: Date;
-    availableTo: Date;
-    participants: RegistrationParticipantDto[];
+export enum RegistrationStatus {
+    Registration = 0, 
+    CourseSelection = 1, 
+    Commitment = 2, 
 }
 
-export class EntityDto implements IEntityDto {
+export class EntityDto {
     id: string;
     rowVersion: string;
-
-    constructor(data?: IEntityDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
 
     init(data?: any) {
         if (data) {
@@ -390,31 +358,15 @@ export class EntityDto implements IEntityDto {
         data["rowVersion"] = this.rowVersion;
         return data; 
     }
-
-    clone(): EntityDto {
-        const json = this.toJSON();
-        let result = new EntityDto();
-        result.init(json);
-        return result;
-    }
 }
 
-export interface IEntityDto {
-    id: string;
-    rowVersion: string;
-}
-
-export class RegistrationParticipantDto extends EntityDto implements IRegistrationParticipantDto {
+export class RegistrationParticipantDto extends EntityDto {
     name: string;
     courseType: CourseType;
     discipline: Discipline;
     niveauId: number;
     language?: Language | undefined;
     ageGroup?: number | undefined;
-
-    constructor(data?: IRegistrationParticipantDto) {
-        super(data);
-    }
 
     init(data?: any) {
         super.init(data);
@@ -446,22 +398,6 @@ export class RegistrationParticipantDto extends EntityDto implements IRegistrati
         super.toJSON(data);
         return data; 
     }
-
-    clone(): RegistrationParticipantDto {
-        const json = this.toJSON();
-        let result = new RegistrationParticipantDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IRegistrationParticipantDto extends IEntityDto {
-    name: string;
-    courseType: CourseType;
-    discipline: Discipline;
-    niveauId: number;
-    language?: Language | undefined;
-    ageGroup?: number | undefined;
 }
 
 export enum CourseType {
@@ -482,18 +418,9 @@ export enum Language {
     Russian = 5, 
 }
 
-export class RegistrationResultDto implements IRegistrationResultDto {
+export class RegistrationResultDto {
     applicantId: string;
     registrationId: string;
-
-    constructor(data?: IRegistrationResultDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
 
     init(data?: any) {
         if (data) {
@@ -515,37 +442,13 @@ export class RegistrationResultDto implements IRegistrationResultDto {
         data["registrationId"] = this.registrationId;
         return data; 
     }
-
-    clone(): RegistrationResultDto {
-        const json = this.toJSON();
-        let result = new RegistrationResultDto();
-        result.init(json);
-        return result;
-    }
 }
 
-export interface IRegistrationResultDto {
-    applicantId: string;
-    registrationId: string;
-}
-
-export class PossibleCourseDto implements IPossibleCourseDto {
+export class PossibleCourseDto {
     registrationPartipiantId: string;
     identifier: number;
     startDate: Date;
     coursePeriods: Period[];
-
-    constructor(data?: IPossibleCourseDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.coursePeriods = [];
-        }
-    }
 
     init(data?: any) {
         if (data) {
@@ -579,35 +482,12 @@ export class PossibleCourseDto implements IPossibleCourseDto {
         }
         return data; 
     }
-
-    clone(): PossibleCourseDto {
-        const json = this.toJSON();
-        let result = new PossibleCourseDto();
-        result.init(json);
-        return result;
-    }
 }
 
-export interface IPossibleCourseDto {
-    registrationPartipiantId: string;
-    identifier: number;
-    startDate: Date;
-    coursePeriods: Period[];
-}
-
-export class Period implements IPeriod {
+export class Period {
     start: Date;
     duration: string;
     end: Date;
-
-    constructor(data?: IPeriod) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
 
     init(data?: any) {
         if (data) {
@@ -631,37 +511,12 @@ export class Period implements IPeriod {
         data["end"] = this.end ? this.end.toISOString() : <any>undefined;
         return data; 
     }
-
-    clone(): Period {
-        const json = this.toJSON();
-        let result = new Period();
-        result.init(json);
-        return result;
-    }
 }
 
-export interface IPeriod {
-    start: Date;
-    duration: string;
-    end: Date;
-}
-
-export class CommitRegistrationDto implements ICommitRegistrationDto {
+export class CommitRegistrationDto {
     registrationId: string;
     payment: string;
     participants: CommitRegistrationParticipantDto[];
-
-    constructor(data?: ICommitRegistrationDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.participants = [];
-        }
-    }
 
     init(data?: any) {
         if (data) {
@@ -693,30 +548,13 @@ export class CommitRegistrationDto implements ICommitRegistrationDto {
         }
         return data; 
     }
-
-    clone(): CommitRegistrationDto {
-        const json = this.toJSON();
-        let result = new CommitRegistrationDto();
-        result.init(json);
-        return result;
-    }
 }
 
-export interface ICommitRegistrationDto {
-    registrationId: string;
-    payment: string;
-    participants: CommitRegistrationParticipantDto[];
-}
-
-export class CommitRegistrationParticipantDto extends EntityDto implements ICommitRegistrationParticipantDto {
+export class CommitRegistrationParticipantDto extends EntityDto {
     language: Language;
     ageGroup: number;
     courseIdentifier: number;
     courseStartDate: Date;
-
-    constructor(data?: ICommitRegistrationParticipantDto) {
-        super(data);
-    }
 
     init(data?: any) {
         super.init(data);
@@ -744,20 +582,6 @@ export class CommitRegistrationParticipantDto extends EntityDto implements IComm
         super.toJSON(data);
         return data; 
     }
-
-    clone(): CommitRegistrationParticipantDto {
-        const json = this.toJSON();
-        let result = new CommitRegistrationParticipantDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface ICommitRegistrationParticipantDto extends IEntityDto {
-    language: Language;
-    ageGroup: number;
-    courseIdentifier: number;
-    courseStartDate: Date;
 }
 
 export class SwaggerException extends Error {

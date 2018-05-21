@@ -27,6 +27,25 @@ namespace SSAH.Core.Domain.Entities
 
         public DateTime AvailableTo { get; set; }
 
+        public RegistrationStatus Status
+        {
+            get
+            {
+                if (this.RegistrationPartipiant.Count == 0)
+                {
+                    return RegistrationStatus.Registration;
+                }
+                else if (this.RegistrationPartipiant.All(rp => rp.ResultingParticipantId.HasValue))
+                {
+                    return RegistrationStatus.Commitment;
+                }
+                else
+                {
+                    return RegistrationStatus.CourseSelection;
+                }
+            }
+        }
+
         public virtual ICollection<RegistrationPartipiant> RegistrationPartipiant { get; set; }
 
         public IEnumerable<CourseParticipant> AddPartipiantsToProposalCourse(IOptions<GroupCourseOptionsCollection> groupCourseOptions, ICourseRepository courseRepository, ISerializationService serializationService)

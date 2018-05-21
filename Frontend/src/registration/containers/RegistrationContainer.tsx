@@ -1,36 +1,44 @@
 import * as React from 'react';
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
 
-import { applicantChange, availabilityChange, changePartipiant, loadRegistration } from '../actions';
+import { RegistrationStatus } from '../../api';
 import { State } from '../../state';
-import { Applicant, ApplicantProps } from '../components/Applicant';
-import { AvailabilitySelector, AvailabilitySelectorProps } from '../components/AvailabilitySelector';
-import { PartipiantList, PartipiantListProps } from '../components/PartipiantList';
-import { Dimmer, Loader } from 'semantic-ui-react';
+import { throwIfUndefined } from '../../utils';
+import { RegistrationSteps } from '../components/RegistrationSteps';
+import { RegistrationStep1Container } from './RegistrationStep1Container';
+import { RegistrationStep2Container } from './RegistrationStep2Container';
 
-const ApplicantContainer = connect(
-    (state: State): Partial<ApplicantProps> => state.registration.applicant,
-    { change: applicantChange }
-)(Applicant)
+interface InternalRegistrationContainerProps {
+    status: RegistrationStatus;
+}
 
-const AvailabilitySelectorContainer = connect(
-    (state: State): Partial<AvailabilitySelectorProps> => state.registration.availability,
-    { change: availabilityChange }
-)(AvailabilitySelector)
+interface InternalRegistrationContainerState {
+    status?: RegistrationStatus;
+}
 
-const PartipiantListContainer = connect(
-    (state: State): Partial<PartipiantListProps> => {
-        return { partipiants: state.registration.partipiants };
-    },
-    { changePartipiant }
-)(PartipiantList)
-
-export class RegistrationContainer extends React.Component {
+class InternalRegistrationContainer extends React.Component<InternalRegistrationContainerProps, InternalRegistrationContainerState> {
     render() {
+        const status = throwIfUndefined((this.state || this.props).status);
+        const activeSection = status === RegistrationStatus.Registration
+            ? (<RegistrationStep1Container />)
+            : status === RegistrationStatus.CourseSelection
+                ? (<RegistrationStep2Container />)
+                : (<h1>Last Step</h1>);
+
         return (<>
-            <ApplicantContainer/>
-            <AvailabilitySelectorContainer />
-            <PartipiantListContainer />
+            <RegistrationSteps 
+                status={this.props.status}
+                activeStatus={status} 
+                activeStatusChanged={s => this.setState({ status: s })} />
+            {activeSection}            
         </>);
     }
 }
+
+export const RegistrationContainer = connect(
+    (state: State): Partial<InternalRegistrationContainerProps> => {
+        return { 
+            status: state.registration.status
+        };
+    }
+)(InternalRegistrationContainer)

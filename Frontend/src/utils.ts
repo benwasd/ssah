@@ -21,11 +21,10 @@ export function toDropdownValue(value?: number) {
     }
 }
 
-export function throwIfUndefined<T>(value?: T): T {
-    if (value) {
-        return value;
-    }
-    else {
+export function throwIfUndefined<T>(value?: T | null): T {
+    if (value === undefined || value === null) {
         throw new Error("Should not be null");
     }
+    
+    return value;
 }

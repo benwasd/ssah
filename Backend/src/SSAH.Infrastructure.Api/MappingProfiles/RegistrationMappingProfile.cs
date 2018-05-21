@@ -1,4 +1,7 @@
-﻿using SSAH.Core.Domain.Entities;
+﻿using System.Linq;
+
+using SSAH.Core.Domain.Entities;
+using SSAH.Core.Domain.Objects;
 using SSAH.Infrastructure.Api.Dtos;
 using SSAH.Infrastructure.Api.Mapping;
 

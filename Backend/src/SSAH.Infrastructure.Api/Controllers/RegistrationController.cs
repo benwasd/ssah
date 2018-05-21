@@ -120,6 +120,7 @@ namespace SSAH.Infrastructure.Api.Controllers
         public IEnumerable<PossibleCourseDto> PossibleCourseDatesPerPartipiant(Guid registrationId)
         {
             var registration = _registrationRepository.GetById(registrationId);
+            var registrationPartipiants = registration.RegistrationPartipiant.Select(rp => new RegistrationWithPartipiant { Registration = registration, RegistrationPartipiant = rp }).ToArray();
 
             // TODO: Do this functional
 
@@ -129,7 +130,7 @@ namespace SSAH.Infrastructure.Api.Controllers
                     registrationPartipiant.Discipline,
                     registration.AvailableFrom,
                     registration.AvailableTo,
-                    includingRegistration: new RegistrationWithPartipiant { Registration = registration, RegistrationPartipiant = registrationPartipiant }
+                    includingRegistrations: registrationPartipiants
                 );
 
                 foreach (var groupCourseDemand in groupCourseDemands)

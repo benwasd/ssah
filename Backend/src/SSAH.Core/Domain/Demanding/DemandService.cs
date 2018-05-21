@@ -54,9 +54,9 @@ namespace SSAH.Core.Domain.Demanding
             }
         }
 
-        public IEnumerable<GroupCourseDemand> GetGroupCourseDemand(Discipline discipline, DateTime from, DateTime to, RegistrationWithPartipiant includingRegistration = null)
+        public IEnumerable<GroupCourseDemand> GetGroupCourseDemand(Discipline discipline, DateTime from, DateTime to, IEnumerable<RegistrationWithPartipiant> includingRegistrations = null)
         {
-            var potentialPartipiants = TryAdd(_registrationRepository.GetRegisteredPartipiantOverlappingPeriod(discipline, from, to), includingRegistration).ToArray();
+            var potentialPartipiants = TryAdd(_registrationRepository.GetRegisteredPartipiantOverlappingPeriod(discipline, from, to), includingRegistrations).ToArray();
             var potentialPartipiantCriterias = potentialPartipiants.Select(DemandingCriterias.CreateFromRegistration).ToArray();
             var potentialCourses = GetPotentialGroupCourses(discipline, from, to, potentialPartipiants.Select(pp => pp.RegistrationPartipiant.NiveauId).Distinct().ToArray());
 
@@ -74,10 +74,10 @@ namespace SSAH.Core.Domain.Demanding
             }
         }
 
-        private static IEnumerable<RegistrationWithPartipiant> TryAdd(IEnumerable<RegistrationWithPartipiant> potentialPartipiants, RegistrationWithPartipiant toAdd)
+        private static IEnumerable<RegistrationWithPartipiant> TryAdd(IEnumerable<RegistrationWithPartipiant> potentialPartipiants, IEnumerable<RegistrationWithPartipiant> toAdd)
         {
             return toAdd != null 
-                ? potentialPartipiants.Concat(new[] { toAdd }) 
+                ? potentialPartipiants.Concat(toAdd) 
                 : potentialPartipiants;
         }
 
