@@ -15,11 +15,11 @@ namespace SSAH.Core.Domain.Messages
         protected override IEnumerable<IDisposable> SetupCore(IQueue queue, IContainer rootContainer)
         {
             yield return queue
-                .OfType<PartipiantRegistredMessage>()
-                .SubscribeInUnitOfWorkScope<PartipiantRegistredMessage, Handler>(rootContainer);
+                .OfType<ParticipantRegistredMessage>()
+                .SubscribeInUnitOfWorkScope<ParticipantRegistredMessage, Handler>(rootContainer);
         }
 
-        public class Handler : ObserverBase<PartipiantRegistredMessage>
+        public class Handler : ObserverBase<ParticipantRegistredMessage>
         {
             private readonly ICourseRepository _courseRepository;
 
@@ -28,7 +28,7 @@ namespace SSAH.Core.Domain.Messages
                 _courseRepository = courseRepository;
             }
 
-            protected override void OnNextCore(PartipiantRegistredMessage value)
+            protected override void OnNextCore(ParticipantRegistredMessage value)
             {
                 var course = _courseRepository.GetById(value.ProposalCourseId);
             }

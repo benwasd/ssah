@@ -2,10 +2,10 @@
 
 namespace SSAH.Core.Domain.Objects
 {
-    public class RegistrationWithPartipiant
+    public class RegistrationWithParticipant
     {
         public Registration Registration { get; set; }
 
-        public RegistrationPartipiant RegistrationPartipiant { get; set; }
+        public RegistrationParticipant RegistrationParticipant { get; set; }
     }
 }

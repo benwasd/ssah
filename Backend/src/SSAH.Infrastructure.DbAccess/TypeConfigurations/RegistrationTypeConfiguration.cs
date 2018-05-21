@@ -12,7 +12,7 @@ namespace SSAH.Infrastructure.DbAccess.TypeConfigurations
         {
             builder.ConfigureEntityBaseProperties();
             builder.HasOne(p => p.Applicant).WithMany().HasForeignKey(p => p.ApplicantId).IsRequired();
-            builder.HasMany(p => p.RegistrationPartipiant).WithOne().HasForeignKey(p => p.RegistrationId);
+            builder.HasMany(p => p.RegistrationParticipants).WithOne().HasForeignKey(p => p.RegistrationId);
         }
     }
 }

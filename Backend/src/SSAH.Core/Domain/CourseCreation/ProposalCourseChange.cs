@@ -17,11 +17,11 @@ namespace SSAH.Core.Domain.CourseCreation
         protected override IEnumerable<IDisposable> SetupCore(IQueue queue, IContainer rootContainer)
         {
             yield return queue
-                .OfType<PartipiantRegistredMessage>()
-                .SubscribeInUnitOfWorkScope<PartipiantRegistredMessage, Handler>(rootContainer);
+                .OfType<ParticipantRegistredMessage>()
+                .SubscribeInUnitOfWorkScope<ParticipantRegistredMessage, Handler>(rootContainer);
         }
 
-        public class Handler : ObserverBase<PartipiantRegistredMessage>
+        public class Handler : ObserverBase<ParticipantRegistredMessage>
         {
             private readonly ICourseRepository _courseRepository;
             private readonly ISolver _solver;
@@ -32,7 +32,7 @@ namespace SSAH.Core.Domain.CourseCreation
                 _solver = solver;
             }
 
-            protected override void OnNextCore(PartipiantRegistredMessage value)
+            protected override void OnNextCore(ParticipantRegistredMessage value)
             {
                 var x = _courseRepository.GetById(value.ProposalCourseId);
                 var solverParticipants = x.Participants.Select(p => new SolverParticipant(p.Participant)).ToArray();

@@ -19,6 +19,7 @@ namespace SSAH.Infrastructure.Api.Dtos
 
         public string PhoneNumber { get; set; }
 
+        // TODO: Rename, fix typo
         public bool PreferSimultaneousCourseExecutionForPartipiants { get; set; }
 
         public DateTime AvailableFrom { get; set; }
