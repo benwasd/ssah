@@ -72,16 +72,12 @@ const handlePartipiants: Reducer<PartipiantState[], Action> = (state, action) =>
 
             let newState2 = state;
             participantIds.forEach(participantId => {
-                let participantIndex = state.findIndex(p => p.id === participantId);
-                let courseSelection = selectCourseAction.selectedCoursesByParticipant[participantId];
+                const participantIndex = state.findIndex(p => p.id === participantId);
+                const courseSelection = selectCourseAction.selectedCoursesByParticipant[participantId];
+                const committing = { courseIdentifier: courseSelection.identifier, courseStartDate: courseSelection.startDate };
                 newState2 = update(
                     newState2, 
-                    { [participantIndex]: { $merge: { 
-                        commiting: { 
-                            courseIdentifier: courseSelection.identifier,
-                            courseStartDate: courseSelection.startDate
-                        }
-                    } } }
+                    { [participantIndex]: { $merge: { committing: committing } } }
                 ) as PartipiantState[];
             });
             
@@ -125,6 +121,7 @@ const handleRegistration: Reducer<RegistrationState, Action> = (state, action) =
                 id: loadedAction.registration.registrationId ? loadedAction.registration.registrationId : null,
                 status: loadedAction.registration.status,
                 applicant: {
+                    id: loadedAction.registration.applicantId,
                     surname: loadedAction.registration.surname,
                     givenname: loadedAction.registration.givenname,
                     residence: loadedAction.registration.residence,

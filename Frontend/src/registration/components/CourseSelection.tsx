@@ -72,10 +72,10 @@ export class CourseSelection extends React.Component<CourseSelectionProps, Cours
     private setStateByParticipants() {
         const map: SelectionMap = {};
 
-        this.props.partipiants.filter(p => p.commiting).forEach(p => {
+        this.props.partipiants.filter(p => p.committing).forEach(p => {
             map[p.id as string] = {
-                identifier: throwIfUndefined(p.commiting).courseIdentifier,
-                startDate: throwIfUndefined(p.commiting).courseStartDate
+                identifier: throwIfUndefined(p.committing).courseIdentifier,
+                startDate: throwIfUndefined(p.committing).courseStartDate
             };
         });
 

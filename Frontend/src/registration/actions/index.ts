@@ -78,6 +78,7 @@ export const submitOrUpdateRegistration = (onSubmittedOrUpdated?: (registrationI
 
     const registrationDto = new RegistrationDto();
     registrationDto.registrationId = registrationState.id ? registrationState.id : undefined;
+    registrationDto.applicantId = registrationState.applicant.id ? registrationState.applicant.id : undefined;
     registrationDto.surname = registrationState.applicant.surname;
     registrationDto.givenname = registrationState.applicant.givenname;
     registrationDto.phoneNumber = registrationState.applicant.phoneNumber;
@@ -147,8 +148,8 @@ export const commitRegistration = (onCommitted?: () => void) => (dispatch: Dispa
             commitPartipiantDto.rowVersion = throwIfUndefined(p.rowVersion);
             commitPartipiantDto.ageGroup = parseInt(p.ageGroup);
             commitPartipiantDto.language = throwIfUndefined(registrationState.applicant.language);
-            commitPartipiantDto.courseIdentifier = throwIfUndefined(p.commiting).courseIdentifier;
-            commitPartipiantDto.courseStartDate = throwIfUndefined(p.commiting).courseStartDate;
+            commitPartipiantDto.courseIdentifier = throwIfUndefined(p.committing).courseIdentifier;
+            commitPartipiantDto.courseStartDate = throwIfUndefined(p.committing).courseStartDate;
 
             return commitPartipiantDto;
         });
