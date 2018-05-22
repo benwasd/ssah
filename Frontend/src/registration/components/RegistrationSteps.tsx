@@ -42,8 +42,8 @@ export class RegistrationSteps extends React.Component<RegistrationStepsProps> {
                         <div className="title">Kursauswahl</div>
                     </div>
                 </a>
-                <a className={this.getStepClassName(RegistrationStatus.Commitment)}
-                   onClick={this.getChangeStepFunc(RegistrationStatus.Commitment)}>
+                <a className={this.getStepClassName(RegistrationStatus.Committed)}
+                   onClick={this.getChangeStepFunc(RegistrationStatus.Committed)}>
                     <i className="info icon"></i>
                     <div className="content">
                         <div className="title">Bestätigung</div>
