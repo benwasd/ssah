@@ -1,4 +1,5 @@
-import { DropdownItemProps } from "semantic-ui-react";
+import { Action, Reducer } from 'redux';
+import { DropdownItemProps } from 'semantic-ui-react';
 
 export function getEnumElementsAsDropdownItemProps(type, texts?: string[]) : DropdownItemProps[] {
     return Object.getOwnPropertyNames(type)
@@ -27,4 +28,18 @@ export function throwIfUndefined<T>(value?: T | null): T {
     }
     
     return value;
+}
+
+export function noopReducer<T>(defaultState: T): Reducer<T, Action> {
+    return (s: T, a: Action) => {
+        if (s === undefined) {
+            return defaultState;
+        }
+
+        return s;
+    }
+}
+
+export function noopAction(): Action {
+    return { type: "" }
 }

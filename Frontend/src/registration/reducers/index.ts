@@ -1,24 +1,17 @@
 import { combineReducers, Reducer, Action } from 'redux';
-
-import { APPLICANT_CHANGE, ApplicantChangeAction, AVAILABILITY_CHANGE, AvailabilityChangeAction, PARTIPIENT_CHANGE, PartipientChangeAction, REGISTRATION_LOADED, RegistrationLoadedAction, PARTIPIENT_SELECT_COURSE, REGISTRATION_POSSIBLE_COURSES_LOADED, RegistrationPossibleCoursesLoadedAction, PartipientSelectCourseAction } from '../actions';
-import { ApplicantState, AvailabilityState, PartipiantState, RegistrationState, hasAllRegistrationProperties } from '../state';
-import { CourseType, Discipline, RegistrationStatus, PossibleCourseDto } from '../../api';
-
 import update from 'immutability-helper';
 
-function noopReducer<T>(defaultState: T): Reducer<T, Action> {
-    return (s: T, a: Action) => {
-        if (s === undefined) {
-            return defaultState;
-        }
-
-        return s;
-    }
-}
-
-function noopAction(): Action {
-    return { type: "" }
-}
+import { CourseType, Discipline, RegistrationStatus, PossibleCourseDto } from '../../api';
+import { noopAction, noopReducer } from '../../utils';
+import { 
+    APPLICANT_CHANGE, ApplicantChangeAction, 
+    AVAILABILITY_CHANGE, AvailabilityChangeAction, 
+    PARTIPIENT_CHANGE, PartipientChangeAction, 
+    REGISTRATION_LOADED, RegistrationLoadedAction,
+    PARTIPIENT_SELECT_COURSE, PartipientSelectCourseAction,
+    REGISTRATION_POSSIBLE_COURSES_LOADED, RegistrationPossibleCoursesLoadedAction
+} from '../actions';
+import { ApplicantState, AvailabilityState, PartipiantState, RegistrationState, hasAllRegistrationProperties } from '../state';
 
 const handleApplicant: Reducer<ApplicantState, Action> = (state, action) => {
     if (state === undefined) {
@@ -167,6 +160,6 @@ export const reducer = combineReducers(<RegistrationReducerTree>{
     availability: handleAvailability,
     partipiants: handlePartipiants,
     possibleCourses: handlePossibleCourses
-})
+});
 
 export const rootReducer = handleRegistration;

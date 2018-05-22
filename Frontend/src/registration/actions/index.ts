@@ -1,10 +1,10 @@
 import { Dispatch } from 'react-redux';
 import { Action } from 'redux';
 
-import { ApplicantState, AvailabilityState, PartipiantState, hasAllRegistrationProperties } from '../state';
-import { RegistrationApiProxy, RegistrationDto, RegistrationParticipantDto, PossibleCourseDto, CommitRegistrationDto, CommitRegistrationParticipantDto } from '../../api';
+import { CommitRegistrationDto, CommitRegistrationParticipantDto, PossibleCourseDto, RegistrationApiProxy, RegistrationDto, RegistrationParticipantDto } from '../../api';
 import { State } from '../../state';
 import { throwIfUndefined } from '../../utils';
+import { ApplicantState, AvailabilityState, hasAllRegistrationProperties, PartipiantState } from '../state';
 
 export const APPLICANT_CHANGE = 'APPLICANT_CHANGE';
 
