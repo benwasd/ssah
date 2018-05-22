@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import { State } from '../../state';
+import { State } from '../../main/state';
 import { loadCourses } from '../actions';
 import { InstructorCourseList, InstructorCourseListProps } from '../components/InstructorCourseList';
 

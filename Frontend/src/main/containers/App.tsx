@@ -4,9 +4,9 @@ import { HashRouter, Route, Switch } from 'react-router-dom';
 import { applyMiddleware, createStore } from 'redux';
 import thunk from 'redux-thunk';
 
-import { InstructorCourseListContainer } from '../instructor/containers/InstructorCourseListContainer';
-import { OpenRegistrationContainer } from '../registration/containers/OpenRegistrationContainer';
-import { RegisterContainer } from '../registration/containers/RegisterContainer';
+import { InstructorCourseListContainer } from '../../instructor/containers/InstructorCourseListContainer';
+import { OpenRegistrationContainer } from '../../registration/containers/OpenRegistrationContainer';
+import { RegisterContainer } from '../../registration/containers/RegisterContainer';
 import { reducer } from '../reducers';
 
 const store = createStore(reducer, applyMiddleware(thunk));

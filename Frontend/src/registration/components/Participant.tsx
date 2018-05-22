@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { Form, Input, Dropdown, DropdownItemProps } from 'semantic-ui-react';
+import { Dropdown, DropdownItemProps, Input } from 'semantic-ui-react';
 
-import { ApplicantState, AvailabilityState, ParticipantState } from '../state';
-import { DateRangePicker, DateRangePickerPropsDateChange} from '../../components/DateRangePicker';
-import { getEnumElementsAsDropdownItemProps, toDropdownValue, fromDropdownValue } from '../../utils';
-import { Discipline, CourseType } from '../../api';
+import { CourseType, Discipline } from '../../api';
+import { fromDropdownValue, getEnumElementsAsDropdownItemProps, toDropdownValue } from '../../utils';
+import { ParticipantState } from '../state';
 
 export interface ParticipantProps {
     name: string;

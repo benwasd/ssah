@@ -3,7 +3,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'semantic-ui-react';
 
-import { State } from '../../state';
+import { State } from '../../main/state';
 import { submitOrUpdateRegistration } from '../actions';
 import { RegistrationContainer } from './RegistrationContainer';
 

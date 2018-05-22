@@ -2,7 +2,7 @@ import { Dispatch } from 'react-redux';
 import { Action } from 'redux';
 
 import { CommitRegistrationDto, CommitRegistrationParticipantDto, PossibleCourseDto, RegistrationApiProxy, RegistrationDto, RegistrationParticipantDto } from '../../api';
-import { State } from '../../state';
+import { State } from '../../main/state';
 import { throwIfUndefined } from '../../utils';
 import { ApplicantState, AvailabilityState, hasAllRegistrationProperties, ParticipantState } from '../state';
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { State } from '../../state';
+import { State } from '../../main/state';
 import { applicantChange, availabilityChange, changeParticipant } from '../actions';
 import { Applicant, ApplicantProps } from '../components/Applicant';
 import { AvailabilitySelector, AvailabilitySelectorProps } from '../components/AvailabilitySelector';

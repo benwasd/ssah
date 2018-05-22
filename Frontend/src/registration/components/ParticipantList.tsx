@@ -1,10 +1,8 @@
 import * as React from 'react';
-import { Form } from 'semantic-ui-react';
-
-import { ApplicantState, AvailabilityState, ParticipantState } from '../state';
-import { DateRangePicker, DateRangePickerPropsDateChange} from '../../components/DateRangePicker';
-import { Participant, ParticipantProps } from './Participant';
 import { omit } from 'lodash';
+
+import { ParticipantState } from '../state';
+import { Participant, ParticipantProps } from './Participant';
 
 export interface ParticipantListProps {
     participants: ParticipantState[];
