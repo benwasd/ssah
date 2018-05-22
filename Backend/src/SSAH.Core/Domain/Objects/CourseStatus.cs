@@ -4,6 +4,7 @@
     {
         EarlyProposal,
         Proposal,
-        Committed
+        Committed,
+        Closed
     }
 }

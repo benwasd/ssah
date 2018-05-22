@@ -8,6 +8,8 @@ namespace SSAH.Core.Domain.Entities
     {
         public Guid ParticipantId { get; set; }
 
+        public Discipline Discipline { get; set; }
+
         public int NiveauId { get; set; }
 
         public string NiveauName { get; set; }

@@ -15,9 +15,4 @@ namespace SSAH.Infrastructure.Api.Dtos
 
         public string PhoneNumber { get; set; }
     }
-
-    public class CourseParticipantFeedbackDto : EntityDto
-    {
-        public bool Passed { get; set; }
-    }
 }

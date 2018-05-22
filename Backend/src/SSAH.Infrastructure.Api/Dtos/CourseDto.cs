@@ -17,9 +17,4 @@ namespace SSAH.Infrastructure.Api.Dtos
 
         public ICollection<CourseParticipantDto> Participants { get; set; }
     }
-
-    public class CloseCourseDto : EntityDto
-    {
-        public ICollection<CourseParticipantFeedbackDto> Participants { get; set; }
-    }
 }
