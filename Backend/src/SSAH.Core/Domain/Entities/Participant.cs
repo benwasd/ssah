@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 using SSAH.Core.Domain.Objects;
 
@@ -28,5 +29,14 @@ namespace SSAH.Core.Domain.Entities
         public int AgeGroup { get; set; }
 
         public virtual ICollection<ParticipantVisitedCourseDay> VisitedCourseDays { get; set; }
+
+        public int CoursesDaysInSameNiveau(int courseNiveauId)
+        {
+            return VisitedCourseDays
+                .Where(vcd => vcd.NiveauId == courseNiveauId)
+                .Select(vcd => vcd.DayStart.Date)
+                .Distinct()
+                .Count();
+        }
     }
 }

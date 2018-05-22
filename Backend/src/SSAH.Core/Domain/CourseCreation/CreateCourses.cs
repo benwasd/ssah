@@ -53,24 +53,24 @@ namespace SSAH.Core.Domain.CourseCreation
                 foreach (var proposalCourseId in proposalCourseIds)
                 {
                     var proposalCourse = _courseRepository.GetById(proposalCourseId);
-                    var solverParticipants = proposalCourse.Participants.Select(p => new SolverParticipant(p.Participant)).ToArray();
 
                     if (proposalCourse is GroupCourse proposalGroupCourse)
                     {
-                        CreateGroupCourse(proposalGroupCourse, solverParticipants);
+                        SolveAndApplyGroupCourseComposition(proposalGroupCourse);
                     }
                 }
             }
 
-            private void CreateGroupCourse(GroupCourse proposalGroupCourse, ICollection<SolverParticipant> solverParticipants)
+            private void SolveAndApplyGroupCourseComposition(GroupCourse proposalGroupCourse)
             {
-                var results = Enumerable.Range(1, proposalGroupCourse.MaximalBoundedInstructorCount())
+                var solverParticipants = proposalGroupCourse.Participants.Select(p => new SolverParticipant(p.Participant, courseNiveauId: proposalGroupCourse.NiveauId)).ToArray();
+                var solverResults = Enumerable.Range(1, proposalGroupCourse.MaximalBoundedInstructorCount())
                     .Select(i => _solver.Solve(new SolverParam(i, solverParticipants)))
                     .ToArray();
 
                 var committedGroupCourseIds = new Guid[0];
 
-                foreach (var efficientCourse in EfficientResult(results).Courses)
+                foreach (var efficientCourse in EfficientResult(solverResults).Courses)
                 {
                     var participantIds = efficientCourse.Participants.Select(p => p.Id).ToArray();
 
