@@ -27,7 +27,9 @@ namespace SSAH.Infrastructure.Api
 
         public static void UseSnowSchoolAdministrationHub(this IApplicationBuilder app, IHostingEnvironment env, IContainer container)
         {
+            app.UseScopeMiddleware(container.Resolve<IUnitOfWorkFactory<ILifetimeScope>>());
             app.UseGlobalExceptionHandler();
+
             app.UseCors(corsPolicyBuilder =>
             {
                 corsPolicyBuilder.AllowAnyOrigin()
@@ -41,7 +43,6 @@ namespace SSAH.Infrastructure.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseScopeMiddleware(container.Resolve<IUnitOfWorkFactory<ILifetimeScope>>());
             app.UseMvc();
         }
     }

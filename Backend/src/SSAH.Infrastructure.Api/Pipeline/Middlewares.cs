@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Diagnostics;
 
 using Autofac;
 
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Logging;
 
 using SSAH.Core;
 using SSAH.Infrastructure.Api.Extensions;
@@ -16,8 +16,6 @@ namespace SSAH.Infrastructure.Api.Pipeline
         {
             app.Use(async (context, next) =>
             {
-                // TODO: log global exceptions
-
                 try
                 {
                     await next();
@@ -27,6 +25,10 @@ namespace SSAH.Infrastructure.Api.Pipeline
                 }
                 catch (Exception ex)
                 {
+                    var logger = context.GetRequestUnitOfWork()?.Dependent?.Resolve<ILogger>();
+                    logger?.LogCritical(ex, "Global Exception Handler caught an exception.");
+
+                    throw;
                 }
             });
 
