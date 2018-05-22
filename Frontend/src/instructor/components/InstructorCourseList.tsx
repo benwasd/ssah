@@ -15,7 +15,6 @@ export class InstructorCourseList extends React.Component<InstructorCourseListPr
         this.props.loadCourses();
     }
 
-
     render() {
         return (<>
             <h1>Zukünftige Kurse</h1>

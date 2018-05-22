@@ -50,7 +50,6 @@ namespace SSAH.Core.Domain.Demanding
 
                 while (courseStartDate < to)
                 {
-
                     yield return CreateEarlyProposalGroupCourse(courseStartDate, niveauId, groupCourseOption);
 
                     courseStartDate = courseStartDate.AddDays(groupCourseOption.WeekInterval * 7);
