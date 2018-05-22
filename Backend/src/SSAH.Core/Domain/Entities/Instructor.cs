@@ -7,7 +7,7 @@ namespace SSAH.Core.Domain.Entities
 {
     public class Instructor : EntityBase
     {
-        public Instructor()
+        public  Instructor()
         {
             Qualifications = new Collection<Qualification>();
         }

@@ -7,20 +7,20 @@ namespace SSAH.Core.Domain.CourseCreation
 {
     public class SolverParticipant
     {
-        public SolverParticipant(Participant participant)
+        public SolverParticipant(Participant participant, int courseNiveauId)
         {
             Id = participant.Id;
             AgeGroup = participant.AgeGroup;
             Language = participant.Language;
-            CoursesCountInSameNiveau = 3;
+            CoursesDaysInSameNiveau = participant.CoursesDaysInSameNiveau(courseNiveauId);
         }
 
-        public SolverParticipant(Guid id, int ageGroup, Language language, int coursesCountInSameNiveau)
+        public SolverParticipant(Guid id, int ageGroup, Language language, int coursesDaysInSameNiveau)
         {
             Id = id;
             AgeGroup = ageGroup;
             Language = language;
-            CoursesCountInSameNiveau = coursesCountInSameNiveau;
+            CoursesDaysInSameNiveau = coursesDaysInSameNiveau;
         }
 
         public Guid Id { get; }
@@ -29,6 +29,6 @@ namespace SSAH.Core.Domain.CourseCreation
 
         public Language Language { get; }
 
-        public int CoursesCountInSameNiveau { get; }
+        public int CoursesDaysInSameNiveau { get; }
     }
 }

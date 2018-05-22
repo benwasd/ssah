@@ -5,8 +5,8 @@ using System.Linq;
 
 using Microsoft.Extensions.Options;
 
+using SSAH.Core.Domain.CourseCreation;
 using SSAH.Core.Domain.Objects;
-using SSAH.Core.Services;
 
 namespace SSAH.Core.Domain.Entities
 {
@@ -14,13 +14,14 @@ namespace SSAH.Core.Domain.Entities
     {
         public Registration()
         {
-            RegistrationPartipiant = new Collection<RegistrationPartipiant>();
+            RegistrationParticipants = new Collection<RegistrationParticipant>();
         }
 
         public Guid ApplicantId { get; set; }
 
         public virtual Applicant Applicant { get; set; }
 
+        // TODO: Rename, fix typo
         public bool PreferSimultaneousCourseExecutionForPartipiants { get; set; }
 
         public DateTime AvailableFrom { get; set; }
@@ -31,13 +32,13 @@ namespace SSAH.Core.Domain.Entities
         {
             get
             {
-                if (this.RegistrationPartipiant.Count == 0)
+                if (this.RegistrationParticipants.Count == 0)
                 {
                     return RegistrationStatus.Registration;
                 }
-                else if (this.RegistrationPartipiant.All(rp => rp.ResultingParticipantId.HasValue))
+                else if (this.RegistrationParticipants.All(rp => rp.ResultingParticipantId.HasValue))
                 {
-                    return RegistrationStatus.Commitment;
+                    return RegistrationStatus.Committed;
                 }
                 else
                 {
@@ -46,43 +47,21 @@ namespace SSAH.Core.Domain.Entities
             }
         }
 
-        public virtual ICollection<RegistrationPartipiant> RegistrationPartipiant { get; set; }
+        public virtual ICollection<RegistrationParticipant> RegistrationParticipants { get; set; }
 
-        public IEnumerable<CourseParticipant> AddPartipiantsToProposalCourse(IOptions<GroupCourseOptionsCollection> groupCourseOptions, ICourseRepository courseRepository, ISerializationService serializationService)
+        public IEnumerable<CourseParticipant> AddParticipantsToProposalCourse(IOptions<GroupCourseOptionsCollection> groupCourseOptions, ICourseCreationService courseCreationService)
         {
-            foreach (var registrationPartipiant in RegistrationPartipiant)
+            foreach (var registrationParticipant in RegistrationParticipants)
             {
-                var courseOptions = groupCourseOptions.Value.SingleOrDefault(c => c.Identifier == registrationPartipiant.CourseIdentifier);
-                var course = GetOrCreateProposalGroupCourse(registrationPartipiant.CourseStartDate.Value, registrationPartipiant.NiveauId, courseOptions, courseRepository, serializationService);
-                var partipiant = registrationPartipiant.ToParticipant(Applicant);
+                var courseOptions = groupCourseOptions.Value.SingleOrDefault(c => c.Identifier == registrationParticipant.CourseIdentifier);
+                var course = courseCreationService.GetOrCreateProposalGroupCourse(registrationParticipant.CourseStartDate.Value, registrationParticipant.NiveauId, courseOptions);
+                var participant = registrationParticipant.ToParticipant(Applicant);
 
-                var courseParticipant = new CourseParticipant { Participant = partipiant };
+                var courseParticipant = new CourseParticipant { Participant = participant };
                 course.Participants.Add(courseParticipant);
 
                 yield return courseParticipant;
             }
-        }
-
-        private static GroupCourse GetOrCreateProposalGroupCourse(DateTime courseStart, int niveauId, GroupCourseOptions groupCourseOption, ICourseRepository courseRepository, ISerializationService serializationService)
-        {
-            var course = courseRepository.GetGroupCourseLocalOrDefault(groupCourseOption.Discipline, CourseStatus.Proposal, niveauId, courseStart, groupCourseOption.Identifier);
-
-            if (course == null)
-            {
-                course = courseRepository.GetGroupCourseOrDefault(groupCourseOption.Discipline, CourseStatus.Proposal, niveauId, courseStart, groupCourseOption.Identifier);
-            }
-
-            if (course == null)
-            {
-                course = courseRepository.CreateAndAddGroupCourse();
-                course.Discipline = groupCourseOption.Discipline;
-                course.Status = CourseStatus.Proposal;
-                course.NiveauId = niveauId;
-                course.StartDate = courseStart;
-                course.SetPeriodsOptions(serializationService, groupCourseOption);
-            }
-
-            return course;
         }
     }
 }

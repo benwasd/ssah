@@ -2,6 +2,7 @@
 
 using AutoMapper;
 
+using SSAH.Infrastructure.Api.Hubs;
 using SSAH.Infrastructure.Api.Mapping;
 using SSAH.Infrastructure.Api.MappingProfiles;
 
@@ -11,6 +12,9 @@ namespace SSAH.Infrastructure.Api
     {
         public static void Configure(ContainerBuilder builder)
         {
+            // Hubs
+            builder.RegisterType<PingHubQueueBridge>().AsSelf().SingleInstance();
+
             // Mapping
             builder.RegisterType<MapperFactory>().AsSelf().SingleInstance();
             builder.Register(c => c.Resolve<MapperFactory>().GetMapper(c.Resolve<ILifetimeScope>())).As<IMapper>().InstancePerLifetimeScope();
@@ -18,6 +22,7 @@ namespace SSAH.Infrastructure.Api
 
             // MappingProfiles
             builder.RegisterType<RegistrationMappingProfile>().As<MappingProfileBase>().InstancePerDependency();
+            builder.RegisterType<InstructorMappingProfile>().As<MappingProfileBase>().InstancePerDependency();
         }
     }
 }

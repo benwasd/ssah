@@ -13,10 +13,10 @@ namespace SSAH.Infrastructure.DbAccess.DbModel
             builder.ApplyConfiguration(new GroupCourseTypeConfiguration());
             builder.ApplyConfiguration(new CourseParticipantTypeConfiguration());
             builder.ApplyConfiguration(new InstructorTypeConfiguration());
-            builder.ApplyConfiguration(new ParticipantCompletedNiveauTypeConfiguration());
+            builder.ApplyConfiguration(new ParticipantVisitedCourseDayTypeConfiguration());
             builder.ApplyConfiguration(new ParticipantTypeConfiguration());
             builder.ApplyConfiguration(new QualificationTypeConfiguration());
-            builder.ApplyConfiguration(new RegistrationPartipiantTypeConfiguration());
+            builder.ApplyConfiguration(new RegistrationParticipantTypeConfiguration());
             builder.ApplyConfiguration(new RegistrationTypeConfiguration());
             builder.ApplyConfiguration(new SeasonTypeConfiguration());
         }
