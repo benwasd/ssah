@@ -1,24 +1,21 @@
 import * as React from 'react';
 import { Form, Input, Dropdown, DropdownItemProps } from 'semantic-ui-react';
 
-import { ApplicantState, AvailabilityState } from '../state';
+import { ApplicantState, AvailabilityState, ParticipantState } from '../state';
 import { DateRangePicker, DateRangePickerPropsDateChange} from '../../components/DateRangePicker';
 import { getEnumElementsAsDropdownItemProps, toDropdownValue, fromDropdownValue } from '../../utils';
 import { Discipline, CourseType } from '../../api';
 
-export interface PartipiantProps {
+export interface ParticipantProps {
     name: string;
     courseType: CourseType;
     discipline: Discipline;
     niveauId?: number;
     ageGroup: string;
-    change(obj: Partial<PartipiantState>);
+    change(obj: Partial<ParticipantState>);
 }
 
-export interface PartipiantState {
-}
-
-export class Partipiant extends React.Component<PartipiantProps, PartipiantState> {
+export class Participant extends React.Component<ParticipantProps> {
     get courseTypeOptions() {
         return getEnumElementsAsDropdownItemProps(CourseType, ["Gruppenkurs"]);
     }

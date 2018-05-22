@@ -6,7 +6,7 @@ export interface RegistrationState {
     status: RegistrationStatus;
     applicant: ApplicantState;
     availability: AvailabilityState;
-    partipiants: PartipiantState[];
+    participants: ParticipantState[];
     possibleCourses: PossibleCourseDto[];
 }
 
@@ -25,7 +25,7 @@ export interface AvailabilityState {
     availableTo?: Date;
 }
 
-export interface PartipiantState {
+export interface ParticipantState {
     id?: string;
     rowVersion?: string;
     name: string;
@@ -39,6 +39,6 @@ export interface PartipiantState {
     }
 }
 
-export function hasAllRegistrationProperties(p: PartipiantState) {
+export function hasAllRegistrationProperties(p: ParticipantState) {
     return p.name != "" && p.niveauId != null && p.courseType != null && p.discipline != null && p.ageGroup != "";
 }

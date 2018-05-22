@@ -4,7 +4,7 @@ import { Action } from 'redux';
 import { CommitRegistrationDto, CommitRegistrationParticipantDto, PossibleCourseDto, RegistrationApiProxy, RegistrationDto, RegistrationParticipantDto } from '../../api';
 import { State } from '../../state';
 import { throwIfUndefined } from '../../utils';
-import { ApplicantState, AvailabilityState, hasAllRegistrationProperties, PartipiantState } from '../state';
+import { ApplicantState, AvailabilityState, hasAllRegistrationProperties, ParticipantState } from '../state';
 
 export const APPLICANT_CHANGE = 'APPLICANT_CHANGE';
 
@@ -28,26 +28,26 @@ export const availabilityChange = (change: AvailabilityState) => (dispatch: Disp
     dispatch(action);
 }
 
-export const PARTIPIENT_CHANGE = 'PARTIPIENT_CHANGE';
+export const PARTICIPAENT_CHANGE = 'PARTICIPAENT_CHANGE';
 
-export interface PartipientChangeAction extends Action {
-    partipiantIndex: number;
-    change: Partial<PartipiantState>;
+export interface ParticipantChangeAction extends Action {
+    participantIndex: number;
+    change: Partial<ParticipantState>;
 }
 
-export const changePartipiant = (partipiantIndex: number, change: Partial<PartipiantState>) => (dispatch: Dispatch) => {
-    const action: PartipientChangeAction = { type: PARTIPIENT_CHANGE, partipiantIndex: partipiantIndex, change: change };
+export const changeParticipant = (partipiantIndex: number, change: Partial<ParticipantState>) => (dispatch: Dispatch) => {
+    const action: ParticipantChangeAction = { type: PARTICIPAENT_CHANGE, participantIndex: partipiantIndex, change: change };
     dispatch(action);
 }
 
-export const PARTIPIENT_SELECT_COURSE = 'PARTIPIENT_SELECT_COURSE';
+export const PARTICIPANT_SELECT_COURSE = 'PARTICIPANT_SELECT_COURSE';
 
-export interface PartipientSelectCourseAction extends Action {
+export interface ParticipantSelectCourseAction extends Action {
     selectedCoursesByParticipant: { [participantId: string]: { identifier: number; startDate: Date; } };
 }
 
 export const selectCoursesForParticipants = (selectedCoursesByParticipant: { [participantId: string]: { identifier: number; startDate: Date; } }) => (dispatch: Dispatch) => {
-    const action: PartipientSelectCourseAction = { type: PARTIPIENT_SELECT_COURSE, selectedCoursesByParticipant };
+    const action: ParticipantSelectCourseAction = { type: PARTICIPANT_SELECT_COURSE, selectedCoursesByParticipant };
     dispatch(action);
 }
 
@@ -87,7 +87,7 @@ export const submitOrUpdateRegistration = (onSubmittedOrUpdated?: (registrationI
     registrationDto.availableFrom = throwIfUndefined(registrationState.availability.availableFrom);
     registrationDto.availableTo = throwIfUndefined(registrationState.availability.availableTo);
     registrationDto.status = registrationState.status;
-    registrationDto.participants = registrationState.partipiants
+    registrationDto.participants = registrationState.participants
         .filter(hasAllRegistrationProperties)
         .map(p => {
             const partipiantDto = new RegistrationParticipantDto();
@@ -140,7 +140,7 @@ export const commitRegistration = (onCommitted?: () => void) => (dispatch: Dispa
     const commitRegistrationDto = new CommitRegistrationDto();
     commitRegistrationDto.registrationId = throwIfUndefined(registrationState.id);
     commitRegistrationDto.payment = "NOOP";
-    commitRegistrationDto.participants = registrationState.partipiants
+    commitRegistrationDto.participants = registrationState.participants
         .filter(hasAllRegistrationProperties)
         .map(p => {
             const commitPartipiantDto = new CommitRegistrationParticipantDto();

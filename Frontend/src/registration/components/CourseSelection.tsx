@@ -3,7 +3,7 @@ import { Radio } from 'semantic-ui-react';
 
 import { PossibleCourseDto } from '../../api';
 import { throwIfUndefined } from '../../utils';
-import { hasAllRegistrationProperties, PartipiantState } from '../state';
+import { hasAllRegistrationProperties, ParticipantState } from '../state';
 import { CourseDateVisualizer } from './CourseDatesVisualizer';
 
 export interface SelectionMap { 
@@ -14,8 +14,8 @@ export interface SelectionMap {
 }
 
 export interface CourseSelectionProps {
-    preferSimultaneousCourseExecutionForPartipiants: boolean;
-    partipiants: PartipiantState[];
+    preferSimultaneousCourseExecutionForParticipants: boolean;
+    participants: ParticipantState[];
     possibleCourses: PossibleCourseDto[];
     loadPossibleCourses();
     selectCoursesForParticipants(selectedCoursesByParticipant: SelectionMap);
@@ -48,7 +48,7 @@ export class CourseSelection extends React.Component<CourseSelectionProps, Cours
 
     render() {
         return (<>
-            {this.props.partipiants
+            {this.props.participants
                 .filter(hasAllRegistrationProperties)
                 .map(p => 
                     <div key={p.id}>
@@ -72,7 +72,7 @@ export class CourseSelection extends React.Component<CourseSelectionProps, Cours
     private setStateByParticipants() {
         const map: SelectionMap = {};
 
-        this.props.partipiants.filter(p => p.committing).forEach(p => {
+        this.props.participants.filter(p => p.committing).forEach(p => {
             map[p.id as string] = {
                 identifier: throwIfUndefined(p.committing).courseIdentifier,
                 startDate: throwIfUndefined(p.committing).courseStartDate

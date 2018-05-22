@@ -1,20 +1,20 @@
 import * as React from 'react';
 import { Form } from 'semantic-ui-react';
 
-import { ApplicantState, AvailabilityState, PartipiantState } from '../state';
+import { ApplicantState, AvailabilityState, ParticipantState } from '../state';
 import { DateRangePicker, DateRangePickerPropsDateChange} from '../../components/DateRangePicker';
-import { Partipiant, PartipiantProps } from './Partipiant';
+import { Participant, ParticipantProps } from './Participant';
 import { omit } from 'lodash';
 
-export interface PartipiantListProps {
-    partipiants: PartipiantState[];
-    changePartipiant(partipiantIndex: number, obj: Partial<PartipiantState>);
+export interface ParticipantListProps {
+    participants: ParticipantState[];
+    changeParticipant(participantIndex: number, obj: Partial<ParticipantState>);
 }
 
-export interface PartipiantListState {
+export interface ParticipantListState {
 }
 
-export class PartipiantList extends React.Component<PartipiantListProps, PartipiantListState> {
+export class ParticipantList extends React.Component<ParticipantListProps, ParticipantListState> {
     render() {
         return (
             <div style={{margin: '1em 0em 0em'}}>
@@ -29,14 +29,14 @@ export class PartipiantList extends React.Component<PartipiantListProps, Partipi
                         </tr>
                     </thead>
                     <tbody>
-                        {this.props.partipiants.map((p, i) => {
+                        {this.props.participants.map((p, i) => {
                             const props = Object.assign(
                                 omit(p, ['id', 'timestamp', 'committing']),
-                                { change: p => this.props.changePartipiant(i, p) }
-                            ) as PartipiantProps;
+                                { change: p => this.props.changeParticipant(i, p) }
+                            ) as ParticipantProps;
                             
                             return (
-                                <Partipiant key={p.id || i} {...props} />
+                                <Participant key={p.id || i} {...props} />
                             );
                         })}
                     </tbody>
