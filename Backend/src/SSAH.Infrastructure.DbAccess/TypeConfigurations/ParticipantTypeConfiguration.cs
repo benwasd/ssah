@@ -11,8 +11,8 @@ namespace SSAH.Infrastructure.DbAccess.TypeConfigurations
         public void Configure(EntityTypeBuilder<Participant> builder)
         {
             builder.ConfigureEntityBaseProperties();
-            builder.HasOne(p => p.Applicant).WithMany().HasForeignKey(p => p.ApplicantId).IsRequired();
-            builder.HasMany(p => p.CompletedNiveaus).WithOne().HasForeignKey(p => p.ParticipantId);
+            builder.HasOne(p => p.Applicant).WithMany().HasForeignKey(p => p.ApplicantId).OnDelete(DeleteBehavior.Restrict).IsRequired();
+            builder.HasMany(p => p.VisitedCourseDays).WithOne().HasForeignKey(p => p.ParticipantId);
         }
     }
 }

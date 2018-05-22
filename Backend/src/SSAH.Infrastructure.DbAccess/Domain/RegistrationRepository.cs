@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,34 +13,34 @@ namespace SSAH.Infrastructure.DbAccess.Domain
 {
     public class RegistrationRepository : Repository<Registration>, IRegistrationRepository
     {
-        private readonly DbSet<RegistrationPartipiant> _registrationPartipiantSet;
+        private readonly DbSet<RegistrationParticipant> _registrationParticipantSet;
 
-        public RegistrationRepository(DbSet<Registration> set, DbSet<RegistrationPartipiant> registrationPartipiantSet)
+        public RegistrationRepository(DbSet<Registration> set, DbSet<RegistrationParticipant> registrationParticipantSet)
             : base(set)
         {
-            _registrationPartipiantSet = registrationPartipiantSet;
+            _registrationParticipantSet = registrationParticipantSet;
         }
 
-        public IEnumerable<RegistrationWithPartipiant> GetRegisteredPartipiantOverlappingPeriod(Discipline discipline, DateTime from, DateTime to)
+        public IEnumerable<RegistrationWithParticipant> GetRegisteredParticipantOverlappingPeriod(Discipline discipline, DateTime from, DateTime to)
         {
-            return GetRegisteredPartipiants()
-                .Where(rp => rp.RegistrationPartipiant.Discipline == discipline)
+            return GetRegisteredParticipants()
+                .Where(rp => rp.RegistrationParticipant.Discipline == discipline)
                 .Where(rp => from <= rp.Registration.AvailableTo && rp.Registration.AvailableFrom <= to);
         }
 
-        public async Task<IEnumerable<Registration>> GetByApplicant(Guid applicantId)
+        public async Task<IEnumerable<Registration>> GetByApplicantAsync(Guid applicantId)
         {
             return await GetQuery().Where(r => r.ApplicantId == applicantId).ToArrayAsync();
         }
 
-        private IEnumerable<RegistrationWithPartipiant> GetRegisteredPartipiants()
+        private IEnumerable<RegistrationWithParticipant> GetRegisteredParticipants()
         {
             return Queryable.Join(
-                _registrationPartipiantSet,
+                _registrationParticipantSet,
                 GetSet(),
                 left => left.RegistrationId,
                 right => right.Id,
-                (left, right) => new RegistrationWithPartipiant { Registration = right, RegistrationPartipiant = left }
+                (left, right) => new RegistrationWithParticipant { Registration = right, RegistrationParticipant = left }
             );
         }
     }

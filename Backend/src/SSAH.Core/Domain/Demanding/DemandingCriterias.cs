@@ -13,15 +13,15 @@ namespace SSAH.Core.Domain.Demanding
         {
         }
 
-        public static DemandingCriterias CreateFromRegistration(RegistrationWithPartipiant registrationWithPartipiant)
+        public static DemandingCriterias CreateFromRegistration(RegistrationWithParticipant registrationWithParticipant)
         {
             return new DemandingCriterias
             {
-                CourseType = registrationWithPartipiant.RegistrationPartipiant.CourseType,
-                Discipline = registrationWithPartipiant.RegistrationPartipiant.Discipline,
-                NiveauId = registrationWithPartipiant.RegistrationPartipiant.NiveauId,
-                From = registrationWithPartipiant.Registration.AvailableFrom.Date,
-                To = registrationWithPartipiant.Registration.AvailableTo.Date,
+                CourseType = registrationWithParticipant.RegistrationParticipant.CourseType,
+                Discipline = registrationWithParticipant.RegistrationParticipant.Discipline,
+                NiveauId = registrationWithParticipant.RegistrationParticipant.NiveauId,
+                From = registrationWithParticipant.Registration.AvailableFrom.Date,
+                To = registrationWithParticipant.Registration.AvailableTo.Date,
                 IsCourse = false
             };
         }

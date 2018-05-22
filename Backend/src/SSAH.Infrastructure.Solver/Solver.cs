@@ -13,7 +13,7 @@ namespace SSAH.Infrastructure.Solver
             // readonly
             int[] ageGroupOfParticipants = param.Participants.Select(p => p.AgeGroup).ToArray();
             int[] languageOfParticipants = param.Participants.Select(p => (int)p.Language).ToArray();
-            int[] coursesCountInSameNiveauOfParticipants = param.Participants.Select(p => p.CoursesCountInSameNiveau).ToArray();
+            int[] courseDaysInSameNiveauOfParticipants = param.Participants.Select(p => p.CoursesDaysInSameNiveau).ToArray();
 
             var courses = Enumerable.Range(1, param.CourseCount).ToArray();
             var participants = Enumerable.Range(0, ageGroupOfParticipants.Length).ToArray();
@@ -33,9 +33,9 @@ namespace SSAH.Infrastructure.Solver
                     {
                         var ageGroup = AgeGroupStandardDeviation(courseOfParticipant, ageGroupOfParticipants, k);
                         var language = UniqueLanguages(courseOfParticipant, languageOfParticipants, k);
-                        var coursesCountInSameNiveau = CoursesCountInSameNiveauStandardDeviation(courseOfParticipant, coursesCountInSameNiveauOfParticipants, k);
+                        var courseDaysInSameNiveau = CourseDaysInSameNiveauStandardDeviation(courseOfParticipant, courseDaysInSameNiveauOfParticipants, k);
 
-                        var valueForCourse = ageGroup * language * coursesCountInSameNiveau;
+                        var valueForCourse = ageGroup * language * courseDaysInSameNiveau;
 
                         return valueForCourse;
                     })
@@ -84,14 +84,14 @@ namespace SSAH.Infrastructure.Solver
             return count;
         }
 
-        public static double CoursesCountInSameNiveauStandardDeviation(int[] kursOfTeilnehmer, int[] coursesCountInSameNiveauOfParticipants, int courseFilter)
+        public static double CourseDaysInSameNiveauStandardDeviation(int[] kursOfTeilnehmer, int[] courseDaysInSameNiveauOfParticipants, int courseFilter)
         {
-            var coursesCountInSameNiveaus = kursOfTeilnehmer.Zip(coursesCountInSameNiveauOfParticipants, (kurs, coursesCountInSameNiveau) => new { kurs, coursesCountInSameNiveau })
+            var courseDaysInSameNiveaus = kursOfTeilnehmer.Zip(courseDaysInSameNiveauOfParticipants, (kurs, courseDaysInSameNiveau) => new { kurs, courseDaysInSameNiveau })
                 .Where(ak => ak.kurs == courseFilter)
-                .Select(ak => ak.coursesCountInSameNiveau)
+                .Select(ak => ak.courseDaysInSameNiveau)
                 .ToList();
 
-            return StandardDeviation(coursesCountInSameNiveaus, 3) + 1;
+            return StandardDeviation(courseDaysInSameNiveaus, 3) + 1;
         }
 
         public static double StandardDeviation(ICollection<int> sequence, int digits)

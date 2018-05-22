@@ -6,9 +6,9 @@ using SSAH.Infrastructure.DbAccess.Extensions;
 
 namespace SSAH.Infrastructure.DbAccess.TypeConfigurations
 {
-    public class RegistrationPartipiantTypeConfiguration : IEntityTypeConfiguration<RegistrationPartipiant>
+    public class RegistrationParticipantTypeConfiguration : IEntityTypeConfiguration<RegistrationParticipant>
     {
-        public void Configure(EntityTypeBuilder<RegistrationPartipiant> builder)
+        public void Configure(EntityTypeBuilder<RegistrationParticipant> builder)
         {
             builder.ConfigureEntityBaseProperties();
             builder.HasOne(p => p.ResultingParticipant).WithMany().HasForeignKey(p => p.ResultingParticipantId).OnDelete(DeleteBehavior.ClientSetNull).IsRequired(false);

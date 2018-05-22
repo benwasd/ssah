@@ -31,7 +31,7 @@ export class PartipiantList extends React.Component<PartipiantListProps, Partipi
                     <tbody>
                         {this.props.partipiants.map((p, i) => {
                             const props = Object.assign(
-                                omit(p, ['id', 'timestamp', 'commiting']),
+                                omit(p, ['id', 'timestamp', 'committing']),
                                 { change: p => this.props.changePartipiant(i, p) }
                             ) as PartipiantProps;
                             

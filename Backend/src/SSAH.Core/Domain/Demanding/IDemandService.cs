@@ -10,6 +10,8 @@ namespace SSAH.Core.Domain.Demanding
     {
         IEnumerable<GroupCourse> GetPotentialGroupCourses(Discipline discipline, DateTime from, DateTime to, int[] potentialNiveauIds);
 
-        IEnumerable<GroupCourseDemand> GetGroupCourseDemand(Discipline discipline, DateTime from, DateTime to, IEnumerable<RegistrationWithPartipiant> includingRegistrations = null);
+        IEnumerable<GroupCourseDemand> GetGroupCourseDemand(Discipline discipline, DateTime from, DateTime to, IEnumerable<RegistrationWithParticipant> includingRegistrations = null);
+
+        IEnumerable<Instructor> GetAvailableInstructorsForGroupCourses(Discipline discipline, Period[] courseDates);
     }
 }

@@ -11,6 +11,7 @@ export interface RegistrationState {
 }
 
 export interface ApplicantState {
+    id?: string;
     surname: string;
     givenname: string;
     residence: string;
@@ -32,7 +33,7 @@ export interface PartipiantState {
     discipline?: Discipline;
     niveauId?: number;
     ageGroup: string;
-    commiting?: {
+    committing?: {
         courseIdentifier: number;
         courseStartDate: Date;
     }

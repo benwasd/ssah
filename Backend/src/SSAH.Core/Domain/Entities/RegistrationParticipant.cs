@@ -4,7 +4,7 @@ using SSAH.Core.Domain.Objects;
 
 namespace SSAH.Core.Domain.Entities
 {
-    public class RegistrationPartipiant : EntityBase
+    public class RegistrationParticipant : EntityBase
     {
         public Guid RegistrationId { get; set; }
 
@@ -33,7 +33,7 @@ namespace SSAH.Core.Domain.Entities
         {
             if (ResultingParticipantId != null)
             {
-                throw new InvalidOperationException("This registrastion partipiant already created a partipiant.");
+                throw new InvalidOperationException("This registrastion participant already created a participant.");
             }
 
             var participant = new Participant();
