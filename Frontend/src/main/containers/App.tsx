@@ -4,6 +4,7 @@ import { HashRouter, Route, Switch } from 'react-router-dom';
 import { applyMiddleware, createStore } from 'redux';
 import thunk from 'redux-thunk';
 
+import { InstructorLoginContainer } from '../../instructor/containers/InstructorLoginContainer';
 import { InstructorCourseListContainer } from '../../instructor/containers/InstructorCourseListContainer';
 import { OpenRegistrationContainer } from '../../registration/containers/OpenRegistrationContainer';
 import { RegisterContainer } from '../../registration/containers/RegisterContainer';
@@ -19,6 +20,7 @@ export class App extends React.Component {
                     <Switch>
                         <Route exact path="/register" component={RegisterContainer} />
                         <Route path="/registration/:id" component={OpenRegistrationContainer} />
+                        <Route path="/instructorLogin" component={InstructorLoginContainer} />
                         <Route path="/instructor" component={InstructorCourseListContainer} />
                     </Switch>
                 </HashRouter>

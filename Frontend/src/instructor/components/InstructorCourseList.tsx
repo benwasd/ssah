@@ -4,12 +4,12 @@ import { CourseDto } from '../../api';
 
 export interface InstructorCourseListProps {
     courses: CourseDto[];
-    loadCourses(instructorId: string);
+    loadCourses();
 }
 
 export class InstructorCourseList extends React.Component<InstructorCourseListProps> {
     componentDidMount() {
-        this.props.loadCourses("AEEF01D4-14DE-49D1-980A-004AF5135C30");
+        this.props.loadCourses();
     }
 
     render() {

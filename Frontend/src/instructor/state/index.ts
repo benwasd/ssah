@@ -2,6 +2,6 @@ import { CourseDto } from "../../api";
 
 export interface InstructorState {
     instructorId: string | null;
-    name: string | null;
+    instructorName: string | null;
     courses: CourseDto[];
 }
