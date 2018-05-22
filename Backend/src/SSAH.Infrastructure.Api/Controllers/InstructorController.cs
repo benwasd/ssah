@@ -57,7 +57,7 @@ namespace SSAH.Infrastructure.Api.Controllers
             await _unitOfWork.CommitAsync();
         }
 
-        public async Task<Course> GetCourseOfInstructor(Guid instructorId, Guid courseId)
+        private async Task<Course> GetCourseOfInstructor(Guid instructorId, Guid courseId)
         {
             var course = await _courseRepository.GetByIdAsync(courseId);
 

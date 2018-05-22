@@ -690,7 +690,7 @@ export class RegistrationDto {
 export enum RegistrationStatus {
     Registration = 0, 
     CourseSelection = 1, 
-    Commitment = 2, 
+    Committed = 2, 
 }
 
 export class RegistrationParticipantDto extends EntityDto {
