@@ -7,6 +7,8 @@ namespace SSAH.Infrastructure.Api.Dtos
 {
     public class CourseDto : EntityDto
     {
+        public CourseType CourseType { get; set; }
+
         public Discipline Discipline { get; set; }
 
         public int NiveauId { get; set; }
@@ -16,5 +18,7 @@ namespace SSAH.Infrastructure.Api.Dtos
         public ICollection<Period> CoursePeriods { get; set; }
 
         public ICollection<CourseParticipantDto> Participants { get; set; }
+
+        public DateTime LastModificationDate { get; set; }
     }
 }

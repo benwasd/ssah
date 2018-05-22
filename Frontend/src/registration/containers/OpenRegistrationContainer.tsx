@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { match } from 'react-router';
 import { Button, Dimmer, Loader } from 'semantic-ui-react';
 
-import { State } from '../../state';
+import { State } from '../../main/state';
 import { commitRegistration, loadRegistration, submitOrUpdateRegistration } from '../actions';
 import { RegistrationContainer } from './RegistrationContainer';
 

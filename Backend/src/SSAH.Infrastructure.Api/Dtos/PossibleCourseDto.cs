@@ -7,8 +7,7 @@ namespace SSAH.Infrastructure.Api.Dtos
 {
     public class PossibleCourseDto
     {
-        // TODO: Rename, fix typo
-        public Guid RegistrationPartipiantId { get; set; }
+        public Guid RegistrationParticipantId { get; set; }
         
         public int Identifier { get; set; }
 

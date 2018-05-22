@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { State } from '../../state';
-import { applicantChange, availabilityChange, changePartipiant } from '../actions';
+import { State } from '../../main/state';
+import { applicantChange, availabilityChange, changeParticipant } from '../actions';
 import { Applicant, ApplicantProps } from '../components/Applicant';
 import { AvailabilitySelector, AvailabilitySelectorProps } from '../components/AvailabilitySelector';
-import { PartipiantList, PartipiantListProps } from '../components/PartipiantList';
+import { ParticipantList, ParticipantListProps } from '../components/ParticipantList';
 
 const ApplicantContainer = connect(
     (state: State): Partial<ApplicantProps> => state.registration.applicant,
@@ -17,21 +17,21 @@ const AvailabilitySelectorContainer = connect(
     { change: availabilityChange }
 )(AvailabilitySelector)
 
-const PartipiantListContainer = connect(
-    (state: State): Partial<PartipiantListProps> => {
+const ParticipantListContainer = connect(
+    (state: State): Partial<ParticipantListProps> => {
         return {
-            partipiants: state.registration.partipiants
+            participants: state.registration.participants
         };
     },
-    { changePartipiant }
-)(PartipiantList)
+    { changeParticipant }
+)(ParticipantList)
 
 export class RegistrationStep1Container extends React.Component {
     render() {
         return (<>
             <ApplicantContainer/>
             <AvailabilitySelectorContainer />
-            <PartipiantListContainer />
+            <ParticipantListContainer />
         </>);
     }
 }

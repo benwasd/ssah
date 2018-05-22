@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { RegistrationStatus } from '../../api';
-import { State } from '../../state';
+import { State } from '../../main/state';
 import { throwIfUndefined } from '../../utils';
 import { RegistrationSteps } from '../components/RegistrationSteps';
 import { RegistrationStep1Container } from './RegistrationStep1Container';
