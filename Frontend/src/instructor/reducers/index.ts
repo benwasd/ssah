@@ -45,8 +45,8 @@ export interface InstructorReducerTree {
 }
 
 export const reducer = combineReducers(<InstructorReducerTree>{
-    instructorId: noopReducer(null),
-    instructorName: noopReducer(null),
+    instructorId: noopReducer("AEEF01D4-14DE-49D1-980A-004AF5135C30"),
+    instructorName: noopReducer("Martina Sägesser"),
     courses: handleCourses
 });
 

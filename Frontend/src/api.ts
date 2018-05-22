@@ -436,15 +436,18 @@ export class EntityDto {
 }
 
 export class CourseDto extends EntityDto {
+    courseType: CourseType;
     discipline: Discipline;
     niveauId: number;
     actualCourseStart: Date;
     coursePeriods: Period[];
     participants: CourseParticipantDto[];
+    lastModificationDate: Date;
 
     init(data?: any) {
         super.init(data);
         if (data) {
+            this.courseType = data["courseType"];
             this.discipline = data["discipline"];
             this.niveauId = data["niveauId"];
             this.actualCourseStart = data["actualCourseStart"] ? new Date(data["actualCourseStart"].toString()) : <any>undefined;
@@ -458,6 +461,7 @@ export class CourseDto extends EntityDto {
                 for (let item of data["participants"])
                     this.participants.push(CourseParticipantDto.fromJS(item));
             }
+            this.lastModificationDate = data["lastModificationDate"] ? new Date(data["lastModificationDate"].toString()) : <any>undefined;
         }
     }
 
@@ -470,6 +474,7 @@ export class CourseDto extends EntityDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["courseType"] = this.courseType;
         data["discipline"] = this.discipline;
         data["niveauId"] = this.niveauId;
         data["actualCourseStart"] = this.actualCourseStart ? this.actualCourseStart.toISOString() : <any>undefined;
@@ -483,9 +488,14 @@ export class CourseDto extends EntityDto {
             for (let item of this.participants)
                 data["participants"].push(item.toJSON());
         }
+        data["lastModificationDate"] = this.lastModificationDate ? this.lastModificationDate.toISOString() : <any>undefined;
         super.toJSON(data);
         return data; 
     }
+}
+
+export enum CourseType {
+    Group = 0, 
 }
 
 export enum Discipline {
@@ -731,10 +741,6 @@ export class RegistrationParticipantDto extends EntityDto {
         super.toJSON(data);
         return data; 
     }
-}
-
-export enum CourseType {
-    Group = 0, 
 }
 
 export class RegistrationOverviewDto {
