@@ -54,7 +54,7 @@ export class CourseSelection extends React.Component<CourseSelectionProps, Cours
                     <div key={p.id}>
                         <h1>{p.name} {p.id}</h1>
                         {this.props.possibleCourses
-                            .filter(c => c.registrationPartipiantId === p.id)
+                            .filter(c => c.registrationParticipantId === p.id)
                             .map(c =>
                                 <div key={c.identifier + "" + c.startDate}>
                                     <CourseDateVisualizer periods={c.coursePeriods} />

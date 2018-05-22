@@ -15,7 +15,7 @@ import { ApplicantState, AvailabilityState, PartipiantState, RegistrationState, 
 
 const handleApplicant: Reducer<ApplicantState, Action> = (state, action) => {
     if (state === undefined) {
-        return { givenname: "", surname: "", residence: "", phoneNumber: "", preferSimultaneousCourseExecutionForPartipiants: true };
+        return { givenname: "", surname: "", residence: "", phoneNumber: "", preferSimultaneousCourseExecutionForParticipants: true };
     }
     
     switch (action.type) {
@@ -120,7 +120,7 @@ const handleRegistration: Reducer<RegistrationState, Action> = (state, action) =
                     residence: loadedAction.registration.residence,
                     phoneNumber: loadedAction.registration.phoneNumber,
                     language: loadedAction.registration.participants.length > 0 ? loadedAction.registration.participants[0].language : undefined,
-                    preferSimultaneousCourseExecutionForPartipiants: loadedAction.registration.preferSimultaneousCourseExecutionForPartipiants
+                    preferSimultaneousCourseExecutionForParticipants: loadedAction.registration.preferSimultaneousCourseExecutionForParticipants
                 },
                 availability: {
                     availableFrom: loadedAction.registration.availableFrom,

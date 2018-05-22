@@ -123,9 +123,8 @@ namespace SSAH.Infrastructure.Api.Controllers
             };
         }
 
-        // TODO: Rename, fix typo
         [HttpGet]
-        public IEnumerable<PossibleCourseDto> PossibleCourseDatesPerPartipiant(Guid registrationId)
+        public IEnumerable<PossibleCourseDto> PossibleCourseDatesPerParticipant(Guid registrationId)
         {
             var registration = _registrationRepository.GetById(registrationId);
             var registrationParticipant = registration.RegistrationParticipants.Select(rp => new RegistrationWithParticipant { Registration = registration, RegistrationParticipant = rp }).ToArray();
@@ -136,6 +135,7 @@ namespace SSAH.Infrastructure.Api.Controllers
             {
                 var groupCourseDemands = _demandService.GetGroupCourseDemand(
                     participant.Discipline,
+                    participant.NiveauId,
                     registration.AvailableFrom,
                     registration.AvailableTo,
                     includingRegistrations: registrationParticipant
@@ -145,7 +145,7 @@ namespace SSAH.Infrastructure.Api.Controllers
                 {
                     yield return new PossibleCourseDto
                     {
-                        RegistrationPartipiantId = participant.Id,
+                        RegistrationParticipantId = participant.Id,
                         Identifier = groupCourseDemand.GroupCourse.OptionsIdentifier,
                         StartDate = groupCourseDemand.GroupCourse.StartDate,
                         CoursePeriods = groupCourseDemand.GroupCourse.GetAllCourseDates(_serializationService).ToList()

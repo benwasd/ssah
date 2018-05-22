@@ -39,7 +39,7 @@ namespace SSAH.Core.Domain.Demanding
             _serializationService = serializationService;
         }
 
-        public IEnumerable<GroupCourse> GetPotentialGroupCourses(Discipline discipline, DateTime from, DateTime to, int[] potentialNiveauIds)
+        public IEnumerable<GroupCourse> GetPotentialGroupCourses(Discipline discipline, int niveauId, DateTime from, DateTime to)
         {
             var matchingGroupCourseOptions = _groupCourseOptionsCollection.Value.Where(gc => gc.Discipline == discipline && gc.ValidFrom <= from && to <= gc.ValidTo);
             var currentOrUpcommingSeasonStart = _seasonRepository.GetCurrentOrUpcommingOrThrow(DateTime.Today).Start;
@@ -50,21 +50,19 @@ namespace SSAH.Core.Domain.Demanding
 
                 while (courseStartDate < to)
                 {
-                    foreach (var potentialNiveauId in potentialNiveauIds)
-                    {
-                        yield return CreateEarlyProposalGroupCourse(courseStartDate, potentialNiveauId, groupCourseOption);
-                    }
+
+                    yield return CreateEarlyProposalGroupCourse(courseStartDate, niveauId, groupCourseOption);
 
                     courseStartDate = courseStartDate.AddDays(groupCourseOption.WeekInterval * 7);
                 }
             }
         }
 
-        public IEnumerable<GroupCourseDemand> GetGroupCourseDemand(Discipline discipline, DateTime from, DateTime to, IEnumerable<RegistrationWithParticipant> includingRegistrations = null)
+        public IEnumerable<GroupCourseDemand> GetGroupCourseDemand(Discipline discipline, int niveauId, DateTime from, DateTime to, IEnumerable<RegistrationWithParticipant> includingRegistrations = null)
         {
             var potentialParticipants = TryAdd(_registrationRepository.GetRegisteredParticipantOverlappingPeriod(discipline, from, to), includingRegistrations).ToArray();
             var potentialParticipantCriterias = potentialParticipants.Select(DemandingCriterias.CreateFromRegistration).ToArray();
-            var potentialCourses = GetPotentialGroupCourses(discipline, from, to, potentialParticipants.Select(pp => pp.RegistrationParticipant.NiveauId).Distinct().ToArray());
+            var potentialCourses = GetPotentialGroupCourses(discipline, niveauId, from, to);
 
             foreach (var potentialCourse in potentialCourses)
             {

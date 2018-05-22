@@ -17,7 +17,7 @@ export interface ApplicantState {
     residence: string;
     phoneNumber: string;
     language?: Language;
-    preferSimultaneousCourseExecutionForPartipiants: boolean;
+    preferSimultaneousCourseExecutionForParticipants: boolean;
 }
 
 export interface AvailabilityState {
