@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 using SSAH.Core.Domain.Objects;
 using SSAH.Core.Services;
@@ -41,7 +42,7 @@ namespace SSAH.Core.Domain.Entities
             return GetPeriodsOptions(serializerService).GetCourseDatesOfOneExecution(StartDate);
         }
 
-        protected override int MaximalBoundedInstructorCountCore()
+        protected override int EvaluateMaximalBoundedInstructorCount()
         {
             var participantCount = Participants.Count;
             var result = 0;
@@ -72,6 +73,28 @@ namespace SSAH.Core.Domain.Entities
             }
 
             return result;
+        }
+
+        protected override void AddVisitedDaysToPassedParticipants(Guid[] passedParticipantIds, ISerializationService serializationService)
+        {
+            var courseDates = GetAllCourseDates(serializationService).ToArray();
+
+            foreach (var participant in Participants)
+            {
+                foreach (var courseDay in courseDates)
+                {
+                    participant.Participant.VisitedCourseDays.Add(
+                        new ParticipantVisitedCourseDay
+                        {
+                            Discipline = Discipline,
+                            NiveauId = NiveauId,
+                            NiveauName = "N",
+                            DayStart = courseDay.Start,
+                            DayDuration = courseDay.Duration
+                        }
+                    );
+                }
+            }
         }
     }
 }

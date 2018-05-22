@@ -23,6 +23,7 @@ namespace SSAH.Infrastructure.Api.MappingProfiles
         private void MapEntitiesToDtos()
         {
             CreateEntityToDtoMap<GroupCourse, CourseDto>()
+                .ForMember(dest => dest.Participants, opt => opt.MapFrom(src => src.Participants.Select(p => p.Participant)))
                 .ForMember(dest => dest.ActualCourseStart, opt => opt.Ignore())
                 .ForMember(dest => dest.CoursePeriods, opt => opt.ResolveUsing<CalleGetAllCourseDatesWithSerializationService>())
                 .AfterMap((src, dest) =>
@@ -30,13 +31,13 @@ namespace SSAH.Infrastructure.Api.MappingProfiles
                     dest.ActualCourseStart = dest.CoursePeriods.OrderBy(p => p.Start).First().Start;
                 });
 
-            CreateEntityToDtoMap<CourseParticipant, CourseParticipantDto>()
-                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Participant.Name))
-                .ForMember(dest => dest.Language, opt => opt.MapFrom(src => src.Participant.Language))
-                .ForMember(dest => dest.AgeGroup, opt => opt.MapFrom(src => src.Participant.AgeGroup))
-                .ForMember(dest => dest.Residence, opt => opt.MapFrom(src => src.Participant.Applicant.Residence))
-                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Participant.Applicant.PhoneNumber))
-                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Participant.Name));
+            CreateEntityToDtoMap<Participant, CourseParticipantDto>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Language, opt => opt.MapFrom(src => src.Language))
+                .ForMember(dest => dest.AgeGroup, opt => opt.MapFrom(src => src.AgeGroup))
+                .ForMember(dest => dest.Residence, opt => opt.MapFrom(src => src.Applicant.Residence))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Applicant.PhoneNumber))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
         }
 
         private void MapDtosToEntities()

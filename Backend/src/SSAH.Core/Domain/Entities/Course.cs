@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 
 using SSAH.Core.Collections;
 using SSAH.Core.Domain.Objects;
+using SSAH.Core.Services;
 
 namespace SSAH.Core.Domain.Entities
 {
@@ -52,6 +53,18 @@ namespace SSAH.Core.Domain.Entities
             }
         }
 
+        public void Close(Guid[] passedParticipantIds, ISerializationService serializationService)
+        {
+            if (Status != CourseStatus.Committed)
+            {
+                throw new InvalidOperationException("Only committed courses can be closed.");
+            }
+
+            AddVisitedDaysToPassedParticipants(passedParticipantIds, serializationService);
+
+            Status = CourseStatus.Closed;
+        }
+
         public DateTime StartDate { get; set; }
 
         public int MaximalBoundedInstructorCount()
@@ -61,9 +74,11 @@ namespace SSAH.Core.Domain.Entities
                 throw new InvalidOperationException("This calculation is only available for proposal courses.");
             }
 
-            return MaximalBoundedInstructorCountCore();
+            return EvaluateMaximalBoundedInstructorCount();
         }
 
-        protected abstract int MaximalBoundedInstructorCountCore();
+        protected abstract int EvaluateMaximalBoundedInstructorCount();
+
+        protected abstract void AddVisitedDaysToPassedParticipants(Guid[] passedParticipantIds, ISerializationService serializationService);
     }
 }

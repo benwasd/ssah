@@ -49,30 +49,10 @@ namespace SSAH.Infrastructure.Api.Controllers
         [HttpPost]
         public async Task CloseCourse(Guid instructorId, [FromBody] CloseCourseDto closeCourseDto)
         {
+            var passedPartipiantIds = closeCourseDto.Participants.Where(x => x.Passed).Select(x => x.Id).ToArray();
+
             var course = await GetCourseOfInstructor(instructorId, closeCourseDto.Id);
-            var courseDates = ((GroupCourse)course).GetAllCourseDates(_serializerService).ToArray();
-
-            foreach (Participant participant in course.Participants.Select(p => p.Participant))
-            {
-                if (closeCourseDto.Participants.Any(pdto => pdto.Passed && pdto.Id == participant.Id))
-                {
-                    foreach (var courseDay in courseDates)
-                    {
-                        participant.VisitedCourseDays.Add(
-                            new ParticipantVisitedCourseDay
-                            {
-                                Discipline = course.Discipline,
-                                NiveauId = course.NiveauId,
-                                NiveauName = "N",
-                                DayStart = courseDay.Start,
-                                DayDuration = courseDay.Duration
-                            }
-                        );
-                    }
-                }
-            }
-
-            course.Status = CourseStatus.Closed;
+            course.Close(passedPartipiantIds, _serializerService);
 
             await _unitOfWork.CommitAsync();
         }
