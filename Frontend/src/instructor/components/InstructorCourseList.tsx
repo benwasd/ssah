@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as moment from 'moment';
+import { sortBy } from 'lodash';
 
 import { CourseDto, Discipline, CourseType } from '../../api';
 import { Link } from 'react-router-dom';
@@ -16,14 +17,26 @@ export class InstructorCourseList extends React.Component<InstructorCourseListPr
 
 
     render() {
-        return (
+        return (<>
+            <h1>Zukünftige Kurse</h1>
             <div className="ui relaxed divided list">
-                <i className="france flag"></i>
-                <i className="myanmar flag"></i>
-                {this.props.courses.map(this.renderCourse)}
+                {this.noEntriesIfEmpty(this.orderdFutureCourses().map(this.renderCourse))}
             </div>
-        );
-        // return this.props.courses.map(c => <div key={c.id}>{c.participants.map(p => p.name).join(',')}</div>)
+            <h1>Vergangene Kurse</h1>
+            <div className="ui relaxed divided list">
+                {this.noEntriesIfEmpty(this.orderdPastCourses().map(this.renderCourse))}
+            </div>
+        </>);
+    }
+
+    private orderdFutureCourses = () => {
+        const currentTime = new Date().getTime();
+        return sortBy(this.props.courses, (c: CourseDto) => c.actualCourseStart).filter(c => c.actualCourseStart.getTime() > currentTime);
+    }
+
+    private orderdPastCourses = () => {
+        const currentTime = new Date().getTime();
+        return sortBy(this.props.courses, (c: CourseDto) => c.actualCourseStart).filter(c => c.actualCourseStart.getTime() <= currentTime);
     }
 
     private renderCourse = (course: CourseDto) => {
@@ -36,5 +49,14 @@ export class InstructorCourseList extends React.Component<InstructorCourseListPr
                 </div>
             </div>
         );
+    }
+
+    private noEntriesIfEmpty(elements: any[]) {
+        if (elements.length === 0) {
+            return [<div>Keine Kurse vorhanden.</div>];
+        }
+        else {
+            return elements;
+        }
     }
 }
