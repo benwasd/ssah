@@ -154,7 +154,8 @@ export class DateRangePicker extends React.Component<DateRangePickerProps> {
                     onFocusChange={this.onFocusChange}
                     focusedInput={focusedInput}
                     startDate={startDate}
-                    endDate={endDate}/>
+                    endDate={endDate}
+                    orientation={window.innerWidth < 768 ? "vertical" : "horizontal"}/>
             </div>
         );
     }
