@@ -46,7 +46,6 @@ export interface CourseReloadedAction extends Action {
 }
 
 export const reloadCourse = (instructorId: string, courseId: string) => (dispatch: Dispatch, getState: () => State) => {
-    console.log("RELOAD COURSE", instructorId, courseId);
     const currentInstructorId = getState().instructor.instructorId;
     if (currentInstructorId == null || instructorId == null || currentInstructorId.toUpperCase() != instructorId.toUpperCase()) {
         return;
@@ -77,7 +76,7 @@ export const closeCourse = (courseId: string, courseRowVersion: string, particip
 
     const apiProxy = new InstructorApiProxy();
     apiProxy.closeCourse(throwIfUndefined(getState().instructor.instructorId), closeCourseDto).then(() => {
-        const action: CourseClosedAction = { type: COURSE_RELOAD, closedCourse: closeCourseDto };
+        const action: CourseClosedAction = { type: COURSE_CLOSED, closedCourse: closeCourseDto };
         dispatch(action);
     })
 }
