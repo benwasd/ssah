@@ -24,8 +24,8 @@ class InternalOpenRegistrationContainer extends React.Component<InternalOpenRegi
         if (this.props.id) {
             return (<>
                 <RegistrationContainer />
-                <Button onClick={() => this.props.updateRegistration(undefined)}>UPDATE</Button>
-                <Button onClick={() => this.props.commitRegistration(undefined)}>COMMIT</Button>
+                <Button primary onClick={() => this.props.updateRegistration(undefined)}>UPDATE</Button>
+                <Button primary onClick={() => this.props.commitRegistration(undefined)}>COMMIT</Button>
             </>);
         }
         else {

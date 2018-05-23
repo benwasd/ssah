@@ -10,6 +10,7 @@ import { RegistrationStep2Container } from './RegistrationStep2Container';
 
 interface InternalRegistrationContainerProps {
     status: RegistrationStatus;
+    applicantGivenname: string;
 }
 
 interface InternalRegistrationContainerState {
@@ -29,7 +30,8 @@ class InternalRegistrationContainer extends React.Component<InternalRegistration
             <RegistrationSteps 
                 status={this.props.status}
                 activeStatus={status} 
-                activeStatusChanged={s => this.setState({ status: s })} />
+                activeStatusChanged={s => this.setState({ status: s })}
+                applicantGivenname={this.props.applicantGivenname} />
             {activeSection}            
         </>);
     }
@@ -38,7 +40,8 @@ class InternalRegistrationContainer extends React.Component<InternalRegistration
 export const RegistrationContainer = connect(
     (state: State): Partial<InternalRegistrationContainerProps> => {
         return { 
-            status: state.registration.status
+            status: state.registration.status,
+            applicantGivenname: state.registration.applicant.givenname
         };
     }
 )(InternalRegistrationContainer)
