@@ -1,4 +1,7 @@
-﻿using SSAH.Core.Domain.Entities;
+﻿using System.Linq;
+
+using SSAH.Core.Domain.Entities;
+using SSAH.Core.Extensions;
 using SSAH.Infrastructure.Api.Dtos;
 using SSAH.Infrastructure.Api.Mapping;
 
@@ -21,9 +24,13 @@ namespace SSAH.Infrastructure.Api.MappingProfiles
                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Applicant.PhoneNumber))
                 .ForMember(dest => dest.Residence, opt => opt.MapFrom(src => src.Applicant.Residence))
                 .ForMember(dest => dest.RegistrationId, opt => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.Participants, opt => opt.MapFrom(src => src.RegistrationPartipiant));
+                .ForMember(dest => dest.Participants, opt => opt.MapFrom(src => src.RegistrationParticipants));
 
-            CreateEntityToDtoMap<RegistrationPartipiant, RegistrationParticipantDto>();
+            CreateEntityToDtoMap<RegistrationParticipant, RegistrationParticipantDto>();
+
+            CreateMap<Registration, RegistrationOverviewDto>()
+                .ForMember(dest => dest.RegistrationId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.ParticipantNames, opt => opt.MapFrom(src => src.RegistrationParticipants.Select(p => p.Name).ToCommaSeparatedGrammaticalSequence()));
         }
 
         private void MapDtosToEntities()
@@ -35,7 +42,7 @@ namespace SSAH.Infrastructure.Api.MappingProfiles
                 .ForMember(dest => dest.ApplicantId, opt => opt.Condition(src => src.ApplicantId != null))
                 .ForMember(dest => dest.AvailableFrom, opt => opt.MapFrom(src => src.AvailableFrom))
                 .ForMember(dest => dest.AvailableTo, opt => opt.MapFrom(src => src.AvailableTo))
-                .ForMember(dest => dest.PreferSimultaneousCourseExecutionForPartipiants, opt => opt.MapFrom(src => src.PreferSimultaneousCourseExecutionForPartipiants))
+                .ForMember(dest => dest.PreferSimultaneousCourseExecutionForParticipants, opt => opt.MapFrom(src => src.PreferSimultaneousCourseExecutionForParticipants))
                 .ForAllOtherMembers(opt => opt.Ignore());
 
             CreateMap<RegistrationDto, Applicant>()
@@ -45,14 +52,14 @@ namespace SSAH.Infrastructure.Api.MappingProfiles
                 .ForMember(dest => dest.Residence, opt => opt.MapFrom(src => src.Residence))
                 .ForAllOtherMembers(opt => opt.Ignore());
 
-            CreateDtoToEntityMap<RegistrationParticipantDto, RegistrationPartipiant>()
+            CreateDtoToEntityMap<RegistrationParticipantDto, RegistrationParticipant>()
                 .ForMember(dest => dest.RegistrationId, opt => opt.Ignore())
                 .ForMember(dest => dest.ResultingParticipantId, opt => opt.Ignore())
                 .ForMember(dest => dest.ResultingParticipant, opt => opt.Ignore())
                 .ForMember(dest => dest.CourseIdentifier, opt => opt.Ignore())
                 .ForMember(dest => dest.CourseStartDate, opt => opt.Ignore());
 
-            CreateDtoToEntityMap<CommitRegistrationParticipantDto, RegistrationPartipiant>()
+            CreateDtoToEntityMap<CommitRegistrationParticipantDto, RegistrationParticipant>()
                 .ForMember(dest => dest.RegistrationId, opt => opt.Ignore())
                 .ForMember(dest => dest.ResultingParticipantId, opt => opt.Ignore())
                 .ForMember(dest => dest.ResultingParticipant, opt => opt.Ignore())

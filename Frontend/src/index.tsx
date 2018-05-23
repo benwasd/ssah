@@ -4,7 +4,7 @@ import * as ReactDOM from 'react-dom';
 import './styling/semantic.less';
 import 'moment/locale/de-ch';
 
-import { App } from './containers/App';
+import { App } from './main/containers/App';
 
 ReactDOM.render(
     <App />,

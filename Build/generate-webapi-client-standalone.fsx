@@ -16,6 +16,7 @@ open System.IO
 open NSwag.CodeGeneration.TypeScript
 open NSwag.SwaggerGeneration.WebApi
 open NJsonSchema
+open NJsonSchema.CodeGeneration.TypeScript
 
 let projectRoot = __SOURCE_DIRECTORY__ @@ ".."
 
@@ -44,8 +45,8 @@ let generate (inputAssembly: System.Reflection.Assembly) outputApiTs =
 
   tssettings.TypeScriptGeneratorSettings.ExtensionCode <- ReadFileAsString (projectRoot @@ "Build" @@ "generate-webapi-client.extension-code.ts")
   tssettings.TypeScriptGeneratorSettings.TypeScriptVersion <- 2.3m
-  tssettings.TypeScriptGeneratorSettings.GenerateCloneMethod <- true
-  tssettings.TypeScriptGeneratorSettings.GenerateConstructorInterface <- true
+  tssettings.TypeScriptGeneratorSettings.TypeStyle <- TypeScriptTypeStyle.Class
+  tssettings.TypeScriptGeneratorSettings.GenerateConstructorInterface <- false
 
   let controllers = Seq.collect WebApiToSwaggerGenerator.GetControllerClasses [inputAssembly]
   let generator = WebApiToSwaggerGenerator(settings)

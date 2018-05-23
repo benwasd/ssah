@@ -3,7 +3,7 @@ import * as moment from 'moment';
 import { Form } from 'semantic-ui-react';
 
 import { ApplicantState, AvailabilityState } from '../state';
-import { DateRangePicker, DateRangePickerPropsDateChange} from '../../components/DateRangePicker';
+import { DateRangePicker, DateRangePickerPropsDateChange} from '../../main/components/DateRangePicker';
 
 export interface AvailabilitySelectorProps {
     availableFrom: Date;

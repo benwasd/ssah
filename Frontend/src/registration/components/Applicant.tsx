@@ -11,7 +11,7 @@ export interface ApplicantProps {
     residence: string;
     phoneNumber: string;
     language?: Language;
-    preferSimultaneousCourseExecutionForPartipiants: boolean;
+    preferSimultaneousCourseExecutionForParticipants: boolean;
     change(obj: Partial<ApplicantState>);
 }
 
@@ -65,7 +65,7 @@ export class Applicant extends React.Component<ApplicantProps, Partial<Applicant
                 </Form.Field>
                 <Form.Field>
                     <label>Nur gleichzeitige Kurse</label>
-                    <Checkbox name='preferSimultaneousCourseExecutionForPartipiants' checked={this.props.preferSimultaneousCourseExecutionForPartipiants} onChange={this.handleCheckboxChange} />
+                    <Checkbox name='preferSimultaneousCourseExecutionForParticipants' checked={this.props.preferSimultaneousCourseExecutionForParticipants} onChange={this.handleCheckboxChange} />
                 </Form.Field>
             </Form>
         );

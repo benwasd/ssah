@@ -8,8 +8,10 @@ namespace SSAH.Core.Domain.Demanding
 {
     public interface IDemandService
     {
-        IEnumerable<GroupCourse> GetPotentialGroupCourses(Discipline discipline, DateTime from, DateTime to, int[] potentialNiveauIds);
+        IEnumerable<GroupCourse> GetPotentialGroupCourses(Discipline discipline, int niveauId, DateTime from, DateTime to);
 
-        IEnumerable<GroupCourseDemand> GetGroupCourseDemand(Discipline discipline, DateTime from, DateTime to, RegistrationWithPartipiant includingRegistration = null);
+        IEnumerable<GroupCourseDemand> GetGroupCourseDemand(Discipline discipline, int niveauId, DateTime from, DateTime to, IEnumerable<RegistrationWithParticipant> includingRegistrations = null);
+
+        IEnumerable<Instructor> GetAvailableInstructorsForGroupCourses(Discipline discipline, Period[] courseDates);
     }
 }

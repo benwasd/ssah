@@ -6,9 +6,9 @@ using SSAH.Infrastructure.DbAccess.Extensions;
 
 namespace SSAH.Infrastructure.DbAccess.TypeConfigurations
 {
-    public class ParticipantCompletedNiveauTypeConfiguration : IEntityTypeConfiguration<ParticipantCompletedNiveau>
+    public class ParticipantVisitedCourseDayTypeConfiguration : IEntityTypeConfiguration<ParticipantVisitedCourseDay>
     {
-        public void Configure(EntityTypeBuilder<ParticipantCompletedNiveau> builder)
+        public void Configure(EntityTypeBuilder<ParticipantVisitedCourseDay> builder)
         {
             builder.ConfigureEntityBaseProperties();
         }

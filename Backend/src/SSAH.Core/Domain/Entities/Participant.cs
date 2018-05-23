@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 using SSAH.Core.Domain.Objects;
 
@@ -11,7 +12,7 @@ namespace SSAH.Core.Domain.Entities
     {
         public Participant()
         {
-            CompletedNiveaus = new Collection<ParticipantCompletedNiveau>();
+            VisitedCourseDays = new Collection<ParticipantVisitedCourseDay>();
         }
 
         [StringLength(Constants.StringLengths.NAME)]
@@ -27,6 +28,15 @@ namespace SSAH.Core.Domain.Entities
         /// <summary>Jahrgang</summary>
         public int AgeGroup { get; set; }
 
-        public virtual ICollection<ParticipantCompletedNiveau> CompletedNiveaus { get; set; }
+        public virtual ICollection<ParticipantVisitedCourseDay> VisitedCourseDays { get; set; }
+
+        public int CoursesDaysInSameNiveau(int courseNiveauId)
+        {
+            return VisitedCourseDays
+                .Where(vcd => vcd.NiveauId == courseNiveauId)
+                .Select(vcd => vcd.DayStart.Date)
+                .Distinct()
+                .Count();
+        }
     }
 }

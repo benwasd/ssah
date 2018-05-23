@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,26 +14,32 @@ namespace SSAH.Core.Domain.Demanding
     public class DemandService : IDemandService
     {
         private readonly IRegistrationRepository _registrationRepository;
+        private readonly ICourseRepository _courseRepository;
         private readonly ISeasonRepository _seasonRepository;
+        private readonly IRepository<Instructor> _instructorRepository;
         private readonly IOptions<GroupCourseOptionsCollection> _groupCourseOptionsCollection;
         private readonly IOptions<DemandingThresholdOptions> _demandingThresholdOptions;
         private readonly ISerializationService _serializationService;
 
         public DemandService(
             IRegistrationRepository registrationRepository,
+            ICourseRepository courseRepository,
             ISeasonRepository seasonRepository,
+            IRepository<Instructor> instructorRepository,
             IOptions<GroupCourseOptionsCollection> groupCourseOptionsCollection,
             IOptions<DemandingThresholdOptions> demandingThresholdOptions,
             ISerializationService serializationService)
         {
             _registrationRepository = registrationRepository;
+            _courseRepository = courseRepository;
             _seasonRepository = seasonRepository;
+            _instructorRepository = instructorRepository;
             _groupCourseOptionsCollection = groupCourseOptionsCollection;
             _demandingThresholdOptions = demandingThresholdOptions;
             _serializationService = serializationService;
         }
 
-        public IEnumerable<GroupCourse> GetPotentialGroupCourses(Discipline discipline, DateTime from, DateTime to, int[] potentialNiveauIds)
+        public IEnumerable<GroupCourse> GetPotentialGroupCourses(Discipline discipline, int niveauId, DateTime from, DateTime to)
         {
             var matchingGroupCourseOptions = _groupCourseOptionsCollection.Value.Where(gc => gc.Discipline == discipline && gc.ValidFrom <= from && to <= gc.ValidTo);
             var currentOrUpcommingSeasonStart = _seasonRepository.GetCurrentOrUpcommingOrThrow(DateTime.Today).Start;
@@ -44,29 +50,28 @@ namespace SSAH.Core.Domain.Demanding
 
                 while (courseStartDate < to)
                 {
-                    foreach (var potentialNiveauId in potentialNiveauIds)
-                    {
-                        yield return CreateEarlyProposalGroupCourse(courseStartDate, potentialNiveauId, groupCourseOption);
-                    }
+                    yield return CreateEarlyProposalGroupCourse(courseStartDate, niveauId, groupCourseOption);
 
                     courseStartDate = courseStartDate.AddDays(groupCourseOption.WeekInterval * 7);
                 }
             }
         }
 
-        public IEnumerable<GroupCourseDemand> GetGroupCourseDemand(Discipline discipline, DateTime from, DateTime to, RegistrationWithPartipiant includingRegistration = null)
+        public IEnumerable<GroupCourseDemand> GetGroupCourseDemand(Discipline discipline, int niveauId, DateTime from, DateTime to, IEnumerable<RegistrationWithParticipant> includingRegistrations = null)
         {
-            var potentialPartipiants = TryAdd(_registrationRepository.GetRegisteredPartipiantOverlappingPeriod(discipline, from, to), includingRegistration).ToArray();
-            var potentialPartipiantCriterias = potentialPartipiants.Select(DemandingCriterias.CreateFromRegistration).ToArray();
-            var potentialCourses = GetPotentialGroupCourses(discipline, from, to, potentialPartipiants.Select(pp => pp.RegistrationPartipiant.NiveauId).Distinct().ToArray());
+            var potentialParticipants = TryAdd(_registrationRepository.GetRegisteredParticipantOverlappingPeriod(discipline, from, to), includingRegistrations).ToArray();
+            var potentialParticipantCriterias = potentialParticipants.Select(DemandingCriterias.CreateFromRegistration).ToArray();
+            var potentialCourses = GetPotentialGroupCourses(discipline, niveauId, from, to);
 
             foreach (var potentialCourse in potentialCourses)
             {
                 var courseCriterias = DemandingCriterias.CreateFromCourse(potentialCourse, _serializationService);
 
-                var demand = potentialPartipiantCriterias.Count(pp => courseCriterias.Match(pp));
+                var demand = potentialParticipantCriterias.Count(pp => courseCriterias.Match(pp));
 
-                // TODO: Add max partipiants, and instructor availability
+                // Feature Proposal: https://github.com/benwasd/ssah/issues/54
+                // Consider instructor availabilities here and compare with MaximalBoundedInstructorCount of early proposal and proposal courses.
+
                 if (demand >= _demandingThresholdOptions.Value.MinParticipants)
                 {
                     yield return new GroupCourseDemand { GroupCourse = potentialCourse, Demand = demand };
@@ -74,11 +79,42 @@ namespace SSAH.Core.Domain.Demanding
             }
         }
 
-        private static IEnumerable<RegistrationWithPartipiant> TryAdd(IEnumerable<RegistrationWithPartipiant> potentialPartipiants, RegistrationWithPartipiant toAdd)
+        public IEnumerable<Instructor> GetAvailableInstructorsForGroupCourses(Discipline discipline, Period[] courseDates)
+        {
+            // Feature Proposal: https://github.com/benwasd/ssah/issues/54
+            // Respect instructor disposition here
+
+            var instructors = _instructorRepository.Get();
+
+            foreach (var instructor in instructors)
+            {
+                var coursesOfInstructor = _courseRepository.GetAllGroupCourses(instructor.Id, CourseStatus.Committed);
+                var isInstructorPlaned = false;
+
+                foreach (var courseOfInstructor in coursesOfInstructor)
+                {
+                    var courseOfInstructorDates = courseOfInstructor.GetAllCourseDates(_serializationService);
+
+                    isInstructorPlaned |= courseOfInstructorDates.Overlaps(courseDates);
+
+                    if (isInstructorPlaned)
+                    {
+                        break;
+                    }
+                }
+
+                if (!isInstructorPlaned)
+                {
+                    yield return instructor;
+                }
+            }
+        }
+
+        private static IEnumerable<RegistrationWithParticipant> TryAdd(IEnumerable<RegistrationWithParticipant> potentialParticipants, IEnumerable<RegistrationWithParticipant> toAdd)
         {
             return toAdd != null 
-                ? potentialPartipiants.Concat(new[] { toAdd }) 
-                : potentialPartipiants;
+                ? potentialParticipants.Concat(toAdd) 
+                : potentialParticipants;
         }
 
         private DateTime CalculateFirstCourseStartLappingInPeriod(DateTime currentOrUpcommingSeasonStart, DateTime from, GroupCourseOptions groupCourseOptions)

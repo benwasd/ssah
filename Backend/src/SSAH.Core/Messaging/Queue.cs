@@ -22,6 +22,8 @@ namespace SSAH.Core.Messaging
             _subject.OnNext(message);
         }
 
+        public IScheduler Scheduler => _scheduler;
+
         protected override IDisposable SubscribeCore(IObserver<IMessage> observer)
         {
             return _subject.ObserveOn(_scheduler).Subscribe(observer);
