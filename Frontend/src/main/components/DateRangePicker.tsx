@@ -22,26 +22,8 @@ export interface DateRangePickerProps {
 }
 
 export class DateRangePicker extends React.Component<DateRangePickerProps> {
-    static propTypes = {
-        // example props for the demo
-        autoFocus: PropTypes.bool,
-        autoFocusEndDate: PropTypes.bool,
-        stateDateWrapper: PropTypes.func,
-        initialStartDate: momentPropTypes.momentObj,
-        initialEndDate: momentPropTypes.momentObj,
-        
-        ...omit(DateRangePickerShape, [
-            'startDate',
-            'endDate',
-            'onDatesChange',
-            'focusedInput',
-            'onFocusChange',
-        ]),
-	};
 
     static defaultProps = {
-        autoFocus: false,
-        autoFocusEndDate: false,
         initialStartDate: null,
         initialEndDate: null,
       
@@ -94,38 +76,22 @@ export class DateRangePicker extends React.Component<DateRangePickerProps> {
         // internationalization
         displayFormat: () => moment.localeData().longDateFormat('L'),
         monthFormat: 'MMMM YYYY',
-        phrases: DateRangePickerPhrases,
-      
-        stateDateWrapper: date => date,
+        phrases: DateRangePickerPhrases
     };
 
     constructor(props) {
         super(props);
 
-        let focusedInput: string | null = null;
-        if (props.autoFocus) {
-            focusedInput = "startDate";
-        }
-        else if (props.autoFocusEndDate) {
-            focusedInput = "endDate";
-        }
-
         this.state = {
-            focusedInput,
+            focusedInput: null,
             startDate: props.initialStartDate,
             endDate: props.initialEndDate,
         };
     }
 
     onDatesChange = ({ startDate, endDate }) => {
-        const { stateDateWrapper } = this.props as any;
-
-        this.setState({
-            startDate: startDate && stateDateWrapper(startDate),
-            endDate: endDate && stateDateWrapper(endDate),
-        });
-
-        this.props.onDatesChange({startDate, endDate});
+        this.setState({ startDate: startDate, endDate: endDate });
+        this.props.onDatesChange({ startDate, endDate });
     }
 
     onFocusChange = (focusedInput) => {
@@ -135,28 +101,20 @@ export class DateRangePicker extends React.Component<DateRangePickerProps> {
     render() {
         const { focusedInput, startDate, endDate } = this.state as any;
 
-        // autoFocus, autoFocusEndDate, initialStartDate and initialEndDate are helper props for the
-        // example wrapper but are not props on the SingleDatePicker itself and
-        // thus, have to be omitted.
         const props = omit(this.props, [
-            'autoFocus',
-            'autoFocusEndDate',
             'initialStartDate',
-            'initialEndDate',
-            'stateDateWrapper',
+            'initialEndDate'
         ]);
 
         return (
-            <div>
-                <ReactDatesDateRangePicker
-                    {...props}
-                    onDatesChange={this.onDatesChange}
-                    onFocusChange={this.onFocusChange}
-                    focusedInput={focusedInput}
-                    startDate={startDate}
-                    endDate={endDate}
-                    orientation={window.innerWidth < 768 ? "vertical" : "horizontal"}/>
-            </div>
+            <ReactDatesDateRangePicker
+                {...props}
+                onDatesChange={this.onDatesChange}
+                onFocusChange={this.onFocusChange}
+                focusedInput={focusedInput}
+                startDate={startDate}
+                endDate={endDate}
+                orientation={window.innerWidth < 768 ? "vertical" : "horizontal"}/>
         );
     }
 }
