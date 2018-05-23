@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import { State } from '../../main/state';
-import { loadCourses } from '../actions';
+import { closeCourse } from '../actions';
 import { CourseDetail, CourseDetailProps } from '../components/CourseDetail';
 
 export const CourseDetailContainer = connect(
@@ -9,5 +9,8 @@ export const CourseDetailContainer = connect(
         return {
             course: state.instructor.courses.find(c => ownProps.match.params.id === c.id)
         }
+    },
+    {
+        closeCourse
     }
 )(CourseDetail)
