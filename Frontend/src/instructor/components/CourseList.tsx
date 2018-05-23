@@ -5,12 +5,12 @@ import { sortBy } from 'lodash';
 import { CourseDto, Discipline, CourseType } from '../../api';
 import { Link } from 'react-router-dom';
 
-export interface InstructorCourseListProps {
+export interface CourseListProps {
     courses: CourseDto[];
     loadCourses();
 }
 
-export class InstructorCourseList extends React.Component<InstructorCourseListProps> {
+export class CourseList extends React.Component<CourseListProps> {
     componentDidMount() {
         this.props.loadCourses();
     }
@@ -52,7 +52,7 @@ export class InstructorCourseList extends React.Component<InstructorCourseListPr
 
     private noEntriesIfEmpty(elements: any[]) {
         if (elements.length === 0) {
-            return [<div>Keine Kurse vorhanden.</div>];
+            return [<div key={"0"}>Keine Kurse vorhanden.</div>];
         }
         else {
             return elements;

@@ -40,9 +40,9 @@ namespace SSAH.Infrastructure.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<CourseDto>> GetMyCourses(Guid instructorId)
+        public async Task<IEnumerable<CourseDto>> GetMyCourses(Guid instructorId, DateTime from, DateTime to)
         {
-            var courses = await _courseRepository.GetAllGroupCourses(instructorId, CourseStatus.Committed, DateTime.Today.AddDays(-7), DateTime.Today.AddDays(14));
+            var courses = await _courseRepository.GetAllGroupCourses(instructorId, CourseStatus.Committed, from, to);
             return courses.Select(_mapper.Map<CourseDto>);
         }
 

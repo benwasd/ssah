@@ -13,6 +13,8 @@ namespace SSAH.Infrastructure.Api.Dtos
 
         public int NiveauId { get; set; }
 
+        public DateTime StartDate { get; set; }
+
         public DateTime ActualCourseStart { get; set; }
 
         public ICollection<Period> CoursePeriods { get; set; }

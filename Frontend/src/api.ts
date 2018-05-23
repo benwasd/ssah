@@ -64,12 +64,20 @@ export class InstructorApiProxy extends ApiProxyBase {
         return Promise.resolve<CourseDto>(<any>null);
     }
 
-    getMyCourses(instructorId: string): Promise<CourseDto[]> {
+    getMyCourses(instructorId: string, from: Date, to: Date): Promise<CourseDto[]> {
         let url_ = this.baseUrl + "/api/Instructor/GetMyCourses?";
         if (instructorId === undefined || instructorId === null)
             throw new Error("The parameter 'instructorId' must be defined and cannot be null.");
         else
             url_ += "instructorId=" + encodeURIComponent("" + instructorId) + "&"; 
+        if (from === undefined || from === null)
+            throw new Error("The parameter 'from' must be defined and cannot be null.");
+        else
+            url_ += "from=" + encodeURIComponent(from ? "" + from.toJSON() : "") + "&"; 
+        if (to === undefined || to === null)
+            throw new Error("The parameter 'to' must be defined and cannot be null.");
+        else
+            url_ += "to=" + encodeURIComponent(to ? "" + to.toJSON() : "") + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <RequestInit>{
@@ -439,6 +447,7 @@ export class CourseDto extends EntityDto {
     courseType: CourseType;
     discipline: Discipline;
     niveauId: number;
+    startDate: Date;
     actualCourseStart: Date;
     coursePeriods: Period[];
     participants: CourseParticipantDto[];
@@ -450,6 +459,7 @@ export class CourseDto extends EntityDto {
             this.courseType = data["courseType"];
             this.discipline = data["discipline"];
             this.niveauId = data["niveauId"];
+            this.startDate = data["startDate"] ? new Date(data["startDate"].toString()) : <any>undefined;
             this.actualCourseStart = data["actualCourseStart"] ? new Date(data["actualCourseStart"].toString()) : <any>undefined;
             if (data["coursePeriods"] && data["coursePeriods"].constructor === Array) {
                 this.coursePeriods = [];
@@ -477,6 +487,7 @@ export class CourseDto extends EntityDto {
         data["courseType"] = this.courseType;
         data["discipline"] = this.discipline;
         data["niveauId"] = this.niveauId;
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
         data["actualCourseStart"] = this.actualCourseStart ? this.actualCourseStart.toISOString() : <any>undefined;
         if (this.coursePeriods && this.coursePeriods.constructor === Array) {
             data["coursePeriods"] = [];
