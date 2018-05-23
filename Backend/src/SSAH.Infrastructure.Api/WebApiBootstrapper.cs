@@ -21,7 +21,12 @@ namespace SSAH.Infrastructure.Api
         {
             services.AddCors();
             services.AddMvc()
-                .AddJsonOptions(options => options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore);
+                .AddJsonOptions(options =>
+                {
+                    options.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
+                    options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Local;
+                    options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                });
 
             // Add custom controller activator
             services.Replace(ServiceDescriptor.Transient<IControllerActivator, UnitOfWorkControllerActivator>());
@@ -29,7 +34,7 @@ namespace SSAH.Infrastructure.Api
             services.AddSignalR();
 
             // Add custom hub activator
-            services.Replace(ServiceDescriptor.Transient<IHubActivator<PingHub>>(p => new AutofacContainerHubActivator<PingHub>(p)));
+            services.Replace(ServiceDescriptor.Transient<IHubActivator<CourseChangeHub>>(p => new AutofacContainerHubActivator<CourseChangeHub>(p)));
         }
 
         public static void UseSnowSchoolAdministrationHub(this IApplicationBuilder app, IHostingEnvironment env, IContainer container)
@@ -51,7 +56,7 @@ namespace SSAH.Infrastructure.Api
             }
 
             app.UseMvc();
-            app.UseSignalR(hr => hr.MapHub<PingHub>("/ping"));
+            app.UseSignalR(hr => hr.MapHub<CourseChangeHub>("/courseChange"));
         }
     }
 }

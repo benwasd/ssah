@@ -62,7 +62,7 @@ export const loadRegistration = (id: string) => (dispatch: Dispatch) => {
     apiProxy.getRegistration(id).then(r => {
         const action: RegistrationLoadedAction = { type: REGISTRATION_LOADED, registration: r };
         dispatch(action);
-    })
+    });
 }
 
 export const REGISTRATION_SUBMIT = 'REGISTRATION_SUBMITTED';

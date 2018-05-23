@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 
@@ -10,7 +11,7 @@ using SSAH.Core.Messaging;
 
 namespace SSAH.Infrastructure.Api.Hubs
 {
-    public class PingHubQueueBridge    
+    public class CourseChangeHubQueueBridge    
     {
         private readonly IQueue _queue;
         private readonly object _connectedIdsLockPad = new object();
@@ -18,13 +19,15 @@ namespace SSAH.Infrastructure.Api.Hubs
         private IDisposable _notificationSubscription;
         private IClientProxy _allClientProxy;
 
-        public PingHubQueueBridge(IQueue queue)
+        public CourseChangeHubQueueBridge(IQueue queue)
         {
             _queue = queue;
         }
 
         public void Connecting(string callerConnectionId, IClientProxy allClients)
         {
+            _allClientProxy = allClients;
+
             bool hasOne;
             lock (_connectedIdsLockPad)
             {
@@ -35,14 +38,16 @@ namespace SSAH.Infrastructure.Api.Hubs
             if (hasOne)
             {
                 // TODO Handle send exceptions
-                _notificationSubscription = _queue.OfType<InterestRegisteredMessage>().Subscribe(m => Notify(m.RegistrationId.ToString()));
+                _notificationSubscription = _queue
+                    .OfType<ICommitedCourseChangeMessage>()
+                    .Subscribe(m => Notify(m.GetType(), m.InstructorId.ToString(), m.CourseId.ToString()));
             }
-
-            _allClientProxy = allClients;
         }
 
         public void Disconnecting(string callerConnectionId, IClientProxy allClients)
         {
+            _allClientProxy = allClients;
+
             bool hasNone;
             lock (_connectedIdsLockPad)
             {
@@ -53,14 +58,14 @@ namespace SSAH.Infrastructure.Api.Hubs
             if (hasNone)
             {
                 _notificationSubscription.Dispose();
+                _allClientProxy = null;
             }
-
-            _allClientProxy = allClients;
         }
 
-        private Task Notify(string message)
+        [SuppressMessage("ReSharper", "UnusedMethodReturnValue.Local")]
+        private Task Notify(Type messageType, string instructorId, string courseId)
         {
-            return _allClientProxy.SendAsync("Notify", message);
+            return _allClientProxy.SendAsync("Notify", messageType.Name, instructorId, courseId);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace SSAH.Infrastructure.Api
         public static void Configure(ContainerBuilder builder)
         {
             // Hubs
-            builder.RegisterType<PingHubQueueBridge>().AsSelf().SingleInstance();
+            builder.RegisterType<CourseChangeHubQueueBridge>().AsSelf().SingleInstance();
 
             // Mapping
             builder.RegisterType<MapperFactory>().AsSelf().SingleInstance();

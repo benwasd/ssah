@@ -1,8 +1,9 @@
-import { Dispatch } from "react-redux";
-import { Action } from "redux";
-import { InstructorApiProxy, CourseDto } from "../../api";
-import { CourseDateVisualizer } from "../../registration/components/CourseDatesVisualizer";
-import { State } from "../../main/state";
+import * as moment from 'moment';
+import { Dispatch } from 'react-redux';
+import { Action } from 'redux';
+
+import { CourseDto, InstructorApiProxy } from '../../api';
+import { State } from '../../main/state';
 
 export const INSTRUCTOR_LOGIN = 'INSTRUCTOR_LOGIN';
 
@@ -29,8 +30,34 @@ export const loadCourses = () => (dispatch: Dispatch, getState: () => State) => 
     }
     
     const apiProxy = new InstructorApiProxy();
-    apiProxy.getMyCourses(instructorId).then(r => {
+    const from = moment().startOf('day').add(-7, 'days').toDate();
+    const to = moment().startOf('day').add(14, 'days').toDate();
+    apiProxy.getMyCourses(instructorId, from, to).then(r => {
         const action: CoursesLoadedAction = { type: COURSES_LOADED, courses: r };
         dispatch(action);
-    })
+    });
+}
+
+export const COURSE_RELOAD = 'COURSE_RELOAD';
+
+export interface CourseReloadedAction extends Action {
+    course: CourseDto;
+}
+
+export const reloadCourse = (instructorId: string, courseId: string) => (dispatch: Dispatch, getState: () => State) => {
+    console.log("RELOAD COURSE", instructorId, courseId);
+    const currentInstructorId = getState().instructor.instructorId;
+    if (currentInstructorId == null || instructorId == null || currentInstructorId.toUpperCase() != instructorId.toUpperCase()) {
+        return;
+    }
+    
+    const apiProxy = new InstructorApiProxy();
+    apiProxy.getMyCourse(instructorId, courseId).then(r => {
+        const from = moment().startOf('day').add(-7, 'days').toDate();
+        const to = moment().startOf('day').add(14, 'days').toDate();
+        if (from <= r.startDate && r.startDate <= to) {
+            const action: CourseReloadedAction = { type: COURSE_RELOAD, course: r };
+            dispatch(action);
+        }
+    });
 }

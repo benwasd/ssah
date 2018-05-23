@@ -35,8 +35,9 @@ namespace SSAH.Core.Domain.CourseCreation
             private readonly ISerializationService _serializationService;
             private readonly ICourseCreationService _courseCreationService;
             private readonly IUnitOfWork _unitOfWork;
+            private readonly IQueue _queue;
 
-            public Handler(ICourseRepository courseRepository, IDemandService demandService, ISolver solver, ISerializationService serializationService, ICourseCreationService courseCreationService, IUnitOfWork unitOfWork)
+            public Handler(ICourseRepository courseRepository, IDemandService demandService, ISolver solver, ISerializationService serializationService, ICourseCreationService courseCreationService, IUnitOfWork unitOfWork, IQueue queue)
             {
                 _courseRepository = courseRepository;
                 _demandService = demandService;
@@ -44,6 +45,7 @@ namespace SSAH.Core.Domain.CourseCreation
                 _serializationService = serializationService;
                 _courseCreationService = courseCreationService;
                 _unitOfWork = unitOfWork;
+                _queue = queue;
             }
 
             protected override void OnNextCore(IList<ParticipantRegistredMessage> messages)
@@ -84,7 +86,22 @@ namespace SSAH.Core.Domain.CourseCreation
                         )
                     );
 
+                    var isNew = course.RowVersion == null || course.RowVersion.Length == 0;
+
                     _unitOfWork.Commit();
+
+                    // TODO: Improve
+                    if (course.InstructorId.HasValue)
+                    {
+                        if (isNew)
+                        {
+                            _queue.Publish(new CommittedCourseCreatedMessage(course.Instructor.Id, course.Id));
+                        }
+                        else
+                        {
+                            _queue.Publish(new CommittedCourseChangedMessage(course.Instructor.Id, course.Id));
+                        }
+                    }
 
                     committedGroupCourseIds = committedGroupCourseIds.Concat(new[] { course.Id }).ToArray();
                 }
@@ -102,8 +119,11 @@ namespace SSAH.Core.Domain.CourseCreation
 
             public static Instructor SelectInstructor(IEnumerable<Instructor> availableInstructor)
             {
-                var random = new Random();
-                return availableInstructor.OrderBy(i => random.Next(0, 100)).FirstOrDefault();
+                // TODO: Change, currently always try to use the same instructor
+                // var random = new Random();
+                // return availableInstructor.OrderBy(i => random.Next(0, 100)).FirstOrDefault();
+
+                return availableInstructor.OrderBy(i => i.Id).FirstOrDefault();
             }
 
             protected override void OnErrorCore(Exception error)

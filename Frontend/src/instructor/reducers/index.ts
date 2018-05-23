@@ -1,9 +1,14 @@
 import { Action, combineReducers, Reducer } from 'redux';
+import update from 'immutability-helper';
 
 import { CourseDto } from '../../api';
-import { noopReducer, noopAction } from '../../utils';
+import { noopAction, noopReducer } from '../../utils';
+import {
+    COURSES_LOADED, CoursesLoadedAction,
+    COURSE_RELOAD, CourseReloadedAction,
+    INSTRUCTOR_LOGIN, InstructorLoginAction
+} from '../actions';
 import { InstructorState } from '../state';
-import { COURSES_LOADED, CoursesLoadedAction, INSTRUCTOR_LOGIN, InstructorLoginAction } from '../actions';
 
 const handleCourses: Reducer<CourseDto[], Action> = (state, action) => {
     if (state === undefined) {
@@ -14,6 +19,20 @@ const handleCourses: Reducer<CourseDto[], Action> = (state, action) => {
         case COURSES_LOADED: 
             const loadedAction = action as CoursesLoadedAction;
             return loadedAction.courses;
+
+        case COURSE_RELOAD:
+            const reloadedAction = action as CourseReloadedAction;
+            
+            const courseIndex = state.findIndex(c => c.id === reloadedAction.course.id);
+            let newState;
+            if (courseIndex >= 0) {
+                newState = update(state, { [courseIndex]: { $set: reloadedAction.course } });
+            }
+            else {
+                newState = state.concat(reloadedAction.course);
+            }
+
+            return newState;
         default:
             return state;
     }
