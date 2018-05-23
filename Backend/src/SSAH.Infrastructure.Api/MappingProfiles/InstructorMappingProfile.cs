@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using AutoMapper;
@@ -23,9 +24,11 @@ namespace SSAH.Infrastructure.Api.MappingProfiles
         private void MapEntitiesToDtos()
         {
             CreateEntityToDtoMap<GroupCourse, CourseDto>()
+                .ForMember(dest => dest.CourseType, opt => opt.MapFrom(src => CourseType.Group))
                 .ForMember(dest => dest.Participants, opt => opt.MapFrom(src => src.Participants.Select(p => p.Participant)))
                 .ForMember(dest => dest.ActualCourseStart, opt => opt.Ignore())
                 .ForMember(dest => dest.CoursePeriods, opt => opt.ResolveUsing<CalleGetAllCourseDatesWithSerializationService>())
+                .ForMember(dest => dest.LastModificationDate, opt => opt.MapFrom(src => GetLastModification(src)))
                 .AfterMap((src, dest) =>
                 {
                     dest.ActualCourseStart = dest.CoursePeriods.OrderBy(p => p.Start).First().Start;
@@ -39,9 +42,19 @@ namespace SSAH.Infrastructure.Api.MappingProfiles
                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Applicant.PhoneNumber))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
         }
-
+        
         private void MapDtosToEntities()
         {
+        }
+
+        private static DateTime GetLastModification(Course src)
+        {
+            return src.Participants
+                .SelectMany(p => new[] { p.ModifiedOn, p.CreatedOn })
+                .Concat(new[] { src.ModifiedOn, src.CreatedOn })
+                .Where(d => d != null)
+                .Select(d => d.Value)
+                .Max();
         }
 
         public class CalleGetAllCourseDatesWithSerializationService : IValueResolver<GroupCourse, CourseDto, ICollection<Period>>

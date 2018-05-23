@@ -42,7 +42,7 @@ namespace SSAH.Infrastructure.Api.MappingProfiles
                 .ForMember(dest => dest.ApplicantId, opt => opt.Condition(src => src.ApplicantId != null))
                 .ForMember(dest => dest.AvailableFrom, opt => opt.MapFrom(src => src.AvailableFrom))
                 .ForMember(dest => dest.AvailableTo, opt => opt.MapFrom(src => src.AvailableTo))
-                .ForMember(dest => dest.PreferSimultaneousCourseExecutionForPartipiants, opt => opt.MapFrom(src => src.PreferSimultaneousCourseExecutionForPartipiants))
+                .ForMember(dest => dest.PreferSimultaneousCourseExecutionForParticipants, opt => opt.MapFrom(src => src.PreferSimultaneousCourseExecutionForParticipants))
                 .ForAllOtherMembers(opt => opt.Ignore());
 
             CreateMap<RegistrationDto, Applicant>()

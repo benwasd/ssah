@@ -64,12 +64,20 @@ export class InstructorApiProxy extends ApiProxyBase {
         return Promise.resolve<CourseDto>(<any>null);
     }
 
-    getMyCourses(instructorId: string): Promise<CourseDto[]> {
+    getMyCourses(instructorId: string, from: Date, to: Date): Promise<CourseDto[]> {
         let url_ = this.baseUrl + "/api/Instructor/GetMyCourses?";
         if (instructorId === undefined || instructorId === null)
             throw new Error("The parameter 'instructorId' must be defined and cannot be null.");
         else
             url_ += "instructorId=" + encodeURIComponent("" + instructorId) + "&"; 
+        if (from === undefined || from === null)
+            throw new Error("The parameter 'from' must be defined and cannot be null.");
+        else
+            url_ += "from=" + encodeURIComponent(from ? "" + from.toJSON() : "") + "&"; 
+        if (to === undefined || to === null)
+            throw new Error("The parameter 'to' must be defined and cannot be null.");
+        else
+            url_ += "to=" + encodeURIComponent(to ? "" + to.toJSON() : "") + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <RequestInit>{
@@ -327,8 +335,8 @@ export class RegistrationApiProxy extends ApiProxyBase {
         return Promise.resolve<RegistrationResultDto>(<any>null);
     }
 
-    possibleCourseDatesPerPartipiant(registrationId: string): Promise<PossibleCourseDto[]> {
-        let url_ = this.baseUrl + "/api/Registration/PossibleCourseDatesPerPartipiant?";
+    possibleCourseDatesPerParticipant(registrationId: string): Promise<PossibleCourseDto[]> {
+        let url_ = this.baseUrl + "/api/Registration/PossibleCourseDatesPerParticipant?";
         if (registrationId === undefined || registrationId === null)
             throw new Error("The parameter 'registrationId' must be defined and cannot be null.");
         else
@@ -346,11 +354,11 @@ export class RegistrationApiProxy extends ApiProxyBase {
         return this.transformOptions(options_).then(transformedOptions_ => {
             return this.http.fetch(url_, transformedOptions_);
         }).then((_response: Response) => {
-            return this.transformResult(url_, _response, (_response: Response) => this.processPossibleCourseDatesPerPartipiant(_response));
+            return this.transformResult(url_, _response, (_response: Response) => this.processPossibleCourseDatesPerParticipant(_response));
         });
     }
 
-    protected processPossibleCourseDatesPerPartipiant(response: Response): Promise<PossibleCourseDto[]> {
+    protected processPossibleCourseDatesPerParticipant(response: Response): Promise<PossibleCourseDto[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -436,17 +444,22 @@ export class EntityDto {
 }
 
 export class CourseDto extends EntityDto {
+    courseType: CourseType;
     discipline: Discipline;
     niveauId: number;
+    startDate: Date;
     actualCourseStart: Date;
     coursePeriods: Period[];
     participants: CourseParticipantDto[];
+    lastModificationDate: Date;
 
     init(data?: any) {
         super.init(data);
         if (data) {
+            this.courseType = data["courseType"];
             this.discipline = data["discipline"];
             this.niveauId = data["niveauId"];
+            this.startDate = data["startDate"] ? new Date(data["startDate"].toString()) : <any>undefined;
             this.actualCourseStart = data["actualCourseStart"] ? new Date(data["actualCourseStart"].toString()) : <any>undefined;
             if (data["coursePeriods"] && data["coursePeriods"].constructor === Array) {
                 this.coursePeriods = [];
@@ -458,6 +471,7 @@ export class CourseDto extends EntityDto {
                 for (let item of data["participants"])
                     this.participants.push(CourseParticipantDto.fromJS(item));
             }
+            this.lastModificationDate = data["lastModificationDate"] ? new Date(data["lastModificationDate"].toString()) : <any>undefined;
         }
     }
 
@@ -470,8 +484,10 @@ export class CourseDto extends EntityDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["courseType"] = this.courseType;
         data["discipline"] = this.discipline;
         data["niveauId"] = this.niveauId;
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
         data["actualCourseStart"] = this.actualCourseStart ? this.actualCourseStart.toISOString() : <any>undefined;
         if (this.coursePeriods && this.coursePeriods.constructor === Array) {
             data["coursePeriods"] = [];
@@ -483,9 +499,14 @@ export class CourseDto extends EntityDto {
             for (let item of this.participants)
                 data["participants"].push(item.toJSON());
         }
+        data["lastModificationDate"] = this.lastModificationDate ? this.lastModificationDate.toISOString() : <any>undefined;
         super.toJSON(data);
         return data; 
     }
+}
+
+export enum CourseType {
+    Group = 0, 
 }
 
 export enum Discipline {
@@ -633,7 +654,7 @@ export class RegistrationDto {
     givenname: string;
     residence: string;
     phoneNumber: string;
-    preferSimultaneousCourseExecutionForPartipiants: boolean;
+    preferSimultaneousCourseExecutionForParticipants: boolean;
     availableFrom: Date;
     availableTo: Date;
     status: RegistrationStatus;
@@ -647,7 +668,7 @@ export class RegistrationDto {
             this.givenname = data["givenname"];
             this.residence = data["residence"];
             this.phoneNumber = data["phoneNumber"];
-            this.preferSimultaneousCourseExecutionForPartipiants = data["preferSimultaneousCourseExecutionForPartipiants"];
+            this.preferSimultaneousCourseExecutionForParticipants = data["preferSimultaneousCourseExecutionForParticipants"];
             this.availableFrom = data["availableFrom"] ? new Date(data["availableFrom"].toString()) : <any>undefined;
             this.availableTo = data["availableTo"] ? new Date(data["availableTo"].toString()) : <any>undefined;
             this.status = data["status"];
@@ -674,7 +695,7 @@ export class RegistrationDto {
         data["givenname"] = this.givenname;
         data["residence"] = this.residence;
         data["phoneNumber"] = this.phoneNumber;
-        data["preferSimultaneousCourseExecutionForPartipiants"] = this.preferSimultaneousCourseExecutionForPartipiants;
+        data["preferSimultaneousCourseExecutionForParticipants"] = this.preferSimultaneousCourseExecutionForParticipants;
         data["availableFrom"] = this.availableFrom ? this.availableFrom.toISOString() : <any>undefined;
         data["availableTo"] = this.availableTo ? this.availableTo.toISOString() : <any>undefined;
         data["status"] = this.status;
@@ -731,10 +752,6 @@ export class RegistrationParticipantDto extends EntityDto {
         super.toJSON(data);
         return data; 
     }
-}
-
-export enum CourseType {
-    Group = 0, 
 }
 
 export class RegistrationOverviewDto {
@@ -799,14 +816,14 @@ export class RegistrationResultDto {
 }
 
 export class PossibleCourseDto {
-    registrationPartipiantId: string;
+    registrationParticipantId: string;
     identifier: number;
     startDate: Date;
     coursePeriods: Period[];
 
     init(data?: any) {
         if (data) {
-            this.registrationPartipiantId = data["registrationPartipiantId"];
+            this.registrationParticipantId = data["registrationParticipantId"];
             this.identifier = data["identifier"];
             this.startDate = data["startDate"] ? new Date(data["startDate"].toString()) : <any>undefined;
             if (data["coursePeriods"] && data["coursePeriods"].constructor === Array) {
@@ -826,7 +843,7 @@ export class PossibleCourseDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["registrationPartipiantId"] = this.registrationPartipiantId;
+        data["registrationParticipantId"] = this.registrationParticipantId;
         data["identifier"] = this.identifier;
         data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
         if (this.coursePeriods && this.coursePeriods.constructor === Array) {

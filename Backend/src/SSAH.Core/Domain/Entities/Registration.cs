@@ -21,8 +21,7 @@ namespace SSAH.Core.Domain.Entities
 
         public virtual Applicant Applicant { get; set; }
 
-        // TODO: Rename, fix typo
-        public bool PreferSimultaneousCourseExecutionForPartipiants { get; set; }
+        public bool PreferSimultaneousCourseExecutionForParticipants { get; set; }
 
         public DateTime AvailableFrom { get; set; }
 
@@ -53,6 +52,7 @@ namespace SSAH.Core.Domain.Entities
         {
             foreach (var registrationParticipant in RegistrationParticipants)
             {
+                // TODO: Use damanding service and verify the registration participants 
                 var courseOptions = groupCourseOptions.Value.SingleOrDefault(c => c.Identifier == registrationParticipant.CourseIdentifier);
                 var course = courseCreationService.GetOrCreateProposalGroupCourse(registrationParticipant.CourseStartDate.Value, registrationParticipant.NiveauId, courseOptions);
                 var participant = registrationParticipant.ToParticipant(Applicant);
