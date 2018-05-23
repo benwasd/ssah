@@ -24,6 +24,7 @@ namespace SSAH.Infrastructure.DbAccess
 
             // Domain Seeder
             builder.RegisterType<SeasonSeeder>().As<IDbSeeder>().InstancePerDependency();
+            builder.RegisterType<InstructorSeeder>().As<IDbSeeder>().InstancePerDependency();
 
             // UnitOfWork
             builder.RegisterGeneric(typeof(UnitOfWorkFactory<>)).As(typeof(IUnitOfWorkFactory<>)).InstancePerDependency();

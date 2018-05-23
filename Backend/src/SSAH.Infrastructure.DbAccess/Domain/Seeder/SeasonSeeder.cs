@@ -44,8 +44,8 @@ namespace SSAH.Infrastructure.DbAccess.Domain.Seeder
 
         public IEnumerable<Season> Items()
         {
-            yield return new Season { Id = WINTER_ID, Label = "Winter 2017/2018", Start = new DateTime(2017, 12, 6), End = new DateTime(2018, 4, 8) };
-            yield return new Season { Id = SOMMER_ID, Label = "Sommer 2017/2018", Start = new DateTime(2018, 5, 1), End = new DateTime(2018, 9, 10) };
+            yield return new Season { Id = SOMMER_ID, Label = "Sommer 2017/2018", Start = new DateTime(2018, 4, 30), End = new DateTime(2018, 9, 9) };
+            yield return new Season { Id = WINTER_ID, Label = "Winter 2018/2019", Start = new DateTime(2018, 12, 3), End = new DateTime(2018, 4, 7) };
         }
     }
 }

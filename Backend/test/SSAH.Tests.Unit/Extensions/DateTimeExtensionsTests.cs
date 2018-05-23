@@ -2,6 +2,7 @@
 
 using NUnit.Framework;
 
+using SSAH.Core.Domain.Objects;
 using SSAH.Core.Extensions;
 
 namespace SSAH.Tests.Unit.Extensions
@@ -94,6 +95,62 @@ namespace SSAH.Tests.Unit.Extensions
 
             // Assert
             Assert.AreEqual(new DateTime(2018, 1, 1), result);
+        }
+
+        [Test]
+        public void Overlaps_MinuteOverlapping()
+        {
+            // Arrange
+            var periodA = new[] { new Period(new DateTime(2018, 1, 1, 8, 0, 0), TimeSpan.FromHours(2)) };
+            var periodB = new[] { new Period(new DateTime(2018, 1, 1, 9, 59, 0), TimeSpan.FromHours(2)) };
+
+            // Act
+            var resultA = periodA.Overlaps(periodB);
+            var resultB = periodB.Overlaps(periodA);
+
+            // Assert
+            Assert.AreEqual(true, resultA);
+            Assert.AreEqual(true, resultB);
+        }
+
+        [Test]
+        public void Overlaps_EqualOverlapping()
+        {
+            // Arrange
+            var periodA = new[] { new Period(new DateTime(2018, 1, 1, 8, 0, 0), TimeSpan.FromHours(2)) };
+            var periodB = new[] { new Period(new DateTime(2018, 1, 1, 10, 0, 0), TimeSpan.FromHours(2)) };
+
+            // Act
+            var resultA = periodA.Overlaps(periodB);
+            var resultB = periodB.Overlaps(periodA);
+
+            // Assert
+            Assert.AreEqual(true, resultA);
+            Assert.AreEqual(true, resultB);
+        }
+
+        [Test]
+        public void Overlaps_Matching()
+        {
+            // Arrange
+            var periodA = new[]
+            {
+                new Period(new DateTime(2018, 1, 1, 8, 0, 0), TimeSpan.FromMinutes(119)),
+                new Period(new DateTime(2018, 1, 1, 18, 0, 0), TimeSpan.FromHours(2))
+            };
+
+            var periodB = new[]
+            {
+                new Period(new DateTime(2018, 1, 1, 10, 0, 0), TimeSpan.FromHours(8).Subtract(TimeSpan.FromMinutes(1)))
+            };
+
+            // Act
+            var resultA = periodA.Overlaps(periodB);
+            var resultB = periodB.Overlaps(periodA);
+
+            // Assert
+            Assert.AreEqual(false, resultA);
+            Assert.AreEqual(false, resultB);
         }
     }
 }
