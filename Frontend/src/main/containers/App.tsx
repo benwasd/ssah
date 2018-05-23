@@ -4,19 +4,21 @@ import { HashRouter, Route, Switch } from 'react-router-dom';
 import { applyMiddleware, createStore } from 'redux';
 import thunk from 'redux-thunk';
 
-import { InstructorLoginContainer } from '../../instructor/containers/InstructorLoginContainer';
+import { CourseDetailContainer } from '../../instructor/containers/CourseDetailContainer';
 import { CourseListContainer } from '../../instructor/containers/CourseListContainer';
+import { InstructorLoginContainer } from '../../instructor/containers/InstructorLoginContainer';
+import { SocketConnectedRefreshWrapper } from '../../instructor/containers/SocketConnectedRefreshWrapper';
 import { OpenRegistrationContainer } from '../../registration/containers/OpenRegistrationContainer';
 import { RegisterContainer } from '../../registration/containers/RegisterContainer';
+import { Header } from '../components/Header';
 import { reducer } from '../reducers';
-import { CourseDetailContainer } from '../../instructor/containers/CourseDetailContainer';
-import { SocketConnectedRefreshWrapper } from '../../instructor/containers/SocketConnectedRefreshWrapper';
 
 const store = createStore(reducer, applyMiddleware(thunk));
 
 export class App extends React.Component {
     render() {
-        return (
+        return (<>
+            <Header />
             <Provider store={store}>
                 <HashRouter>
                     <Switch>
@@ -36,6 +38,6 @@ export class App extends React.Component {
                     </Switch>
                 </HashRouter>
             </Provider>
-        );
+        </>);
     }
 }
