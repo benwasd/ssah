@@ -209,7 +209,7 @@
      Breakpoints
 --------------------*/
 
-@mobileBreakpoint            : 320px;
+@mobileBreakpoint            : 360px;
 @tabletBreakpoint            : 768px;
 @computerBreakpoint          : 992px;
 @largeMonitorBreakpoint      : 992px;
@@ -510,7 +510,7 @@
 @headerMargin       : @headerTopMargin 0em @headerBottomMargin;
 
 /* Minimum Mobile Width */
-@pageMinWidth       : 320px;
+@pageMinWidth       : 360px;
 
 /* Positive / Negative Dupes */
 @successBackgroundColor : @positiveBackgroundColor;
