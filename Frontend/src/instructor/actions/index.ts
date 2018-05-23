@@ -2,8 +2,9 @@ import * as moment from 'moment';
 import { Dispatch } from 'react-redux';
 import { Action } from 'redux';
 
-import { CourseDto, InstructorApiProxy } from '../../api';
+import { CloseCourseDto, CourseDto, CourseParticipantFeedbackDto, InstructorApiProxy } from '../../api';
 import { State } from '../../main/state';
+import { throwIfUndefined } from '../../utils';
 
 export const INSTRUCTOR_LOGIN = 'INSTRUCTOR_LOGIN';
 
@@ -45,7 +46,6 @@ export interface CourseReloadedAction extends Action {
 }
 
 export const reloadCourse = (instructorId: string, courseId: string) => (dispatch: Dispatch, getState: () => State) => {
-    console.log("RELOAD COURSE", instructorId, courseId);
     const currentInstructorId = getState().instructor.instructorId;
     if (currentInstructorId == null || instructorId == null || currentInstructorId.toUpperCase() != instructorId.toUpperCase()) {
         return;
@@ -60,4 +60,23 @@ export const reloadCourse = (instructorId: string, courseId: string) => (dispatc
             dispatch(action);
         }
     });
+}
+
+export const COURSE_CLOSED = 'COURSE_CLOSED';
+
+export interface CourseClosedAction extends Action {
+    closedCourse: CloseCourseDto;
+}
+
+export const closeCourse = (courseId: string, courseRowVersion: string, participantsFeedback: CourseParticipantFeedbackDto[]) => (dispatch: Dispatch, getState: () => State) => {
+    const closeCourseDto = new CloseCourseDto();
+    closeCourseDto.id = courseId;
+    closeCourseDto.rowVersion = courseRowVersion;
+    closeCourseDto.participants = participantsFeedback;
+
+    const apiProxy = new InstructorApiProxy();
+    apiProxy.closeCourse(throwIfUndefined(getState().instructor.instructorId), closeCourseDto).then(() => {
+        const action: CourseClosedAction = { type: COURSE_CLOSED, closedCourse: closeCourseDto };
+        dispatch(action);
+    })
 }
