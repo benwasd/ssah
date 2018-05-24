@@ -1,0 +1,26 @@
+@import "~semantic-ui-less/definitions/elements/container"; 
+
+.availability {
+    margin-top: 1em;
+}
+
+@media only screen and (min-width: @tabletBreakpoint) {
+    .availability {
+        display: flex;
+        justify-content: space-between;
+
+        > .ui.form {
+            align-self: center;
+            flex: 6;
+
+            label {
+                margin: 0;
+            }
+        }
+
+        > .DateRangePicker {
+            align-self: center;
+            flex: 10;
+        }
+    }
+}

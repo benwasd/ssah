@@ -6,6 +6,7 @@ import { applicantChange, availabilityChange, changeParticipant } from '../actio
 import { Applicant, ApplicantProps } from '../components/Applicant';
 import { AvailabilitySelector, AvailabilitySelectorProps } from '../components/AvailabilitySelector';
 import { ParticipantList, ParticipantListProps } from '../components/ParticipantList';
+import { Grid } from 'semantic-ui-react';
 
 const ApplicantContainer = connect(
     (state: State): Partial<ApplicantProps> => state.registration.applicant,
@@ -29,9 +30,15 @@ const ParticipantListContainer = connect(
 export class RegistrationStep1Container extends React.Component {
     render() {
         return (<>
-            <ApplicantContainer/>
-            <AvailabilitySelectorContainer />
-            <ParticipantListContainer />
+            <Grid>
+                <Grid.Column mobile={16} tablet={16} computer={10}> 
+                    <ApplicantContainer/>
+                    <AvailabilitySelectorContainer />
+                </Grid.Column>
+                <Grid.Column width={16}>
+                    <ParticipantListContainer />
+                </Grid.Column>
+            </Grid>
         </>);
     }
 }

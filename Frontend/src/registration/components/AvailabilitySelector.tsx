@@ -4,6 +4,7 @@ import { Form } from 'semantic-ui-react';
 
 import { ApplicantState, AvailabilityState } from '../state';
 import { DateRangePicker, DateRangePickerPropsDateChange} from '../../main/components/DateRangePicker';
+import './AvailabilitySelector.less';
 
 export interface AvailabilitySelectorProps {
     availableFrom: Date;
@@ -20,16 +21,18 @@ export class AvailabilitySelector extends React.Component<AvailabilitySelectorPr
     }
 
     render() {
-        return (<>
-            <Form style={{margin: '1em 0em 0em'}}>
-                <Form.Field required>
-                    <label>Verfügbarkeit</label>
-                </Form.Field>
-            </Form>
-            <DateRangePicker 
-                initialStartDate={this.props.availableFrom ? moment(this.props.availableFrom) : undefined} 
-                initialEndDate={this.props.availableTo ? moment(this.props.availableTo) : undefined}
-                onDatesChange={this.onDatesChange} />
-        </>);
+        return (
+            <div className='availability'>
+                <div className='ui form'>
+                    <Form.Field required>
+                        <label>Verfügbarkeit</label>
+                    </Form.Field>
+                </div>
+                <DateRangePicker 
+                    initialStartDate={this.props.availableFrom ? moment(this.props.availableFrom) : undefined} 
+                    initialEndDate={this.props.availableTo ? moment(this.props.availableTo) : undefined}
+                    onDatesChange={this.onDatesChange} />
+            </div>
+        );
     }
 }

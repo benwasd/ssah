@@ -42,7 +42,7 @@ export class Applicant extends React.Component<ApplicantProps, Partial<Applicant
 
     render() {
         return (
-            <Form>
+            <Form className='tablet column'>
                 <Form.Field required>
                     <label>Mobile</label>
                     <Form.Input placeholder='+41 79 450 12 13' name='phoneNumber' value={this.props.phoneNumber} onChange={this.handleChange} error={this.isEmptyAndChanged(p => p.phoneNumber)} />
