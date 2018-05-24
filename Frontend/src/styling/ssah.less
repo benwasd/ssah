@@ -16,6 +16,15 @@ h1, h2, h3, h4, h5 {
     letter-spacing: -1px;
 }
 
+.ui.modal {
+    margin: auto !important;
+    margin-top: 30px !important;
+    
+    .ui.form {
+        width: 100%;
+    }
+}
+
 @media only screen and (min-width: @tabletBreakpoint) {
     .ui.form.tablet.column {
         .field {
@@ -29,10 +38,16 @@ h1, h2, h3, h4, h5 {
             }
 
             > .field,
+            > .input,
+            > .dropdown,
             > .checkbox {
                 align-self: center;
                 flex: 10;
             }
         }
+    }
+
+    .ui.modal {
+        margin-top: 80px !important;
     }
 }

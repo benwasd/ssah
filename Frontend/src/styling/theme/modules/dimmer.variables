@@ -21,8 +21,8 @@
 @overflow: hidden;
 
 @blurredStartFilter: ~"blur(0px) grayscale(0)";
-@blurredEndFilter: ~"blur(5px) grayscale(0.7)";
-@blurredTransition: 800ms filter @defaultEasing;
+@blurredEndFilter: ~"blur(3px) grayscale(0.7)";
+@blurredTransition: 500ms filter steps(15, end);
 
 @blurredBackgroundColor: rgba(0, 0, 0, 0.6);
 @blurredInvertedBackgroundColor: rgba(255, 255, 255, 0.6);
