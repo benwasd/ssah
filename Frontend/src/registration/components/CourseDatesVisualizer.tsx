@@ -11,7 +11,7 @@ export interface CourseDateVisualizerProps {
 export class CourseDateVisualizer extends React.Component<CourseDateVisualizerProps> {
     render() {
         if (this.props.periods.length === 0) {
-            return (<></>)
+            return (<></>);
         }
 
         const firstPeriodElement = this.props.periods[0];
