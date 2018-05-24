@@ -21,15 +21,16 @@ class InternalRegisterContainer extends React.Component<InternalRegisterContaine
     render() {
         return (<>
             <RegistrationContainer />
-            <Button primary onClick={this.submitRegistrationAndNavigate} value='Abschicken'>ABSCHICKEN</Button>
+            <Button primary className='mt-3' onClick={this.submitRegistrationAndNavigate}>
+                Registrieren
+            </Button>
         </>);
     }
 }
 
 export const RegisterContainer = connect(
     (state: State): Partial<InternalRegisterContainerProps> => {
-        return {
-        };
+        return { };
     },
     { submitRegistration: submitOrUpdateRegistration }
 )(InternalRegisterContainer)

@@ -11,7 +11,7 @@ export interface CourseDateVisualizerProps {
 export class CourseDateVisualizer extends React.Component<CourseDateVisualizerProps> {
     render() {
         if (this.props.periods.length === 0) {
-            return (<></>);
+            return null;
         }
 
         const firstPeriodElement = this.props.periods[0];
@@ -80,6 +80,7 @@ export class CourseDateVisualizer extends React.Component<CourseDateVisualizerPr
                 </div>
             );
         }
+
         return (<>
             <div>{day}</div>
             {periods.map(p => {
@@ -104,7 +105,7 @@ export class CourseDateVisualizer extends React.Component<CourseDateVisualizerPr
                     {this.renderSingleDay(l[0].period, l.map(x => x.period))}
                 </div>
             );
-        })
+        });
     }
 
     private sameHoursAndMinutes(a: Date, b: Date) {

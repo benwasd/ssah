@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { Divider, Grid } from 'semantic-ui-react';
 
 import { State } from '../../main/state';
 import { applicantChange, availabilityChange, changeParticipant } from '../actions';
 import { Applicant, ApplicantProps } from '../components/Applicant';
+import { ApplicantCard } from '../components/ApplicantCard';
 import { AvailabilitySelector, AvailabilitySelectorProps } from '../components/AvailabilitySelector';
 import { ParticipantList, ParticipantListProps } from '../components/ParticipantList';
-import { Grid } from 'semantic-ui-react';
 
 const ApplicantContainer = connect(
     (state: State): Partial<ApplicantProps> => state.registration.applicant,
@@ -35,7 +36,13 @@ export class RegistrationStep1Container extends React.Component {
                     <ApplicantContainer/>
                     <AvailabilitySelectorContainer />
                 </Grid.Column>
+                <Grid.Column floated='right' only='large screen' computer={5}>
+                    <ApplicantCard />
+                </Grid.Column>
                 <Grid.Column width={16}>
+                </Grid.Column>
+                <Grid.Column width={16}>
+                    <div className='lead'>Teilnehmer</div>
                     <ParticipantListContainer />
                 </Grid.Column>
             </Grid>

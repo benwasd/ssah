@@ -84,12 +84,12 @@ export class Applicant extends React.Component<ApplicantProps, Partial<Applicant
                     <Form.Dropdown
                         name='language'
                         placeholder='Kurstyp'
-                        selection
+                        selection fluid
                         options={this.languageOptions}
                         value={toDropdownValue(this.props.language)}
                         selectOnBlur={false}
                         onChange={this.handleDropdownValueChange}
-                        error={this.isEmptyAndChanged(p => p.language)} fluid />
+                        error={this.isEmptyAndChanged(p => p.language)} />
                 </Form.Field>
                 <Form.Field>
                     <label>Nur gleichzeitige Kurse</label>

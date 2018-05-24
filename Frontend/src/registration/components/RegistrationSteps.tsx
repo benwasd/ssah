@@ -49,7 +49,7 @@ export class RegistrationSteps extends React.Component<RegistrationStepsProps> {
         }
 
         return (<>
-            <div>
+            <div className="registration head">
                 <h1 className='mb-0'>{heading}</h1>
                 <p className="lead">{leadText}</p>
             </div>
