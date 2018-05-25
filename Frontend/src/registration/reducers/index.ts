@@ -43,38 +43,35 @@ const handleAvailability: Reducer<AvailabilityState, Action> = (state, action) =
 
 const handleParticipants: Reducer<ParticipantState[], Action> = (state, action) => {
     if (state === undefined) {
-        return [ 
-            { name: "", ageGroup: "" },
-            { name: "", ageGroup: "" }
-        ];
+        return [];
     }
 
+    let newState;
     switch (action.type) {
         case PARTICIPAENT_CHANGE:
             const changeAction = action as ParticipantChangeAction;
 
-            let newState = update(state, { [changeAction.participantIndex]: { $merge: changeAction.change } });
-            if (newState.every(p => hasAllRegistrationProperties(p))) {
-                newState = newState.concat({ name: "", ageGroup: "" });
+            if (changeAction.participantIndex >= state.length) { 
+                newState = state.concat([ Object.assign({ name: "", ageGroup: "" }, changeAction.change) ])
+            }
+            else {
+                newState = update(state, { [changeAction.participantIndex]: { $merge: changeAction.change } });
             }
 
-            return newState as ParticipantState[];
+            return newState;
         case PARTICIPANT_SELECT_COURSE:
             const selectCourseAction = action as ParticipantSelectCourseAction;
             const participantIds = Object.getOwnPropertyNames(selectCourseAction.selectedCoursesByParticipant);
 
-            let newState2 = state;
+            newState = state;
             participantIds.forEach(participantId => {
                 const participantIndex = state.findIndex(p => p.id === participantId);
                 const courseSelection = selectCourseAction.selectedCoursesByParticipant[participantId];
                 const committing = { courseIdentifier: courseSelection.identifier, courseStartDate: courseSelection.startDate };
-                newState2 = update(
-                    newState2, 
-                    { [participantIndex]: { $merge: { committing: committing } } }
-                ) as ParticipantState[];
+                newState = update(newState, { [participantIndex]: { $merge: { committing: committing } } });
             });
             
-            return newState2;
+            return newState;
         default: 
             return state;
     }

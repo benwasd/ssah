@@ -33,7 +33,7 @@ export class RegistrationStep1Container extends React.Component {
         return (<>
             <Grid>
                 <Grid.Column mobile={16} tablet={16} computer={10}> 
-                    <ApplicantContainer/>
+                    <ApplicantContainer />
                     <AvailabilitySelectorContainer />
                 </Grid.Column>
                 <Grid.Column floated='right' only='large screen' computer={5}>
@@ -42,7 +42,7 @@ export class RegistrationStep1Container extends React.Component {
                 <Grid.Column width={16}>
                 </Grid.Column>
                 <Grid.Column width={16}>
-                    <div className='lead'>Teilnehmer</div>
+                    <div className='lead'>Wer möchte an unserem Kursangebot teilnehmen?</div>
                     <ParticipantListContainer />
                 </Grid.Column>
             </Grid>

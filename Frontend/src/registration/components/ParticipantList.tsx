@@ -14,6 +14,13 @@ export interface ParticipantListState {
 
 export class ParticipantList extends React.Component<ParticipantListProps, ParticipantListState> {
     render() {
+        let participantsWithNewRow = this.props.participants.concat({ name: "", ageGroup: "" });
+
+        // Add second new row if no or one participants entered
+        if (this.props.participants.length <= 1) {
+            participantsWithNewRow = participantsWithNewRow.concat({ name: "", ageGroup: "" });
+        }
+
         return (
             <div style={{margin: '1em 0em 0em'}}>
                 <table className="ui definition table">
@@ -27,7 +34,7 @@ export class ParticipantList extends React.Component<ParticipantListProps, Parti
                         </tr>
                     </thead>
                     <tbody>
-                        {this.props.participants.map((p, i) => {
+                        {participantsWithNewRow.map((p, i) => {
                             const props = Object.assign(
                                 omit(p, ['id', 'timestamp', 'committing']),
                                 { change: p => this.props.changeParticipant(i, p) }

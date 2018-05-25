@@ -7,8 +7,8 @@ import { ParticipantState } from '../state';
 
 export interface ParticipantProps {
     name: string;
-    courseType: CourseType;
-    discipline: Discipline;
+    courseType?: CourseType;
+    discipline?: Discipline;
     niveauId?: number;
     ageGroup: string;
     change(obj: Partial<ParticipantState>);

@@ -83,8 +83,8 @@ export class Applicant extends React.Component<ApplicantProps, Partial<Applicant
                     <label>Sprache</label>
                     <Form.Dropdown
                         name='language'
-                        placeholder='Kurstyp'
-                        selection fluid
+                        placeholder='Sprache'
+                        selection fluid basic
                         options={this.languageOptions}
                         value={toDropdownValue(this.props.language)}
                         selectOnBlur={false}
