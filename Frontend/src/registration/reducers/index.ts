@@ -52,8 +52,8 @@ const handleParticipants: Reducer<ParticipantState[], Action> = (state, action) 
         case PARTICIPAENT_CHANGE:
             const changeAction = action as ParticipantChangeAction;
 
-            if (changeAction.participantIndex >= state.length) { 
-                newState = state.concat([ Object.assign({ name: "", ageGroup: "" }, changeAction.change) ])
+            if (changeAction.participantIndex >= state.length) {
+                newState = state.concat([ Object.assign({ name: "", ageGroup: "", courseType: CourseType.Group }, changeAction.change) ]);
             }
             else {
                 newState = update(state, { [changeAction.participantIndex]: { $merge: changeAction.change } });

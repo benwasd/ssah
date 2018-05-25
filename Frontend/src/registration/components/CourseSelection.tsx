@@ -2,9 +2,9 @@ import * as React from 'react';
 import { Radio } from 'semantic-ui-react';
 
 import { PossibleCourseDto } from '../../api';
+import { CourseDateVisualizer } from '../../main/components/CourseDateVisualizer';
 import { throwIfUndefined } from '../../utils';
 import { hasAllForRegistrationParticipant, ParticipantState } from '../state';
-import { CourseDateVisualizer } from './CourseDatesVisualizer';
 
 export interface SelectionMap { 
     [participantId: string]: {

@@ -1,5 +1,5 @@
-import * as moment from 'moment';
 import * as React from 'react';
+import * as moment from 'moment';
 import { groupBy, map } from 'lodash';
 
 import { Period } from '../../api';
