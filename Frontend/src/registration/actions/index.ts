@@ -4,7 +4,7 @@ import { Action } from 'redux';
 import { CommitRegistrationDto, CommitRegistrationParticipantDto, PossibleCourseDto, RegistrationApiProxy, RegistrationDto, RegistrationParticipantDto } from '../../api';
 import { State } from '../../main/state';
 import { throwIfUndefined } from '../../utils';
-import { ApplicantState, AvailabilityState, hasAllRegistrationProperties, ParticipantState } from '../state';
+import { ApplicantState, AvailabilityState, hasAllForRegistrationParticipant, ParticipantState } from '../state';
 
 export const APPLICANT_CHANGE = 'APPLICANT_CHANGE';
 
@@ -51,6 +51,17 @@ export const selectCoursesForParticipants = (selectedCoursesByParticipant: { [pa
     dispatch(action);
 }
 
+export const REGISTRATION_FULL_VALIDATE = 'REGISTRATION_FULL_VALIDATE';
+
+export interface RegistrationFullValidateAction extends Action {
+    shouldFullyValidate: boolean;
+}
+
+export const shouldFullyValidate = (shouldFullyValidate: boolean) => (dispatch: Dispatch) => {
+    const action: RegistrationFullValidateAction = { type: REGISTRATION_FULL_VALIDATE, shouldFullyValidate };
+    dispatch(action);
+}
+
 export const REGISTRATION_LOADED = 'REGISTRATION_LOADED';
 
 export interface RegistrationLoadedAction extends Action {
@@ -88,7 +99,6 @@ export const submitOrUpdateRegistration = (onSubmittedOrUpdated?: (registrationI
     registrationDto.availableTo = throwIfUndefined(registrationState.availability.availableTo);
     registrationDto.status = registrationState.status;
     registrationDto.participants = registrationState.participants
-        .filter(hasAllRegistrationProperties)
         .map(p => {
             const partipiantDto = new RegistrationParticipantDto();
             if (p.id && p.rowVersion) {
@@ -141,7 +151,7 @@ export const commitRegistration = (onCommitted?: () => void) => (dispatch: Dispa
     commitRegistrationDto.registrationId = throwIfUndefined(registrationState.id);
     commitRegistrationDto.payment = "NOOP";
     commitRegistrationDto.participants = registrationState.participants
-        .filter(hasAllRegistrationProperties)
+        .filter(hasAllForRegistrationParticipant)
         .map(p => {
             const commitPartipiantDto = new CommitRegistrationParticipantDto();
             commitPartipiantDto.id = throwIfUndefined(p.id);

@@ -4,6 +4,7 @@ import { Discipline, CourseType, Language, RegistrationStatus, PossibleCourseDto
 export interface RegistrationState {
     id: string | null;
     status: RegistrationStatus;
+    shouldFullyValidate: boolean;
     applicant: ApplicantState;
     availability: AvailabilityState;
     participants: ParticipantState[];
@@ -39,6 +40,22 @@ export interface ParticipantState {
     }
 }
 
-export function hasAllRegistrationProperties(p: ParticipantState) {
-    return p.name != "" && p.niveauId != null && p.courseType != null && p.discipline != null && p.ageGroup != "";
+export function hasAllForRegistration(r: RegistrationState) {
+    return !!r.applicant.surname
+        && !!r.applicant.givenname
+        && !!r.applicant.residence
+        && !!r.applicant.phoneNumber
+        && r.applicant.language != null
+        && r.applicant.preferSimultaneousCourseExecutionForParticipants != null
+        && !!r.availability.availableFrom
+        && !!r.availability.availableTo
+        && r.participants.length > 0;
+}
+
+export function hasAllForRegistrationParticipant(p: ParticipantState) {
+    return !!p.name
+        && p.niveauId != null
+        && p.courseType != null
+        && p.discipline != null
+        && !!p.ageGroup;
 }

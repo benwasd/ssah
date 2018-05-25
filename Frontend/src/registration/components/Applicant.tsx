@@ -13,16 +13,15 @@ export interface ApplicantProps {
     language?: Language;
     preferSimultaneousCourseExecutionForParticipants: boolean;
     change(obj: Partial<ApplicantState>);
+    shouldFullyValidate: boolean;
 }
 
-export class Applicant extends React.Component<ApplicantProps, Partial<ApplicantProps>> {
+export class Applicant extends React.Component<ApplicantProps> {
     handleChange = (event: React.ChangeEvent<HTMLInputElement>, { name, value }) => {
-        this.setState({ [name]: "change" });
         this.props.change({ [name]: value });
     }
         
     handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>, { name, checked }) => {
-        this.setState({ [name]: "change" });
         this.props.change({ [name]: checked });
     }
 
@@ -30,10 +29,11 @@ export class Applicant extends React.Component<ApplicantProps, Partial<Applicant
         this.props.change({ [name]: fromDropdownValue(parseInt(value)) });
     }
     
-    isEmptyAndChanged = (propertySelector: (ApplicantProps) => string) => {
-        const isEmpty = propertySelector(this.props) == "";
-        const hasChanged = propertySelector(this.state || {}) === "change";
-        return isEmpty && hasChanged;
+    isEmptyAndFullyValidated = (propertySelector: (ApplicantProps) => any) => {
+        const propertyValue = propertySelector(this.props);
+        const isEmpty = typeof(propertyValue) === "number" ? propertyValue == null : !propertyValue;
+        const fullyValidated = this.props.shouldFullyValidate
+        return isEmpty && fullyValidated;
     }
 
     get languageOptions() {
@@ -50,7 +50,7 @@ export class Applicant extends React.Component<ApplicantProps, Partial<Applicant
                         name='phoneNumber'
                         value={this.props.phoneNumber}
                         onChange={this.handleChange}
-                        error={this.isEmptyAndChanged(p => p.phoneNumber)} />
+                        error={this.isEmptyAndFullyValidated(p => p.phoneNumber)} />
                 </Form.Field>
                 <Form.Field required>
                     <label>Vorname</label>
@@ -59,7 +59,7 @@ export class Applicant extends React.Component<ApplicantProps, Partial<Applicant
                         name='givenname'
                         value={this.props.givenname}
                         onChange={this.handleChange}
-                        error={this.isEmptyAndChanged(p => p.givenname)} />
+                        error={this.isEmptyAndFullyValidated(p => p.givenname)} />
                 </Form.Field>
                 <Form.Field required>
                     <label>Nachname</label>
@@ -68,7 +68,7 @@ export class Applicant extends React.Component<ApplicantProps, Partial<Applicant
                         name='surname'
                         value={this.props.surname}
                         onChange={this.handleChange}
-                        error={this.isEmptyAndChanged(p => p.surname)} />
+                        error={this.isEmptyAndFullyValidated(p => p.surname)} />
                 </Form.Field>
                 <Form.Field required>
                     <label>Ort</label>
@@ -77,7 +77,7 @@ export class Applicant extends React.Component<ApplicantProps, Partial<Applicant
                         name='residence'
                         value={this.props.residence}
                         onChange={this.handleChange}
-                        error={this.isEmptyAndChanged(p => p.residence)} />
+                        error={this.isEmptyAndFullyValidated(p => p.residence)} />
                 </Form.Field>
                 <Form.Field required>
                     <label>Sprache</label>
@@ -89,7 +89,7 @@ export class Applicant extends React.Component<ApplicantProps, Partial<Applicant
                         value={toDropdownValue(this.props.language)}
                         selectOnBlur={false}
                         onChange={this.handleDropdownValueChange}
-                        error={this.isEmptyAndChanged(p => p.language)} />
+                        error={this.isEmptyAndFullyValidated(p => p.language)} />
                 </Form.Field>
                 <Form.Field>
                     <label>Nur gleichzeitige Kurse</label>

@@ -19,13 +19,14 @@ export interface DateRangePickerProps {
     initialStartDate?: moment.Moment;
     initialEndDate?: moment.Moment;
     onDatesChange: (dateChange: DateRangePickerPropsDateChange) => void;
+    showError?: boolean;
 }
 
 export class DateRangePicker extends React.Component<DateRangePickerProps> {
-
     static defaultProps = {
         initialStartDate: null,
         initialEndDate: null,
+        showError: null,
       
         // input related props
         startDateId: "startDate",
@@ -103,18 +104,21 @@ export class DateRangePicker extends React.Component<DateRangePickerProps> {
 
         const props = omit(this.props, [
             'initialStartDate',
-            'initialEndDate'
+            'initialEndDate',
+            'showError'
         ]);
 
         return (
-            <ReactDatesDateRangePicker
-                {...props}
-                onDatesChange={this.onDatesChange}
-                onFocusChange={this.onFocusChange}
-                focusedInput={focusedInput}
-                startDate={startDate}
-                endDate={endDate}
-                orientation={window.innerWidth < 768 ? "vertical" : "horizontal"}/>
+            <div className={'datepicker' + (this.props.showError ? ' error' : '')}>
+                <ReactDatesDateRangePicker
+                    {...props}
+                    onDatesChange={this.onDatesChange}
+                    onFocusChange={this.onFocusChange}
+                    focusedInput={focusedInput}
+                    startDate={startDate}
+                    endDate={endDate}
+                    orientation={window.innerWidth < 768 ? "vertical" : "horizontal"}/>
+            </div>
         );
     }
 }

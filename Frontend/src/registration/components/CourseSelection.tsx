@@ -3,7 +3,7 @@ import { Radio } from 'semantic-ui-react';
 
 import { PossibleCourseDto } from '../../api';
 import { throwIfUndefined } from '../../utils';
-import { hasAllRegistrationProperties, ParticipantState } from '../state';
+import { hasAllForRegistrationParticipant, ParticipantState } from '../state';
 import { CourseDateVisualizer } from './CourseDatesVisualizer';
 
 export interface SelectionMap { 
@@ -49,7 +49,7 @@ export class CourseSelection extends React.Component<CourseSelectionProps, Cours
     render() {
         return (<>
             {this.props.participants
-                .filter(hasAllRegistrationProperties)
+                .filter(hasAllForRegistrationParticipant)
                 .map(p => 
                     <div key={p.id}>
                         <h1>{p.name} {p.id}</h1>

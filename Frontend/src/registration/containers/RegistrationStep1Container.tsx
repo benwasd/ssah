@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Divider, Grid } from 'semantic-ui-react';
+import update from 'immutability-helper';
 
 import { State } from '../../main/state';
 import { applicantChange, availabilityChange, changeParticipant } from '../actions';
@@ -10,12 +11,12 @@ import { AvailabilitySelector, AvailabilitySelectorProps } from '../components/A
 import { ParticipantList, ParticipantListProps } from '../components/ParticipantList';
 
 const ApplicantContainer = connect(
-    (state: State): Partial<ApplicantProps> => state.registration.applicant,
+    (state: State): Partial<ApplicantProps> => update(state.registration.applicant, { $merge: { shouldFullyValidate: state.registration.shouldFullyValidate } }),
     { change: applicantChange }
 )(Applicant)
 
 const AvailabilitySelectorContainer = connect(
-    (state: State): Partial<AvailabilitySelectorProps> => state.registration.availability,
+    (state: State): Partial<AvailabilitySelectorProps> => update(state.registration.availability, { $merge: { shouldFullyValidate: state.registration.shouldFullyValidate } }),
     { change: availabilityChange }
 )(AvailabilitySelector)
 

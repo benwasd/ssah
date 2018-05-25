@@ -10,6 +10,7 @@ export interface AvailabilitySelectorProps {
     availableFrom: Date;
     availableTo: Date;
     change(obj: AvailabilityState);
+    shouldFullyValidate: boolean;
 }
 
 export class AvailabilitySelector extends React.Component<AvailabilitySelectorProps> {
@@ -18,6 +19,12 @@ export class AvailabilitySelector extends React.Component<AvailabilitySelectorPr
             availableFrom: dateChange.startDate ? dateChange.startDate.toDate() : undefined,
             availableTo: dateChange.endDate ? dateChange.endDate.toDate() : undefined
         });
+    }
+
+    isEmptyAndFullyValidated = () => {
+        const isEmpty = !this.props.availableFrom || !this.props.availableTo;
+        const fullyValidated = this.props.shouldFullyValidate
+        return isEmpty && fullyValidated;
     }
 
     render() {
@@ -31,7 +38,8 @@ export class AvailabilitySelector extends React.Component<AvailabilitySelectorPr
                 <DateRangePicker 
                     initialStartDate={this.props.availableFrom ? moment(this.props.availableFrom) : undefined} 
                     initialEndDate={this.props.availableTo ? moment(this.props.availableTo) : undefined}
-                    onDatesChange={this.onDatesChange} />
+                    onDatesChange={this.onDatesChange}
+                    showError={this.isEmptyAndFullyValidated()} />
             </div>
         );
     }

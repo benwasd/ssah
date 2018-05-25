@@ -7,11 +7,12 @@ import {
     APPLICANT_CHANGE, ApplicantChangeAction, 
     AVAILABILITY_CHANGE, AvailabilityChangeAction, 
     PARTICIPAENT_CHANGE, ParticipantChangeAction, 
+    REGISTRATION_FULL_VALIDATE, RegistrationFullValidateAction,
     REGISTRATION_LOADED, RegistrationLoadedAction,
     PARTICIPANT_SELECT_COURSE, ParticipantSelectCourseAction,
-    REGISTRATION_POSSIBLE_COURSES_LOADED, RegistrationPossibleCoursesLoadedAction
+    REGISTRATION_POSSIBLE_COURSES_LOADED, RegistrationPossibleCoursesLoadedAction,
 } from '../actions';
-import { ApplicantState, AvailabilityState, ParticipantState, RegistrationState, hasAllRegistrationProperties } from '../state';
+import { ApplicantState, AvailabilityState, ParticipantState, RegistrationState } from '../state';
 
 const handleApplicant: Reducer<ApplicantState, Action> = (state, action) => {
     if (state === undefined) {
@@ -96,6 +97,7 @@ const handleRegistration: Reducer<RegistrationState, Action> = (state, action) =
         return {
             id: null,
             status: RegistrationStatus.Registration,
+            shouldFullyValidate: false,
             applicant: handleApplicant(undefined, noopAction()),
             availability: handleAvailability(undefined, noopAction()),
             participants: handleParticipants(undefined, noopAction()),
@@ -104,12 +106,16 @@ const handleRegistration: Reducer<RegistrationState, Action> = (state, action) =
     }
 
     switch (action.type) {
+        case REGISTRATION_FULL_VALIDATE: 
+            const fullValidateAction = action as RegistrationFullValidateAction;
+            return update(state, { $merge: { shouldFullyValidate: fullValidateAction.shouldFullyValidate } });
         case REGISTRATION_LOADED:
             const loadedAction = action as RegistrationLoadedAction;
 
             return {
                 id: loadedAction.registration.registrationId ? loadedAction.registration.registrationId : null,
                 status: loadedAction.registration.status,
+                shouldFullyValidate: false,
                 applicant: {
                     id: loadedAction.registration.applicantId,
                     surname: loadedAction.registration.surname,
@@ -144,6 +150,7 @@ const handleRegistration: Reducer<RegistrationState, Action> = (state, action) =
 export interface RegistrationReducerTree {
     id: Reducer<string | null, Action>;
     status: Reducer<RegistrationStatus, Action>;
+    shouldFullyValidate: Reducer<boolean, Action>;
     applicant: Reducer<ApplicantState, Action>;
     availability: Reducer<AvailabilityState, Action>;
     participants: Reducer<ParticipantState[], Action>;
@@ -153,6 +160,7 @@ export interface RegistrationReducerTree {
 export const reducer = combineReducers(<RegistrationReducerTree>{
     id: noopReducer(null),
     status: noopReducer(RegistrationStatus.Registration),
+    shouldFullyValidate: noopReducer(false),
     applicant: handleApplicant,
     availability: handleAvailability,
     participants: handleParticipants,
