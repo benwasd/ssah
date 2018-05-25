@@ -23,7 +23,8 @@ const AvailabilitySelectorContainer = connect(
 const ParticipantListContainer = connect(
     (state: State): Partial<ParticipantListProps> => {
         return {
-            participants: state.registration.participants
+            participants: state.registration.participants,
+            showAllValidationErrors: state.registration.showAllValidationErrors
         };
     },
     { changeParticipant }

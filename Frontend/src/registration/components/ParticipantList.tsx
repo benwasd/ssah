@@ -8,6 +8,7 @@ import { Participant, ParticipantProps } from './Participant';
 export interface ParticipantListProps {
     participants: ParticipantState[];
     changeParticipant(participantIndex: number, obj: Partial<ParticipantState>);
+    showAllValidationErrors: boolean;
 }
 
 export interface ParticipantListState {
@@ -29,7 +30,10 @@ export class ParticipantList extends React.Component<ParticipantListProps, Parti
                         {participantsWithNewRow.map((p, i) => {
                             const props = Object.assign(
                                 omit(p, ['id', 'timestamp', 'committing']),
-                                { change: p => this.props.changeParticipant(i, p) }
+                                { 
+                                    change: p => this.props.changeParticipant(i, p),
+                                    showAllValidationErrors: this.props.showAllValidationErrors
+                                }
                             ) as ParticipantProps;
                             
                             return (

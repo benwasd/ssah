@@ -14,6 +14,7 @@ export interface ParticipantProps {
     niveauId?: number;
     ageGroup: string;
     change(obj: Partial<ParticipantState>);
+    showAllValidationErrors: boolean;
 }
 
 export interface ParticipantCState {
@@ -47,8 +48,20 @@ export class Participant extends React.Component<ParticipantProps, ParticipantCS
         this.props.change({ [name]: fromDropdownValue(parseInt(value)) });
     }
 
-    open = () => this.setState({ open: true });
-    close = () => this.setState({ open: false });
+    isEmptyAndValidated = (propertySelector: (ApplicantProps) => any) => {
+        const propertyValue = propertySelector(this.props);
+        const isEmpty = typeof(propertyValue) === "number" ? propertyValue == null : !propertyValue;
+        const fullyValidated = this.props.showAllValidationErrors;
+        return isEmpty && fullyValidated;
+    }
+
+    open = () => {
+        this.setState({ open: true });
+    }
+
+    close = () => {
+        this.setState({ open: false });
+    }
 
     render() {
         return (<>
@@ -59,14 +72,16 @@ export class Participant extends React.Component<ParticipantProps, ParticipantCS
                         name='name'
                         fluid
                         value={this.props.name}
-                        onChange={this.handleChange} /></td>
+                        onChange={this.handleChange}
+                        error={this.isEmptyAndValidated(p => p.name)} /></td>
                 <td className='three wide'>
                     <Input 
                         placeholder='Jahrgang' 
                         name='ageGroup' 
                         fluid
                         value={this.props.ageGroup} 
-                        onChange={this.handleChange} />
+                        onChange={this.handleChange}
+                        error={this.isEmptyAndValidated(p => p.ageGroup)} />
                 </td>
                 <td className='three wide'>
                     <NiveauVisualizer discipline={this.props.discipline} niveauId={this.props.niveauId} />
@@ -97,7 +112,8 @@ export class Participant extends React.Component<ParticipantProps, ParticipantCS
                                             options={this.disciplineOptions}
                                             value={toDropdownValue(this.props.discipline)}
                                             selectOnBlur={false}
-                                            onChange={this.handleDropdownValueChange} />
+                                            onChange={this.handleDropdownValueChange}
+                                            error={this.isEmptyAndValidated(p => p.discipline)} />
                                     </Form.Field>
                                     <Form.Field required>
                                         <label>Niveau</label>
@@ -108,7 +124,8 @@ export class Participant extends React.Component<ParticipantProps, ParticipantCS
                                             options={this.niveauOptions}
                                             value={toDropdownValue(this.props.niveauId)}
                                             selectOnBlur={false}
-                                            onChange={this.handleDropdownValueChange} />
+                                            onChange={this.handleDropdownValueChange}
+                                            error={this.isEmptyAndValidated(p => p.niveauId)} />
                                     </Form.Field>
                                 </Form>
                             </div>
