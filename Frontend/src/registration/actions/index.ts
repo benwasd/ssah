@@ -51,14 +51,14 @@ export const selectCoursesForParticipants = (selectedCoursesByParticipant: { [pa
     dispatch(action);
 }
 
-export const REGISTRATION_FULL_VALIDATE = 'REGISTRATION_FULL_VALIDATE';
+export const REGISTRATION_SHOW_ALL_VALIDATION_ERRORS = 'REGISTRATION_SHOW_ALL_VALIDATION_ERRORS';
 
-export interface RegistrationFullValidateAction extends Action {
-    shouldFullyValidate: boolean;
+export interface RegistrationShowAllValidationErrorsAction extends Action {
+    showAllValidationErrors: boolean;
 }
 
-export const shouldFullyValidate = (shouldFullyValidate: boolean) => (dispatch: Dispatch) => {
-    const action: RegistrationFullValidateAction = { type: REGISTRATION_FULL_VALIDATE, shouldFullyValidate };
+export const showAllValidationErrors = (showAllValidationErrors: boolean) => (dispatch: Dispatch) => {
+    const action: RegistrationShowAllValidationErrorsAction = { type: REGISTRATION_SHOW_ALL_VALIDATION_ERRORS, showAllValidationErrors };
     dispatch(action);
 }
 

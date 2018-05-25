@@ -7,7 +7,7 @@ import {
     APPLICANT_CHANGE, ApplicantChangeAction, 
     AVAILABILITY_CHANGE, AvailabilityChangeAction, 
     PARTICIPAENT_CHANGE, ParticipantChangeAction, 
-    REGISTRATION_FULL_VALIDATE, RegistrationFullValidateAction,
+    REGISTRATION_SHOW_ALL_VALIDATION_ERRORS, RegistrationShowAllValidationErrorsAction,
     REGISTRATION_LOADED, RegistrationLoadedAction,
     PARTICIPANT_SELECT_COURSE, ParticipantSelectCourseAction,
     REGISTRATION_POSSIBLE_COURSES_LOADED, RegistrationPossibleCoursesLoadedAction,
@@ -97,7 +97,7 @@ const handleRegistration: Reducer<RegistrationState, Action> = (state, action) =
         return {
             id: null,
             status: RegistrationStatus.Registration,
-            shouldFullyValidate: false,
+            showAllValidationErrors: false,
             applicant: handleApplicant(undefined, noopAction()),
             availability: handleAvailability(undefined, noopAction()),
             participants: handleParticipants(undefined, noopAction()),
@@ -106,16 +106,16 @@ const handleRegistration: Reducer<RegistrationState, Action> = (state, action) =
     }
 
     switch (action.type) {
-        case REGISTRATION_FULL_VALIDATE: 
-            const fullValidateAction = action as RegistrationFullValidateAction;
-            return update(state, { $merge: { shouldFullyValidate: fullValidateAction.shouldFullyValidate } });
+        case REGISTRATION_SHOW_ALL_VALIDATION_ERRORS: 
+            const showAllValidationErrorsAction = action as RegistrationShowAllValidationErrorsAction;
+            return update(state, { $merge: { showAllValidationErrors: showAllValidationErrorsAction.showAllValidationErrors } });
         case REGISTRATION_LOADED:
             const loadedAction = action as RegistrationLoadedAction;
 
             return {
                 id: loadedAction.registration.registrationId ? loadedAction.registration.registrationId : null,
                 status: loadedAction.registration.status,
-                shouldFullyValidate: false,
+                showAllValidationErrors: false,
                 applicant: {
                     id: loadedAction.registration.applicantId,
                     surname: loadedAction.registration.surname,
@@ -150,7 +150,7 @@ const handleRegistration: Reducer<RegistrationState, Action> = (state, action) =
 export interface RegistrationReducerTree {
     id: Reducer<string | null, Action>;
     status: Reducer<RegistrationStatus, Action>;
-    shouldFullyValidate: Reducer<boolean, Action>;
+    showAllValidationErrors: Reducer<boolean, Action>;
     applicant: Reducer<ApplicantState, Action>;
     availability: Reducer<AvailabilityState, Action>;
     participants: Reducer<ParticipantState[], Action>;
@@ -160,7 +160,7 @@ export interface RegistrationReducerTree {
 export const reducer = combineReducers(<RegistrationReducerTree>{
     id: noopReducer(null),
     status: noopReducer(RegistrationStatus.Registration),
-    shouldFullyValidate: noopReducer(false),
+    showAllValidationErrors: noopReducer(false),
     applicant: handleApplicant,
     availability: handleAvailability,
     participants: handleParticipants,

@@ -4,7 +4,7 @@ import { Discipline, CourseType, Language, RegistrationStatus, PossibleCourseDto
 export interface RegistrationState {
     id: string | null;
     status: RegistrationStatus;
-    shouldFullyValidate: boolean;
+    showAllValidationErrors: boolean;
     applicant: ApplicantState;
     availability: AvailabilityState;
     participants: ParticipantState[];

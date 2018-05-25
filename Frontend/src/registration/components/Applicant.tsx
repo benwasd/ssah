@@ -13,7 +13,7 @@ export interface ApplicantProps {
     language?: Language;
     preferSimultaneousCourseExecutionForParticipants: boolean;
     change(obj: Partial<ApplicantState>);
-    shouldFullyValidate: boolean;
+    showAllValidationErrors: boolean;
 }
 
 export class Applicant extends React.Component<ApplicantProps> {
@@ -29,10 +29,10 @@ export class Applicant extends React.Component<ApplicantProps> {
         this.props.change({ [name]: fromDropdownValue(parseInt(value)) });
     }
     
-    isEmptyAndFullyValidated = (propertySelector: (ApplicantProps) => any) => {
+    isEmptyAndValidated = (propertySelector: (ApplicantProps) => any) => {
         const propertyValue = propertySelector(this.props);
         const isEmpty = typeof(propertyValue) === "number" ? propertyValue == null : !propertyValue;
-        const fullyValidated = this.props.shouldFullyValidate
+        const fullyValidated = this.props.showAllValidationErrors;
         return isEmpty && fullyValidated;
     }
 
@@ -50,7 +50,7 @@ export class Applicant extends React.Component<ApplicantProps> {
                         name='phoneNumber'
                         value={this.props.phoneNumber}
                         onChange={this.handleChange}
-                        error={this.isEmptyAndFullyValidated(p => p.phoneNumber)} />
+                        error={this.isEmptyAndValidated(p => p.phoneNumber)} />
                 </Form.Field>
                 <Form.Field required>
                     <label>Vorname</label>
@@ -59,7 +59,7 @@ export class Applicant extends React.Component<ApplicantProps> {
                         name='givenname'
                         value={this.props.givenname}
                         onChange={this.handleChange}
-                        error={this.isEmptyAndFullyValidated(p => p.givenname)} />
+                        error={this.isEmptyAndValidated(p => p.givenname)} />
                 </Form.Field>
                 <Form.Field required>
                     <label>Nachname</label>
@@ -68,7 +68,7 @@ export class Applicant extends React.Component<ApplicantProps> {
                         name='surname'
                         value={this.props.surname}
                         onChange={this.handleChange}
-                        error={this.isEmptyAndFullyValidated(p => p.surname)} />
+                        error={this.isEmptyAndValidated(p => p.surname)} />
                 </Form.Field>
                 <Form.Field required>
                     <label>Ort</label>
@@ -77,7 +77,7 @@ export class Applicant extends React.Component<ApplicantProps> {
                         name='residence'
                         value={this.props.residence}
                         onChange={this.handleChange}
-                        error={this.isEmptyAndFullyValidated(p => p.residence)} />
+                        error={this.isEmptyAndValidated(p => p.residence)} />
                 </Form.Field>
                 <Form.Field required>
                     <label>Sprache</label>
@@ -89,7 +89,7 @@ export class Applicant extends React.Component<ApplicantProps> {
                         value={toDropdownValue(this.props.language)}
                         selectOnBlur={false}
                         onChange={this.handleDropdownValueChange}
-                        error={this.isEmptyAndFullyValidated(p => p.language)} />
+                        error={this.isEmptyAndValidated(p => p.language)} />
                 </Form.Field>
                 <Form.Field>
                     <label>Nur gleichzeitige Kurse</label>

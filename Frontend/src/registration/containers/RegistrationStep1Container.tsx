@@ -11,12 +11,12 @@ import { AvailabilitySelector, AvailabilitySelectorProps } from '../components/A
 import { ParticipantList, ParticipantListProps } from '../components/ParticipantList';
 
 const ApplicantContainer = connect(
-    (state: State): Partial<ApplicantProps> => update(state.registration.applicant, { $merge: { shouldFullyValidate: state.registration.shouldFullyValidate } }),
+    (state: State): Partial<ApplicantProps> => update(state.registration.applicant, { $merge: { showAllValidationErrors: state.registration.showAllValidationErrors } }),
     { change: applicantChange }
 )(Applicant)
 
 const AvailabilitySelectorContainer = connect(
-    (state: State): Partial<AvailabilitySelectorProps> => update(state.registration.availability, { $merge: { shouldFullyValidate: state.registration.shouldFullyValidate } }),
+    (state: State): Partial<AvailabilitySelectorProps> => update(state.registration.availability, { $merge: { showAllValidationErrors: state.registration.showAllValidationErrors } }),
     { change: availabilityChange }
 )(AvailabilitySelector)
 

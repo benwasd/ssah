@@ -4,12 +4,13 @@ import { connect } from 'react-redux';
 import { Button } from 'semantic-ui-react';
 
 import { State } from '../../main/state';
-import { shouldFullyValidate, submitOrUpdateRegistration } from '../actions';
+import { showAllValidationErrors, submitOrUpdateRegistration } from '../actions';
 import { RegistrationState, hasAllForRegistration, hasAllForRegistrationParticipant } from '../state';
 import { RegistrationContainer } from './RegistrationContainer';
 
 interface InternalRegisterContainerProps {
-    shouldFullyValidate(shouldFullyValidate: boolean);
+    
+    showAllValidationErrors(shouldFullyValidate: boolean);
     submitRegistration(onSubmitted: (id: string) => void);
     registration: RegistrationState;
     history: H.History;
@@ -28,7 +29,7 @@ class InternalRegisterContainer extends React.Component<InternalRegisterContaine
             this.props.submitRegistration(onSubmitted);
         }
         else {
-            this.props.shouldFullyValidate(true);
+            this.props.showAllValidationErrors(true);
         }
     }
 
@@ -46,8 +47,8 @@ export const RegisterContainer = connect(
     (state: State): Partial<InternalRegisterContainerProps> => {
         return { registration: state.registration };
     },
-    { 
-        submitRegistration: submitOrUpdateRegistration,
-        shouldFullyValidate
+    {
+        showAllValidationErrors,
+        submitRegistration: submitOrUpdateRegistration
     }
 )(InternalRegisterContainer)
