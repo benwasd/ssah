@@ -16,11 +16,11 @@ export interface ParticipantListState {
 
 export class ParticipantList extends React.Component<ParticipantListProps, ParticipantListState> {
     render() {
-        let participantsWithNewRow = this.props.participants.concat({ name: "", ageGroup: "" } as any);
+        let participantsWithNewRow = this.props.participants.concat({ name: "", ageGroup: "" });
 
         // Add second new row if no or one participants entered
         if (this.props.participants.length <= 1) {
-            participantsWithNewRow = participantsWithNewRow.concat({ name: "", ageGroup: "" } as any);
+            participantsWithNewRow = participantsWithNewRow.concat({ name: "", ageGroup: "" });
         }
 
         return (
@@ -28,7 +28,6 @@ export class ParticipantList extends React.Component<ParticipantListProps, Parti
                 <table className="ui table unstackable">
                     <tbody>
                         {participantsWithNewRow.map((p, i) => {
-                            console.log(i, this.props.participants.length);
                             const props = Object.assign(
                                 omit(p, ['id', 'timestamp', 'committing']),
                                 { 
