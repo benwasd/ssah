@@ -19,13 +19,13 @@ export interface ParticipantProps {
 }
 
 export interface ParticipantCState {
-    open: boolean;
+    isNiveauModalOpen: boolean;
 }
 
 export class Participant extends React.Component<ParticipantProps, ParticipantCState> {
     constructor(props: ParticipantProps) {
         super(props);
-        this.state = { open: false };
+        this.state = { isNiveauModalOpen: false };
     }
 
     get disciplineOptions() {
@@ -56,12 +56,16 @@ export class Participant extends React.Component<ParticipantProps, ParticipantCS
         return isEmpty && fullyValidated && !this.props.isNewRow;
     }
 
-    open = () => {
-        this.setState({ open: true });
+    hasErrorInModal = () => {
+        return this.isEmptyAndValidatedOnNotNewRow(p => p.discipline) || this.isEmptyAndValidatedOnNotNewRow(p => p.niveauId)
     }
 
-    close = () => {
-        this.setState({ open: false });
+    openNiveauModal = () => {
+        this.setState({ isNiveauModalOpen: true });
+    }
+
+    closeNiveauModal = () => {
+        this.setState({ isNiveauModalOpen: false });
     }
 
     render() {
@@ -86,15 +90,15 @@ export class Participant extends React.Component<ParticipantProps, ParticipantCS
                 </td>
                 <td className='three wide'>
                     <NiveauVisualizer discipline={this.props.discipline} niveauId={this.props.niveauId} />
-                    <Button onClick={this.open} fluid basic>
+                    <Button onClick={this.openNiveauModal} fluid basic>
                         X
                     </Button>
                 </td>
                 <td className='five wide niveau'>
-                    <Button onClick={this.open} fluid>
+                    <Button fluid onClick={this.openNiveauModal} className={this.hasErrorInModal() ? 'error' : ''}>
                         Stufe ermitteln
                     </Button>
-                    <Modal open={this.state.open} onOpen={this.open} onClose={this.close} dimmer={'blurring'} size='small'>
+                    <Modal open={this.state.isNiveauModalOpen} onOpen={this.openNiveauModal} onClose={this.closeNiveauModal} dimmer={'blurring'} size='small'>
                         <Modal.Header>
                             Passende Stufe finden
                         </Modal.Header>
@@ -132,7 +136,7 @@ export class Participant extends React.Component<ParticipantProps, ParticipantCS
                             </div>
                         </Modal.Content>
                         <Modal.Actions>
-                            <Button primary onClick={this.close}>
+                            <Button primary onClick={this.closeNiveauModal}>
                                 Ok
                             </Button>
                         </Modal.Actions>
