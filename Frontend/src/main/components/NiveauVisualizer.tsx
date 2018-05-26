@@ -5,8 +5,8 @@ import { Discipline } from '../../api';
 import './NiveauVisualizer.less';
 
 import './../../assets';
-import * as skiSvg from './../../assets/Ski.svg';
-import * as snowboardSvg from './../../assets/Snowboard.svg';
+import * as skiSvg from './../../assets/Discipline-Ski.svg';
+import * as snowboardSvg from './../../assets/Discipline-Snowboard.svg';
 
 export interface NiveauVisualizerProps {
     discipline?: Discipline;
