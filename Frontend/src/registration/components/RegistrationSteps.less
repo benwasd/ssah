@@ -4,12 +4,12 @@
     padding-left: 3px;
 }
 
-.ui.steps .step .description { 
+.ui.steps.fluid.unstackable .step .description { 
     font-size: .8rem;
 }
 
 @media only screen and (max-width: 512px) {
-    .ui.steps .step {
+    .ui.steps.fluid.unstackable .step {
         > .icon {
             display: none;
         }
@@ -17,11 +17,11 @@
 }
 
 @media only screen and (max-width: @largestMobileScreen) {
-    .ui.steps .step:first-child {
+    .ui.steps.fluid.unstackable .step:first-child {
         padding-left: .7em;
     }
 
-    .ui.steps .step {
+    .ui.steps.fluid.unstackable .step {
         font-size: .7rem;
         padding: .7em .7em;
 
@@ -39,11 +39,11 @@
 
 
 @media only screen and (min-width: @tabletBreakpoint) and (max-width: @largestTabletScreen) {
-    .ui.steps .step:first-child {
+    .ui.steps.fluid.unstackable .step:first-child {
         padding-left: 1.45em;
     }
 
-    .ui.steps .step {
+    .ui.steps.fluid.unstackable .step {
         > .content {
             &.shorter { max-width: 105px; }
             &.longer { max-width: 120px; }
@@ -53,15 +53,15 @@
 }
 
 @media only screen and (min-width: @computerBreakpoint) {
-    .ui.steps .step:first-child {
+    .ui.steps.fluid.unstackable .step:first-child {
         padding-left: 1.45em;
     }
 
-    .ui.steps .step:last-child {
+    .ui.steps.fluid.unstackable .step:last-child {
         padding-right: 1.45em;
     }
 
-    .ui.steps .step {
+    .ui.steps.fluid.unstackable .step {
         > .content {
             &.shorter { max-width: 168px; }
             &.longer { max-width: 208px; }
@@ -70,7 +70,7 @@
     }
 }
 
-.ui.steps .step.completed,
-.ui.steps .step.completed::after {
+.ui.steps.fluid.unstackable .step.completed,
+.ui.steps.fluid.unstackable .step.completed::after {
     background-color: #fafbfc;
 }
