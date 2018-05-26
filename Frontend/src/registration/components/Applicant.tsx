@@ -11,7 +11,6 @@ export interface ApplicantProps {
     residence: string;
     phoneNumber: string;
     language?: Language;
-    preferSimultaneousCourseExecutionForParticipants: boolean;
     change(obj: Partial<ApplicantState>);
     showAllValidationErrors: boolean;
 }
@@ -90,13 +89,6 @@ export class Applicant extends React.Component<ApplicantProps> {
                         selectOnBlur={false}
                         onChange={this.handleDropdownValueChange}
                         error={this.isEmptyAndValidated(p => p.language)} />
-                </Form.Field>
-                <Form.Field>
-                    <label>Nur gleichzeitige Kurse</label>
-                    <Checkbox 
-                        name='preferSimultaneousCourseExecutionForParticipants'
-                        checked={this.props.preferSimultaneousCourseExecutionForParticipants}
-                        onChange={this.handleCheckboxChange} />
                 </Form.Field>
             </Form>
         );

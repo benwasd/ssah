@@ -94,7 +94,6 @@ export const submitOrUpdateRegistration = (onSubmittedOrUpdated?: (registrationI
     registrationDto.givenname = registrationState.applicant.givenname;
     registrationDto.phoneNumber = registrationState.applicant.phoneNumber;
     registrationDto.residence = registrationState.applicant.residence;
-    registrationDto.preferSimultaneousCourseExecutionForParticipants = registrationState.applicant.preferSimultaneousCourseExecutionForParticipants;
     registrationDto.availableFrom = throwIfUndefined(registrationState.availability.availableFrom);
     registrationDto.availableTo = throwIfUndefined(registrationState.availability.availableTo);
     registrationDto.status = registrationState.status;

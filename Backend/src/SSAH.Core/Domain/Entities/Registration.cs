@@ -21,8 +21,6 @@ namespace SSAH.Core.Domain.Entities
 
         public virtual Applicant Applicant { get; set; }
 
-        public bool PreferSimultaneousCourseExecutionForParticipants { get; set; }
-
         public DateTime AvailableFrom { get; set; }
 
         public DateTime AvailableTo { get; set; }

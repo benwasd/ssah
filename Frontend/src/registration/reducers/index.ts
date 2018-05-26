@@ -16,7 +16,7 @@ import { ApplicantState, AvailabilityState, ParticipantState, RegistrationState 
 
 const handleApplicant: Reducer<ApplicantState, Action> = (state, action) => {
     if (state === undefined) {
-        return { givenname: "", surname: "", residence: "", phoneNumber: "", preferSimultaneousCourseExecutionForParticipants: true };
+        return { givenname: "", surname: "", residence: "", phoneNumber: "" };
     }
     
     switch (action.type) {
@@ -62,16 +62,19 @@ const handleParticipants: Reducer<ParticipantState[], Action> = (state, action) 
             return newState;
         case PARTICIPANT_SELECT_COURSE:
             const selectCourseAction = action as ParticipantSelectCourseAction;
-            const participantIds = Object.getOwnPropertyNames(selectCourseAction.selectedCoursesByParticipant);
-
-            newState = state;
-            participantIds.forEach(participantId => {
-                const participantIndex = state.findIndex(p => p.id === participantId);
-                const courseSelection = selectCourseAction.selectedCoursesByParticipant[participantId];
-                const committing = { courseIdentifier: courseSelection.identifier, courseStartDate: courseSelection.startDate };
-                newState = update(newState, { [participantIndex]: { $merge: { committing: committing } } });
-            });
             
+            newState = state;
+            state.forEach((participant, participantIndex) => {
+                let committing: { courseIdentifier: number, courseStartDate: Date } | null = null;
+                
+                const courseSelection = selectCourseAction.selectedCoursesByParticipant[participant.id as any];
+                if (courseSelection) {
+                    committing = { courseIdentifier: courseSelection.identifier, courseStartDate: courseSelection.startDate };
+                }
+
+                newState = update(newState, { [participantIndex]: { committing: { $set: committing } } });
+            });
+
             return newState;
         default: 
             return state;
@@ -122,8 +125,7 @@ const handleRegistration: Reducer<RegistrationState, Action> = (state, action) =
                     givenname: loadedAction.registration.givenname,
                     residence: loadedAction.registration.residence,
                     phoneNumber: loadedAction.registration.phoneNumber,
-                    language: loadedAction.registration.participants.length > 0 ? loadedAction.registration.participants[0].language : undefined,
-                    preferSimultaneousCourseExecutionForParticipants: loadedAction.registration.preferSimultaneousCourseExecutionForParticipants
+                    language: loadedAction.registration.participants.length > 0 ? loadedAction.registration.participants[0].language : undefined
                 },
                 availability: {
                     availableFrom: loadedAction.registration.availableFrom,

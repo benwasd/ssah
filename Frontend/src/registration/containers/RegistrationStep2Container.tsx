@@ -9,7 +9,6 @@ import { CourseSelection, CourseSelectionProps, SelectionMap } from '../componen
 const CourseSelectionContainer = connect(
     (state: State): Partial<CourseSelectionProps> => {
         return {
-            preferSimultaneousCourseExecutionForParticipants: state.registration.applicant.preferSimultaneousCourseExecutionForParticipants,
             participants: state.registration.participants,
             possibleCourses: state.registration.possibleCourses
         }

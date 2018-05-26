@@ -18,7 +18,6 @@ export interface ApplicantState {
     residence: string;
     phoneNumber: string;
     language?: Language;
-    preferSimultaneousCourseExecutionForParticipants: boolean;
 }
 
 export interface AvailabilityState {
@@ -46,7 +45,6 @@ export function hasAllForRegistration(r: RegistrationState) {
         && !!r.applicant.residence
         && !!r.applicant.phoneNumber
         && r.applicant.language != null
-        && r.applicant.preferSimultaneousCourseExecutionForParticipants != null
         && !!r.availability.availableFrom
         && !!r.availability.availableTo
         && r.participants.length > 0;
