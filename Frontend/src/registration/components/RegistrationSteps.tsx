@@ -11,26 +11,6 @@ export interface RegistrationStepsProps {
 }
 
 export class RegistrationSteps extends React.Component<RegistrationStepsProps> {
-    getStepClassName = (status: RegistrationStatus) => {
-        let result = "step";
-
-        if (status > this.props.status) {
-            result += " disabled";
-        }
-        if (status === this.props.status) {
-            result += " active";
-        }
-        if (status < this.props.status) {
-            result += " completed";
-        }
-
-        return result;
-    }
-
-    getChangeStepFunc = (status: RegistrationStatus) => () => {
-        this.props.activeStatusChanged(status);
-    }
-
     render() {
         let heading;
         let leadText;
@@ -86,5 +66,25 @@ export class RegistrationSteps extends React.Component<RegistrationStepsProps> {
                 </a>
             </div>    
         </>);
+    }
+
+    private getStepClassName = (status: RegistrationStatus) => {
+        let result = "step";
+
+        if (status > this.props.status) {
+            result += " disabled";
+        }
+        if (status === this.props.status) {
+            result += " active";
+        }
+        if (status < this.props.status) {
+            result += " completed";
+        }
+
+        return result;
+    }
+
+    private getChangeStepFunc = (status: RegistrationStatus) => () => {
+        this.props.activeStatusChanged(status);
     }
 }

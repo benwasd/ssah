@@ -123,7 +123,9 @@ export class CourseSelection extends React.Component<CourseSelectionProps, Cours
                                                 checked={this.isCombinationChecked(p.participantId, c.identifier, c.startDate)} />
                                         </td>
                                         <td className='niveau'>
-                                            <NiveauVisualizer discipline={p.participant.discipline} niveauId={p.participant.niveauId} />
+                                            <NiveauVisualizer 
+                                                discipline={p.participant.discipline}
+                                                niveauId={p.participant.niveauId} />
                                         </td>
                                         <td className='periods'>
                                             <CourseDateVisualizer periods={c.coursePeriods} />
@@ -134,6 +136,7 @@ export class CourseSelection extends React.Component<CourseSelectionProps, Cours
                         </table>
                     </div>
                 )}
+
             {this.props.showAllValidationErrors && 
                 <div className='ui negative message m-0 mt-3'>
                     <p>Bitte wählen Sie für jeden Teilnehmer die passende Durchführung aus.</p>

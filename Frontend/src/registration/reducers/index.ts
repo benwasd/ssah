@@ -3,18 +3,18 @@ import update from 'immutability-helper';
 
 import { CourseType, Discipline, RegistrationStatus, PossibleCourseDto } from '../../api';
 import { noopAction, noopReducer } from '../../utils';
+import { ApplicantState, AvailabilityState, ParticipantState, RegistrationState } from '../state';
 import { 
-    APPLICANT_CHANGE, ApplicantChangeAction, 
-    AVAILABILITY_CHANGE, AvailabilityChangeAction, 
-    PARTICIPAENT_CHANGE, ParticipantChangeAction, 
+    APPLICANT_CHANGE, ApplicantChangeAction,
+    AVAILABILITY_CHANGE, AvailabilityChangeAction,
+    PARTICIPANT_CHANGE, ParticipantChangeAction,
+    PARTICIPANT_SELECT_COURSE, ParticipantSelectCourseAction,
+    REGISTRATION_POSSIBLE_COURSES_LOADED, RegistrationPossibleCoursesLoadedAction,
     REGISTRATION_SHOW_ALL_VALIDATION_ERRORS, RegistrationShowAllValidationErrorsAction,
     REGISTRATION_LOADED, RegistrationLoadedAction,
     REGISTRATION_UNSET,
     REGISTRATION_COURSE_SELECTED,
-    PARTICIPANT_SELECT_COURSE, ParticipantSelectCourseAction,
-    REGISTRATION_POSSIBLE_COURSES_LOADED, RegistrationPossibleCoursesLoadedAction,
 } from '../actions';
-import { ApplicantState, AvailabilityState, ParticipantState, RegistrationState } from '../state';
 
 const handleApplicant: Reducer<ApplicantState, Action> = (state, action) => {
     if (state === undefined) {
@@ -51,7 +51,7 @@ const handleParticipants: Reducer<ParticipantState[], Action> = (state, action) 
 
     let newState;
     switch (action.type) {
-        case PARTICIPAENT_CHANGE:
+        case PARTICIPANT_CHANGE:
             const changeAction = action as ParticipantChangeAction;
 
             if (changeAction.participantIndex >= state.length) {
@@ -114,16 +114,6 @@ const handleRegistration: Reducer<RegistrationState, Action> = (state, action) =
         case REGISTRATION_SHOW_ALL_VALIDATION_ERRORS: 
             const showAllValidationErrorsAction = action as RegistrationShowAllValidationErrorsAction;
             return update(state, { $merge: { showAllValidationErrors: showAllValidationErrorsAction.showAllValidationErrors } });
-        case REGISTRATION_UNSET:
-            return {
-                id: null,
-                status: RegistrationStatus.Registration,
-                showAllValidationErrors: false,
-                applicant: handleApplicant(undefined, noopAction()),
-                availability: handleAvailability(undefined, noopAction()),
-                participants: handleParticipants(undefined, noopAction()),
-                possibleCourses: handlePossibleCourses(undefined, noopAction())
-            };
         case REGISTRATION_LOADED:
             const loadedAction = action as RegistrationLoadedAction;
             return {
@@ -154,7 +144,17 @@ const handleRegistration: Reducer<RegistrationState, Action> = (state, action) =
                     }
                 }),
                 possibleCourses: []
-            }
+            };
+        case REGISTRATION_UNSET:
+            return {
+                id: null,
+                status: RegistrationStatus.Registration,
+                showAllValidationErrors: false,
+                applicant: handleApplicant(undefined, noopAction()),
+                availability: handleAvailability(undefined, noopAction()),
+                participants: handleParticipants(undefined, noopAction()),
+                possibleCourses: handlePossibleCourses(undefined, noopAction())
+            };
         case REGISTRATION_COURSE_SELECTED:
             return update(state, { $merge: { status: RegistrationStatus.Commitment } });
         default:

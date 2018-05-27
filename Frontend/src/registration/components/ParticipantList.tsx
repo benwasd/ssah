@@ -23,7 +23,10 @@ export class ParticipantList extends React.Component<ParticipantListProps, Parti
             participantsWithNewRow = participantsWithNewRow.concat({ name: "", ageGroup: "" });
         }
 
-        return (
+        return (<>
+            <div className='lead'>
+                Wer möchte an unserem Kursangebot teilnehmen?
+            </div>
             <div style={{margin: '1em 0em 0em'}}>
                 <table className="ui table unstackable participants">
                     <tbody>
@@ -44,6 +47,6 @@ export class ParticipantList extends React.Component<ParticipantListProps, Parti
                     </tbody>
                 </table>
             </div>
-        );
+        </>);
     }
 }

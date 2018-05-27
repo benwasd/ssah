@@ -1,11 +1,10 @@
 import { Dispatch } from 'react-redux';
 import { Action } from 'redux';
-
-import { CommitRegistrationDto, CommitRegistrationParticipantDto, PossibleCourseDto, RegistrationApiProxy, RegistrationDto, RegistrationParticipantDto, RegistrationStatus } from '../../api';
+import { RegistrationDto, RegistrationParticipantDto, RegistrationStatus, PossibleCourseDto, CommitRegistrationDto, CommitRegistrationParticipantDto, RegistrationApiProxy } from '../../api';
 import { track } from '../../main/actions';
 import { State } from '../../main/state';
 import { throwIfUndefined } from '../../utils';
-import { ApplicantState, AvailabilityState, hasAllForRegistrationParticipant, ParticipantState } from '../state';
+import { ApplicantState, AvailabilityState, ParticipantState } from '../state';
 
 export const APPLICANT_CHANGE = 'APPLICANT_CHANGE';
 
@@ -29,7 +28,7 @@ export const availabilityChange = (change: AvailabilityState) => (dispatch: Disp
     dispatch(action);
 }
 
-export const PARTICIPAENT_CHANGE = 'PARTICIPAENT_CHANGE';
+export const PARTICIPANT_CHANGE = 'PARTICIPANT_CHANGE';
 
 export interface ParticipantChangeAction extends Action {
     participantIndex: number;
@@ -37,7 +36,7 @@ export interface ParticipantChangeAction extends Action {
 }
 
 export const changeParticipant = (partipiantIndex: number, change: Partial<ParticipantState>) => (dispatch: Dispatch) => {
-    const action: ParticipantChangeAction = { type: PARTICIPAENT_CHANGE, participantIndex: partipiantIndex, change: change };
+    const action: ParticipantChangeAction = { type: PARTICIPANT_CHANGE, participantIndex: partipiantIndex, change: change };
     dispatch(action);
 }
 
@@ -114,22 +113,21 @@ export const submitOrUpdateRegistration = (onSubmittedOrUpdated?: (registrationI
     registrationDto.availableFrom = throwIfUndefined(registrationState.availability.availableFrom);
     registrationDto.availableTo = throwIfUndefined(registrationState.availability.availableTo);
     registrationDto.status = registrationState.status;
-    registrationDto.participants = registrationState.participants
-        .map(p => {
-            const partipiantDto = new RegistrationParticipantDto();
-            if (p.id && p.rowVersion) {
-                partipiantDto.id = p.id;
-                partipiantDto.rowVersion = p.rowVersion;
-            }
-            partipiantDto.name = p.name;
-            partipiantDto.courseType = throwIfUndefined(p.courseType);
-            partipiantDto.discipline = throwIfUndefined(p.discipline);
-            partipiantDto.niveauId = throwIfUndefined(p.niveauId);
-            partipiantDto.ageGroup = p.ageGroup ? parseInt(p.ageGroup) : undefined;
-            partipiantDto.language = registrationState.applicant.language;
+    registrationDto.participants = registrationState.participants.map(p => {
+        const partipiantDto = new RegistrationParticipantDto();
+        if (p.id && p.rowVersion) {
+            partipiantDto.id = p.id;
+            partipiantDto.rowVersion = p.rowVersion;
+        }
+        partipiantDto.name = p.name;
+        partipiantDto.courseType = throwIfUndefined(p.courseType);
+        partipiantDto.discipline = throwIfUndefined(p.discipline);
+        partipiantDto.niveauId = throwIfUndefined(p.niveauId);
+        partipiantDto.ageGroup = p.ageGroup ? parseInt(p.ageGroup) : undefined;
+        partipiantDto.language = registrationState.applicant.language;
 
-            return partipiantDto;
-        });
+        return partipiantDto;
+    });
 
     if (registrationDto.registrationId) {
         track(apiProxy.update(registrationDto), dispatch).then(r => {
@@ -175,19 +173,17 @@ export const commitRegistration = (onCommitted?: () => void) => (dispatch: Dispa
     const commitRegistrationDto = new CommitRegistrationDto();
     commitRegistrationDto.registrationId = throwIfUndefined(registrationState.id);
     commitRegistrationDto.payment = "NOOP";
-    commitRegistrationDto.participants = registrationState.participants
-        .filter(hasAllForRegistrationParticipant)
-        .map(p => {
-            const commitPartipiantDto = new CommitRegistrationParticipantDto();
-            commitPartipiantDto.id = throwIfUndefined(p.id);
-            commitPartipiantDto.rowVersion = throwIfUndefined(p.rowVersion);
-            commitPartipiantDto.ageGroup = parseInt(p.ageGroup);
-            commitPartipiantDto.language = throwIfUndefined(registrationState.applicant.language);
-            commitPartipiantDto.courseIdentifier = throwIfUndefined(p.committing).courseIdentifier;
-            commitPartipiantDto.courseStartDate = throwIfUndefined(p.committing).courseStartDate;
+    commitRegistrationDto.participants = registrationState.participants.map(p => {
+        const commitPartipiantDto = new CommitRegistrationParticipantDto();
+        commitPartipiantDto.id = throwIfUndefined(p.id);
+        commitPartipiantDto.rowVersion = throwIfUndefined(p.rowVersion);
+        commitPartipiantDto.ageGroup = parseInt(p.ageGroup);
+        commitPartipiantDto.language = throwIfUndefined(registrationState.applicant.language);
+        commitPartipiantDto.courseIdentifier = throwIfUndefined(p.committing).courseIdentifier;
+        commitPartipiantDto.courseStartDate = throwIfUndefined(p.committing).courseStartDate;
 
-            return commitPartipiantDto;
-        });
+        return commitPartipiantDto;
+    });
 
     track(apiProxy.commitRegistration(commitRegistrationDto), dispatch).then(r => {
         const action: RegistrationCommittedAction = { type: REGISTRATION_SUBMITTED };

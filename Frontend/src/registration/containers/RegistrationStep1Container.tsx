@@ -44,7 +44,6 @@ export class RegistrationStep1Container extends React.Component {
                 <Grid.Column width={16}>
                 </Grid.Column>
                 <Grid.Column width={16}>
-                    <div className='lead'>Wer möchte an unserem Kursangebot teilnehmen?</div>
                     <ParticipantListContainer />
                 </Grid.Column>
             </Grid>

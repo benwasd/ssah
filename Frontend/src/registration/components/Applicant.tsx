@@ -19,11 +19,7 @@ export class Applicant extends React.Component<ApplicantProps> {
     handleChange = (event: React.ChangeEvent<HTMLInputElement>, { name, value }) => {
         this.props.change({ [name]: value });
     }
-        
-    handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>, { name, checked }) => {
-        this.props.change({ [name]: checked });
-    }
-
+    
     handleDropdownValueChange = (event: React.ChangeEvent<HTMLInputElement>, { name, value }) => {
         this.props.change({ [name]: fromDropdownValue(parseInt(value)) });
     }
