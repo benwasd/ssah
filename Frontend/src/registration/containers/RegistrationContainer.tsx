@@ -30,6 +30,7 @@ class InternalRegistrationContainer extends React.Component<InternalRegistration
 
     constructor(props: InternalRegistrationContainerProps) {
         super(props);
+        this.state = {};
     }
 
     componentWillMount() {
@@ -45,7 +46,7 @@ class InternalRegistrationContainer extends React.Component<InternalRegistration
     initStateByPathname(pathname: string) {
         if (pathname.toLowerCase() === '/register') {
             this.props.unsetRegistration();
-            this.setState(null);
+            this.unsetStatus();
         }
         else if (pathname.toLowerCase().startsWith('/registration/') && this.props.match.params.id) {
             this.props.loadRegistration(this.props.match.params.id);
@@ -82,7 +83,7 @@ class InternalRegistrationContainer extends React.Component<InternalRegistration
     }
 
     render() {
-        const status = throwIfUndefined((this.state || this.props.registration).status);
+        const status = this.getStatus();
         const activeSection = status === RegistrationStatus.Registration
             ? (<RegistrationStep1Container />)
             : status === RegistrationStatus.CourseSelection
@@ -93,7 +94,7 @@ class InternalRegistrationContainer extends React.Component<InternalRegistration
             <RegistrationSteps 
                 status={this.props.registration.status}
                 activeStatus={status} 
-                activeStatusChanged={s => this.setState({ status: s })}
+                activeStatusChanged={s => this.setStatus(s)}
                 applicantGivenname={this.props.registration.applicant.givenname} />
             {activeSection}
             {status === RegistrationStatus.Registration &&
@@ -105,6 +106,28 @@ class InternalRegistrationContainer extends React.Component<InternalRegistration
                     Bestätigen
                 </Button>}
         </>);
+    }
+
+    private getStatus(): RegistrationStatus {
+        if (this.state.status === undefined) {
+            return this.props.registration.status;
+        }
+        else {
+            return this.state.status;
+        }
+    }
+
+    private setStatus(status: RegistrationStatus) {
+        if (status === this.props.registration.status) {
+            this.setState({ status: undefined });
+        }
+        else {
+            this.setState({ status })
+        }
+    }
+
+    private unsetStatus() {
+        this.setState({ status: undefined });
     }
 }
 

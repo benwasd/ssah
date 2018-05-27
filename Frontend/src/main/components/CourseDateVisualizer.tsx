@@ -48,7 +48,7 @@ export class CourseDateVisualizer extends React.Component<CourseDateVisualizerPr
                 {range}
                 <div>
                     {this.props.periods.map(p => moment(p.start).format('dd')).join(', ') + ' '}
-                    {moment(firstPeriodElement.start).format('HH:mm')} - {moment(firstPeriodElement.end).format('HH:mm')}
+                    <b>{moment(firstPeriodElement.start).format('HH:mm')} - {moment(firstPeriodElement.end).format('HH:mm')}</b>
                 </div>
             </>);
         }
@@ -60,7 +60,7 @@ export class CourseDateVisualizer extends React.Component<CourseDateVisualizerPr
                     var endMoment = moment(p.end);
                     return (
                         <div key={p.start.toString()}>
-                            {startMoment.format('dd')}: {startMoment.format('HH:mm')} - {endMoment.format('HH:mm')}
+                            {startMoment.format('dd')}: <b>{startMoment.format('HH:mm')} - {endMoment.format('HH:mm')}</b>
                         </div>
                     );
                 })}
@@ -76,7 +76,7 @@ export class CourseDateVisualizer extends React.Component<CourseDateVisualizerPr
         if (periods.length === 1) {
             return (
                 <div>
-                    {day} {firstPeriodElementStartMoment.format('HH:mm')} - {firstPeriodElementEndMoment.format('HH:mm')}
+                    {day} <b>{firstPeriodElementStartMoment.format('HH:mm')} - {firstPeriodElementEndMoment.format('HH:mm')}</b>
                 </div>
             );
         }
@@ -88,7 +88,7 @@ export class CourseDateVisualizer extends React.Component<CourseDateVisualizerPr
                 var endMoment = moment(p.end);
                 return (
                     <div key={p.start.toString()}>
-                        {startMoment.format('HH:mm')} - {endMoment.format('HH:mm')}
+                        <b>{startMoment.format('HH:mm')} - {endMoment.format('HH:mm')}</b>
                     </div>
                 );
             })}

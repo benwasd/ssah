@@ -1,14 +1,14 @@
 @import "~semantic-ui-less/definitions/elements/container"; 
 
 @media only screen and (max-width: @largestMobileScreen) {
-    td.niveau {
-        display: none;
-    }
-
-    .ui.table.unstackable {
+    table.participants {
         border: none;
 
-        td {
+        td.niveau {
+            display: none;
+        }
+    
+        &.unstackable td {
             border: none;
             padding: 0.25em 0.25em;
 
@@ -20,16 +20,18 @@
 }
 
 @media only screen and (max-width: 500px) {
-    .ui.table.unstackable {
-        td.three.wide.niveauId {
+    table.participants {
+        &.unstackable td.three.wide.niveauId {
             width: 1%; // as small as possible, content will regulate
         }
     }
 }
 
-.ui.button.error {
-    background-color: #FFF6F6;
-    border-color: #E0B4B4;
-    border-width: 1px;
-    border-style: solid;
+table.participants {
+    .ui.button.error {
+        background-color: #FFF6F6;
+        border-color: #E0B4B4;
+        border-width: 1px;
+        border-style: solid;
+    }
 }

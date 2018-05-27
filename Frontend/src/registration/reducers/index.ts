@@ -30,7 +30,7 @@ const handleApplicant: Reducer<ApplicantState, Action> = (state, action) => {
 
 const handleAvailability: Reducer<AvailabilityState, Action> = (state, action) => {
     if (state === undefined) {
-        return {};
+        return { availableFrom: undefined, availableTo: undefined };
     }
     
     switch (action.type) {

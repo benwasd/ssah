@@ -25,7 +25,7 @@ export class ParticipantList extends React.Component<ParticipantListProps, Parti
 
         return (
             <div style={{margin: '1em 0em 0em'}}>
-                <table className="ui table unstackable">
+                <table className="ui table unstackable participants">
                     <tbody>
                         {participantsWithNewRow.map((p, i) => {
                             const props = Object.assign(
