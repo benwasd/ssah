@@ -1,0 +1,79 @@
+@import "~semantic-ui-less/definitions/elements/container"; 
+
+.registration.head .lead {
+    padding-left: 3px;
+}
+
+.ui.steps.fluid.unstackable .step .description { 
+    font-size: .8rem;
+}
+
+.ui.steps.fluid.nonavigate {
+    pointer-events: none;
+}
+
+@media only screen and (max-width: 512px) {
+    .ui.steps.fluid.unstackable .step {
+        > .icon {
+            display: none;
+        }
+    }
+}
+
+@media only screen and (max-width: @largestMobileScreen) {
+    .ui.steps.fluid.unstackable .step:first-child {
+        padding-left: .7em;
+    }
+
+    .ui.steps.fluid.unstackable .step {
+        font-size: .7rem;
+        padding: .7em .7em;
+
+        > .content {
+            &.shorter { max-width: 85px; }
+            &.longer { max-width: 95px; }
+            max-width: 90px;
+
+            .description {
+                font-size: .7rem,
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: @tabletBreakpoint) and (max-width: @largestTabletScreen) {
+    .ui.steps.fluid.unstackable .step:first-child {
+        padding-left: 1.45em;
+    }
+
+    .ui.steps.fluid.unstackable .step {
+        > .content {
+            &.shorter { max-width: 105px; }
+            &.longer { max-width: 120px; }
+            max-width: 120px;
+        }
+    }
+}
+
+@media only screen and (min-width: @computerBreakpoint) {
+    .ui.steps.fluid.unstackable .step:first-child {
+        padding-left: 1.45em;
+    }
+
+    .ui.steps.fluid.unstackable .step:last-child {
+        padding-right: 1.45em;
+    }
+
+    .ui.steps.fluid.unstackable .step {
+        > .content {
+            &.shorter { max-width: 168px; }
+            &.longer { max-width: 208px; }
+            max-width: 178px;
+        }
+    }
+}
+
+.ui.steps.fluid.unstackable .step.completed,
+.ui.steps.fluid.unstackable .step.completed::after {
+    background-color: #fafbfc;
+}

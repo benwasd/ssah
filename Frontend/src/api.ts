@@ -654,7 +654,6 @@ export class RegistrationDto {
     givenname: string;
     residence: string;
     phoneNumber: string;
-    preferSimultaneousCourseExecutionForParticipants: boolean;
     availableFrom: Date;
     availableTo: Date;
     status: RegistrationStatus;
@@ -668,7 +667,6 @@ export class RegistrationDto {
             this.givenname = data["givenname"];
             this.residence = data["residence"];
             this.phoneNumber = data["phoneNumber"];
-            this.preferSimultaneousCourseExecutionForParticipants = data["preferSimultaneousCourseExecutionForParticipants"];
             this.availableFrom = data["availableFrom"] ? new Date(data["availableFrom"].toString()) : <any>undefined;
             this.availableTo = data["availableTo"] ? new Date(data["availableTo"].toString()) : <any>undefined;
             this.status = data["status"];
@@ -695,7 +693,6 @@ export class RegistrationDto {
         data["givenname"] = this.givenname;
         data["residence"] = this.residence;
         data["phoneNumber"] = this.phoneNumber;
-        data["preferSimultaneousCourseExecutionForParticipants"] = this.preferSimultaneousCourseExecutionForParticipants;
         data["availableFrom"] = this.availableFrom ? this.availableFrom.toISOString() : <any>undefined;
         data["availableTo"] = this.availableTo ? this.availableTo.toISOString() : <any>undefined;
         data["status"] = this.status;
@@ -711,7 +708,8 @@ export class RegistrationDto {
 export enum RegistrationStatus {
     Registration = 0, 
     CourseSelection = 1, 
-    Committed = 2, 
+    Commitment = 2, 
+    Committed = 3, 
 }
 
 export class RegistrationParticipantDto extends EntityDto {

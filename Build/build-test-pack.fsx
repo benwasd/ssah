@@ -60,7 +60,7 @@ Target "Build-Backend" (fun _ ->
 
 Target "Build-Frontend" (fun _ -> 
   npm (Install Standard) (projectRoot @@ "Frontend")
-  npm (Run "build") (projectRoot @@ "Frontend")
+  npm (Run "build-production") (projectRoot @@ "Frontend")
 )
 
 Target "Test-Backend" (fun _ ->
@@ -92,8 +92,13 @@ Target "Collect-Output" (fun _ ->
     |> SetBaseDir projectRoot
     |> Seq.iter (CopyFileWithSubfolder ("./Frontend/public/") (outputDir @@ "Frontend"))
 
+  let mainCssFilename = !! (outputDir @@ "./Frontend/static/css/main.*.css") |> Seq.head |> filename
+  let bundlejsFilename = !! (outputDir @@ "./Frontend/static/js/bundle.*.js") |> Seq.head |> filename
+  
   ReadFileAsString (outputDir @@ "Frontend" @@ "index.html")
   |> replace "./dist" ""
+  |> replace "main.css" mainCssFilename
+  |> replace "bundle.js" bundlejsFilename
   |> WriteStringToFile false (outputDir @@ "Frontend" @@ "index.html")
 
   !! "./**/*"

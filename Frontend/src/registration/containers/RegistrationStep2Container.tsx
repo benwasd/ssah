@@ -2,21 +2,19 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { State } from '../../main/state';
-import { applicantChange, selectCoursesForParticipants, loadPossibleCourses } from '../actions';
-import { ApplicantProps } from '../components/Applicant';
+import { selectCoursesForParticipants } from '../actions';
 import { CourseSelection, CourseSelectionProps, SelectionMap } from '../components/CourseSelection';
 
 const CourseSelectionContainer = connect(
     (state: State): Partial<CourseSelectionProps> => {
         return {
-            preferSimultaneousCourseExecutionForParticipants: state.registration.applicant.preferSimultaneousCourseExecutionForParticipants,
             participants: state.registration.participants,
-            possibleCourses: state.registration.possibleCourses
+            possibleCourses: state.registration.possibleCourses,
+            showAllValidationErrors: state.registration.showAllValidationErrors
         }
     },
     {
-        selectCoursesForParticipants,
-        loadPossibleCourses
+        selectCoursesForParticipants
     }
 )(CourseSelection)
 

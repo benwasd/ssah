@@ -7,7 +7,7 @@
 --------------------*/
 
 @stepMargin: 1em 0em;
-@stepsBorderRadius: @defaultBorderRadius;
+@stepsBorderRadius: 0em;
 @stepsBackground: '';
 @stepsBoxShadow: none;
 @stepsBorder: 1px solid @borderColor;
@@ -108,7 +108,7 @@
 @completedColor: @positiveColor;
 
 /* Hover */
-@hoverBackground: @offWhite;
+@hoverBackground: @darkWhite;
 @hoverColor: @hoveredTextColor;
 
 /* Down */
@@ -116,15 +116,14 @@
 @downColor: @pressedTextColor;
 
 /* Active */
-@activeBackground: @darkWhite;
+@activeBackground: @white;
 @activeColor: @linkColor;
 @activeIconColor: @darkTextColor;
 
 /* Active + Hover */
-@activeHoverBackground: @lightGrey;
+@activeHoverBackground: @darkWhite;
 @activeHoverColor: @textColor;
 
-
 /* Disabled */
-@disabledBackground: @background;
-@disabledColor: @disabledTextColor;
+@disabledBackground: @offWhite;
+@disabledColor: #c6cbd1;
