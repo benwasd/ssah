@@ -2,6 +2,7 @@ import { Dispatch } from 'react-redux';
 import { Action } from 'redux';
 
 import { CommitRegistrationDto, CommitRegistrationParticipantDto, PossibleCourseDto, RegistrationApiProxy, RegistrationDto, RegistrationParticipantDto } from '../../api';
+import { track } from '../../main/actions';
 import { State } from '../../main/state';
 import { throwIfUndefined } from '../../utils';
 import { ApplicantState, AvailabilityState, hasAllForRegistrationParticipant, ParticipantState } from '../state';
@@ -70,10 +71,21 @@ export interface RegistrationLoadedAction extends Action {
 
 export const loadRegistration = (id: string) => (dispatch: Dispatch) => {
     const apiProxy = new RegistrationApiProxy();
-    apiProxy.getRegistration(id).then(r => {
-        const action: RegistrationLoadedAction = { type: REGISTRATION_LOADED, registration: r };
-        dispatch(action);
-    });
+    track(apiProxy.getRegistration(id), dispatch)
+        .then(r => {
+            const action: RegistrationLoadedAction = { type: REGISTRATION_LOADED, registration: r };
+            dispatch(action);
+        });
+}
+
+export const REGISTRATION_UNSET = 'REGISTRATION_UNSET';
+
+export interface RegistrationUnsetAction extends Action {
+}
+
+export const unsetRegistration = () => (dispatch: Dispatch) => {
+    const action: RegistrationUnsetAction = { type: REGISTRATION_UNSET };
+    dispatch(action);
 }
 
 export const REGISTRATION_SUBMIT = 'REGISTRATION_SUBMITTED';
@@ -115,7 +127,7 @@ export const submitOrUpdateRegistration = (onSubmittedOrUpdated?: (registrationI
         });
 
     if (registrationDto.registrationId) {
-        apiProxy.update(registrationDto).then(r => {
+        track(apiProxy.update(registrationDto), dispatch).then(r => {
             const action: RegistrationSubmittedAction = { type: REGISTRATION_SUBMIT, applicantId: r.applicantId, registrationId: r.registrationId };
             dispatch(action);
 
@@ -125,7 +137,7 @@ export const submitOrUpdateRegistration = (onSubmittedOrUpdated?: (registrationI
         });
     }
     else {
-        apiProxy.register(registrationDto).then(r => {
+        track(apiProxy.register(registrationDto), dispatch).then(r => {
             const action: RegistrationSubmittedAction = { type: REGISTRATION_SUBMIT, applicantId: r.applicantId, registrationId: r.registrationId };
             dispatch(action);
 
@@ -135,7 +147,6 @@ export const submitOrUpdateRegistration = (onSubmittedOrUpdated?: (registrationI
         });
     }
 }
-
 
 export const REGISTRATION_COMMITTED = 'REGISTRATION_COMMITTED';
 
@@ -163,7 +174,7 @@ export const commitRegistration = (onCommitted?: () => void) => (dispatch: Dispa
             return commitPartipiantDto;
         });
 
-    apiProxy.commitRegistration(commitRegistrationDto).then(r => {
+    track(apiProxy.commitRegistration(commitRegistrationDto), dispatch).then(r => {
         const action: RegistrationCommittedAction = { type: REGISTRATION_SUBMIT };
         dispatch(action);
 
@@ -181,7 +192,8 @@ export interface RegistrationPossibleCoursesLoadedAction extends Action {
 
 export const loadPossibleCourses = () => (dispatch: Dispatch, getState: () => State) => {
     const apiProxy = new RegistrationApiProxy();
-    apiProxy.possibleCourseDatesPerParticipant(throwIfUndefined<string>(getState().registration.id)).then(r => {
+    const registrationId = throwIfUndefined<string>(getState().registration.id);
+    track(apiProxy.possibleCourseDatesPerParticipant(registrationId), dispatch).then(r => {
         const action: RegistrationPossibleCoursesLoadedAction = { type: REGISTRATION_POSSIBLE_COURSES_LOADED, possibleCourses: r }
         dispatch(action);
     });

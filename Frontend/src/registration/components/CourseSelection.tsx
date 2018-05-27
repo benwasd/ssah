@@ -66,7 +66,9 @@ export class CourseSelection extends React.Component<CourseSelectionProps, Cours
     }
 
     getXyz = (): Xyz[] => {
-        const validParticipants = this.props.participants.filter(hasAllForRegistrationParticipant);
+        const validParticipants = this.props.participants
+            .filter(hasAllForRegistrationParticipant)
+            .filter(p => !!p.id);
 
         if (this.state.preferSimultaneousCourseExecutionForParticipants) {
             const groups = chain(this.props.possibleCourses)

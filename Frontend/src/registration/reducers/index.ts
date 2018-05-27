@@ -10,7 +10,7 @@ import {
     REGISTRATION_SHOW_ALL_VALIDATION_ERRORS, RegistrationShowAllValidationErrorsAction,
     REGISTRATION_LOADED, RegistrationLoadedAction,
     PARTICIPANT_SELECT_COURSE, ParticipantSelectCourseAction,
-    REGISTRATION_POSSIBLE_COURSES_LOADED, RegistrationPossibleCoursesLoadedAction,
+    REGISTRATION_POSSIBLE_COURSES_LOADED, RegistrationPossibleCoursesLoadedAction, REGISTRATION_UNSET,
 } from '../actions';
 import { ApplicantState, AvailabilityState, ParticipantState, RegistrationState } from '../state';
 
@@ -112,9 +112,18 @@ const handleRegistration: Reducer<RegistrationState, Action> = (state, action) =
         case REGISTRATION_SHOW_ALL_VALIDATION_ERRORS: 
             const showAllValidationErrorsAction = action as RegistrationShowAllValidationErrorsAction;
             return update(state, { $merge: { showAllValidationErrors: showAllValidationErrorsAction.showAllValidationErrors } });
+        case REGISTRATION_UNSET:
+            return {
+                id: null,
+                status: RegistrationStatus.Registration,
+                showAllValidationErrors: false,
+                applicant: handleApplicant(undefined, noopAction()),
+                availability: handleAvailability(undefined, noopAction()),
+                participants: handleParticipants(undefined, noopAction()),
+                possibleCourses: handlePossibleCourses(undefined, noopAction())
+            };
         case REGISTRATION_LOADED:
             const loadedAction = action as RegistrationLoadedAction;
-
             return {
                 id: loadedAction.registration.registrationId ? loadedAction.registration.registrationId : null,
                 status: loadedAction.registration.status,
