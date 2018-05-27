@@ -44,7 +44,7 @@ export class BusyIndicator extends React.Component<BusyIndicatorProps, BusyIndic
 
     render() {
         return (
-            <Dimmer active={this.state.isVisible}>
+            <Dimmer active={this.state.isVisible} page>
                 <Loader size='massive'>Loading</Loader>
             </Dimmer>
         );

@@ -11,6 +11,18 @@
         td {
             border: none;
             padding: 0.25em 0.25em;
+
+            &.three.wide.ageGroup {
+                width: 25%;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .ui.table.unstackable {
+        td.three.wide.niveauId {
+            width: 1%; // as small as possible, content will regulate
         }
     }
 }

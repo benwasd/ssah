@@ -45,7 +45,7 @@ class InternalRegistrationContainer extends React.Component<InternalRegistration
     initStateByPathname(pathname: string) {
         if (pathname.toLowerCase() === '/register') {
             this.props.unsetRegistration();
-            this.setState({ status: RegistrationStatus.Registration });
+            this.setState(null);
         }
         else if (pathname.toLowerCase().startsWith('/registration/') && this.props.match.params.id) {
             this.props.loadRegistration(this.props.match.params.id);

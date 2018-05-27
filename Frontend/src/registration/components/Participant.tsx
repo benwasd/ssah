@@ -79,7 +79,7 @@ export class Participant extends React.Component<ParticipantProps, ParticipantCS
                         value={this.props.name}
                         onChange={this.handleChange}
                         error={this.isEmptyAndValidatedOnNotNewRow(p => p.name)} /></td>
-                <td className='three wide'>
+                <td className='three wide ageGroup'>
                     <Input 
                         placeholder='Jahrgang' 
                         name='ageGroup' 
@@ -88,11 +88,11 @@ export class Participant extends React.Component<ParticipantProps, ParticipantCS
                         onChange={this.handleChange}
                         error={this.isEmptyAndValidatedOnNotNewRow(p => p.ageGroup)} />
                 </td>
-                <td className='three wide'>
-                    <NiveauVisualizer discipline={this.props.discipline} niveauId={this.props.niveauId} />
-                    <Button onClick={this.openNiveauModal} fluid basic>
-                        X
-                    </Button>
+                <td className='three wide niveauId'>
+                    <NiveauVisualizer
+                        onClick={this.openNiveauModal}
+                        discipline={this.props.discipline}
+                        niveauId={this.props.niveauId} />
                 </td>
                 <td className='five wide niveau'>
                     <Button fluid onClick={this.openNiveauModal} className={this.hasErrorInModal() ? 'error' : ''}>
