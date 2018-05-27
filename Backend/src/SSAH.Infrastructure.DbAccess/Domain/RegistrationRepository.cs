@@ -21,10 +21,10 @@ namespace SSAH.Infrastructure.DbAccess.Domain
             _registrationParticipantSet = registrationParticipantSet;
         }
 
-        public IEnumerable<RegistrationWithParticipant> GetRegisteredParticipantOverlappingPeriod(Discipline discipline, DateTime from, DateTime to)
+        public IEnumerable<RegistrationWithParticipant> GetRegisteredParticipantOverlappingPeriod(Discipline discipline, int niveauId, DateTime from, DateTime to)
         {
             return GetRegisteredParticipants()
-                .Where(rp => rp.RegistrationParticipant.Discipline == discipline)
+                .Where(rp => rp.RegistrationParticipant.Discipline == discipline && rp.RegistrationParticipant.NiveauId == niveauId)
                 .Where(rp => from <= rp.Registration.AvailableTo && rp.Registration.AvailableFrom <= to);
         }
 
