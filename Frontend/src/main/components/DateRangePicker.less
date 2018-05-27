@@ -1,3 +1,39 @@
+/* SSAH CUSTOM */
+.DateRangePicker input {
+  text-align: center;
+  &::-webkit-input-placeholder {
+    color: rgba(191, 191, 191, 0.87);
+  }
+
+  &::-moz-placeholder {
+    color: rgba(191, 191, 191, 0.87);
+  }
+
+  &:-ms-input-placeholder {
+    color: rgba(191, 191, 191, 0.87);
+  }
+}
+
+.error .DateRangePickerInput {
+  border-color: #E0B4B4 !important;
+  background: #FFF6F6;
+
+  input {
+    background: #FFF6F6;
+    &::-webkit-input-placeholder {
+      color: #e7bdbc;
+    }
+  
+    &::-moz-placeholder {
+      color: #e7bdbc;
+    }
+  
+    &:-ms-input-placeholder {
+      color: #e7bdbc;
+    }
+  }
+}
+
 .PresetDateRangePicker_panel {
   padding: 0 22px 11px
 }
@@ -651,7 +687,10 @@
   border: 0;
   border-top: 0;
   border-right: 0;
-  border-bottom: 2px solid #008489;
+
+  /* SSAH CUSTOM */
+  // border-bottom: 2px solid #008489;
+  border-bottom: 2px solid #85B7D9;
   border-left: 0
 }
 .DateInput_input__disabled {
@@ -691,7 +730,12 @@
 }
 .DateRangePickerInput__withBorder {
   border: 1px solid #dbdbdb;
-  border-radius: 2px
+
+  /* SSAH CUSTOM */
+  border-radius: 0.25em;
+  padding-left: 2px;
+  padding-right: 2px;
+  padding-bottom: 1px;
 }
 .DateRangePickerInput__rtl {
   direction: rtl

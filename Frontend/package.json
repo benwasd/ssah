@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "del \"node_modules\\redux-thunk\\index.d.ts\" && webpack",
+    "build-production": "del \"node_modules\\redux-thunk\\index.d.ts\" && webpack --env.production",
     "watch": "del \"node_modules\\redux-thunk\\index.d.ts\" && webpack --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

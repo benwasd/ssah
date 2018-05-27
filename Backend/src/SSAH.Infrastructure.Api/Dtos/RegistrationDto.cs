@@ -19,8 +19,6 @@ namespace SSAH.Infrastructure.Api.Dtos
 
         public string PhoneNumber { get; set; }
 
-        public bool PreferSimultaneousCourseExecutionForParticipants { get; set; }
-
         public DateTime AvailableFrom { get; set; }
 
         public DateTime AvailableTo { get; set; }

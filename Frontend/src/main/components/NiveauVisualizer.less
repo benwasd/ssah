@@ -1,0 +1,111 @@
+@import "~semantic-ui-less/definitions/elements/button"; 
+@import "~semantic-ui-less/definitions/elements/container"; 
+
+@kidsVillageColor: #97bf0d;
+@blueLeagueColor: #3D59AB;
+@redLeagueColor:#CD2626;
+@blackLeagueColor: #292421;
+
+.niveau.visualizer {
+    display: flex;
+    border-radius: 1em;
+    padding-left: 7px;
+    padding-right: 7px;
+    width: 2*44+2*7px;
+    margin: auto;
+
+    pointer-events: none;
+    
+    .discipline,    
+    .niveau {
+        width: 44px;
+        height: 44px;
+        .image {
+            border: none;
+        }
+    }
+
+    .caption {
+        display: none;
+    }
+
+    .discipline .image {
+        height: 30px;
+        width: 30px;
+        margin: 7px;
+    }
+
+    &.kids-village {
+        background-color: @kidsVillageColor;
+
+        .niveau .image {
+            height: 44px;
+            width: 57px;
+            margin-left: -8px;
+            margin-top: 3px;
+        }
+    }
+
+    &.blue-league {
+        background-color: @blueLeagueColor;
+    }
+
+    &.red-league {
+        background-color: @redLeagueColor;
+    }
+
+    &.black-league {
+        background-color: @blackLeagueColor;
+    }
+}
+
+@media only screen and (max-width: @largestMobileScreen) {   
+    .niveau.clickable-on-mobile {
+        cursor: pointer;
+        pointer-events: all;
+        background-color: @backgroundColor;
+        
+        .caption {
+            display: block;
+            position: absolute;
+            text-align: center;
+            width: 88px;
+            font-weight: 600;
+        }
+
+        &:hover {
+            background-color: @hoverBackgroundColor;
+        }
+        &:active {
+            background-color: @downBackgroundColor;
+        }
+
+        &.kids-village:hover {
+            background-color: saturate(darken(@kidsVillageColor, 5), 10, relative);
+        }
+        &.kids-village:active {
+            background-color: darken(@kidsVillageColor, 10);
+        }
+
+        &.blue-league:hover {
+            background-color: saturate(darken(@blueLeagueColor, 5), 10, relative);
+        }
+        &.blue-league:active {
+            background-color: darken(@blueLeagueColor, 10);
+        }
+
+        &.red-league:hover {
+            background-color: saturate(darken(@redLeagueColor, 5), 10, relative);
+        }
+        &.red-league:active {
+            background-color: darken(@redLeagueColor, 10);
+        }
+
+        &.black-league:hover {
+            background-color: saturate(darken(@blackLeagueColor, 5), 10, relative);
+        }
+        &.black-league:active {
+            background-color: darken(@blackLeagueColor, 10);
+        }
+    }
+}
