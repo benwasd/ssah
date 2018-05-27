@@ -19,8 +19,8 @@ export interface SelectionMap {
 export interface CourseSelectionProps {
     participants: ParticipantState[];
     possibleCourses: PossibleCourseDto[];
-    loadPossibleCourses();
     selectCoursesForParticipants(selectedCoursesByParticipant: SelectionMap);
+    showAllValidationErrors: boolean;
 }
 
 export interface CourseSelectionState {
@@ -45,7 +45,6 @@ export class CourseSelection extends React.Component<CourseSelectionProps, Cours
     }
 
     componentWillMount() {
-        this.props.loadPossibleCourses();
         this.setSelectedCourseStateByParticipants();
     }
     
@@ -135,6 +134,10 @@ export class CourseSelection extends React.Component<CourseSelectionProps, Cours
                         </table>
                     </div>
                 )}
+            {this.props.showAllValidationErrors && 
+                <div className='ui negative message m-0 mt-3'>
+                    <p>Bitte wählen Sie für jeden Teilnehmer die passende Durchführung aus.</p>
+                </div>}
         </>);
     }
 

@@ -57,3 +57,7 @@ export function hasAllForRegistrationParticipant(p: ParticipantState) {
         && p.discipline != null
         && !!p.ageGroup;
 }
+
+export function hasCourseSelectionForAllParticipants(r: RegistrationState) {
+    return r.participants.every(p => !!p.committing && !!p.committing.courseIdentifier && !!p.committing.courseStartDate);
+}

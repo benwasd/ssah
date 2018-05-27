@@ -34,6 +34,7 @@ export class RegistrationSteps extends React.Component<RegistrationStepsProps> {
     render() {
         let heading;
         let leadText;
+        let navigationDisabled = '';
 
         if (this.props.status === RegistrationStatus.Registration) {
             heading = "Willkommen";
@@ -43,13 +44,14 @@ export class RegistrationSteps extends React.Component<RegistrationStepsProps> {
             heading = "Hallo " + this.props.applicantGivenname;
             leadText = "Schön, machen Sie den Ersten Schritt in den Schnee.";
         }
-        else if (this.props.status === RegistrationStatus.Committment) {
+        else if (this.props.status === RegistrationStatus.Commitment) {
             heading = "Hallo " + this.props.applicantGivenname;
             leadText = "Schön, machen Sie den Ersten Schritt in den Schnee.";
         }
         else {
             heading = "Geschafft";
             leadText = "Wir freuen uns auf Sie.";
+            navigationDisabled = ' nonavigate';
         }
 
         return (<>
@@ -57,7 +59,7 @@ export class RegistrationSteps extends React.Component<RegistrationStepsProps> {
                 <h1 className='mb-0'>{heading}</h1>
                 <p className="lead">{leadText}</p>
             </div>
-            <div className="ui steps fluid unstackable">
+            <div className={'ui steps fluid unstackable' + navigationDisabled}>
                 <a className={this.getStepClassName(RegistrationStatus.Registration)}
                    onClick={this.getChangeStepFunc(RegistrationStatus.Registration)}>
                     <i className="user icon"></i>
@@ -74,8 +76,8 @@ export class RegistrationSteps extends React.Component<RegistrationStepsProps> {
                         <div className="description">Wählen Sie den passenden Kurs</div>
                     </div>
                 </a>
-                <a className={this.getStepClassName(RegistrationStatus.Committment)}
-                   onClick={this.getChangeStepFunc(RegistrationStatus.Committment)}>
+                <a className={this.getStepClassName(RegistrationStatus.Commitment)}
+                   onClick={this.getChangeStepFunc(RegistrationStatus.Commitment)}>
                     <i className="handshake outline icon"></i>
                     <div className="content longer">
                         <div className="title">Bestätigung</div>

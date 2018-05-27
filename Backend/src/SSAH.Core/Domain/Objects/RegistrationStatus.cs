@@ -4,7 +4,7 @@
     {
         Registration,
         CourseSelection,
-        Committment,
+        Commitment,
         Committed
     }
 }

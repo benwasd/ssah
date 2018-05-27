@@ -8,7 +8,7 @@ import { State } from '../../main/state';
 import { throwIfUndefined } from '../../utils';
 import { showAllValidationErrors, submitOrUpdateRegistration, loadRegistration, unsetRegistration, courseSelected, commitRegistration} from '../actions';
 import { RegistrationSteps } from '../components/RegistrationSteps';
-import { hasAllForRegistration, hasAllForRegistrationParticipant, RegistrationState } from '../state';
+import { RegistrationState, hasAllForRegistration, hasAllForRegistrationParticipant, hasCourseSelectionForAllParticipants } from '../state';
 import { RegistrationStep1Container } from './RegistrationStep1Container';
 import { RegistrationStep2Container } from './RegistrationStep2Container';
 import { RegistrationStep3Container } from './RegistrationStep3Container';
@@ -69,8 +69,10 @@ class InternalRegistrationContainer extends React.Component<InternalRegistration
         const r = this.props.registration;
         const isStateValidForSubmitting = hasAllForRegistration(r) && r.participants.every(hasAllForRegistrationParticipant);
         
-        if (isStateValidForSubmitting) {            
+        if (isStateValidForSubmitting) {
+            this.props.showAllValidationErrors(false);    
             this.props.submitOrUpdateRegistration(onSubmitted);
+            this.unsetStatus();
         }
         else {
             this.props.showAllValidationErrors(true);
@@ -78,7 +80,16 @@ class InternalRegistrationContainer extends React.Component<InternalRegistration
     }
 
     courseSelected = () => {
-        this.props.courseSelected();
+        const areCoursesSelected = hasCourseSelectionForAllParticipants(this.props.registration);
+        
+        if (areCoursesSelected) {
+            this.props.showAllValidationErrors(false);
+            this.props.courseSelected();
+            this.unsetStatus();
+        }
+        else {
+            this.props.showAllValidationErrors(true);
+        }
     }
 
     commit = () => {
@@ -95,7 +106,7 @@ class InternalRegistrationContainer extends React.Component<InternalRegistration
             ? <RegistrationStep1Container />
             : status === RegistrationStatus.CourseSelection
                 ? <RegistrationStep2Container />
-                : status === RegistrationStatus.Committment
+                : status === RegistrationStatus.Commitment
                     ? (<RegistrationStep3Container />)
                     : (<RegistrationStep4Container />);
 
@@ -108,13 +119,13 @@ class InternalRegistrationContainer extends React.Component<InternalRegistration
             {activeSection}
             {status === RegistrationStatus.Registration &&
                 <Button primary onClick={this.submitOrUpdate} className='mt-3'>
-                    {this.props.registration.id ? 'Aktualisieren' : 'Registrieren'}
+                    {this.props.registration.id ? 'Aktualisieren & Weiter' : 'Registrieren'}
                 </Button>}
             {status === RegistrationStatus.CourseSelection &&
                 <Button primary onClick={this.courseSelected} className='mt-3'>
                     Weiter
                 </Button>}
-            {status === RegistrationStatus.Committment &&
+            {status === RegistrationStatus.Commitment &&
                 <Button primary onClick={this.commit} className='mt-3' size='large'>
                     Bestätigen
                 </Button>}

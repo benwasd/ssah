@@ -1,7 +1,7 @@
 import { Dispatch } from 'react-redux';
 import { Action } from 'redux';
 
-import { CommitRegistrationDto, CommitRegistrationParticipantDto, PossibleCourseDto, RegistrationApiProxy, RegistrationDto, RegistrationParticipantDto } from '../../api';
+import { CommitRegistrationDto, CommitRegistrationParticipantDto, PossibleCourseDto, RegistrationApiProxy, RegistrationDto, RegistrationParticipantDto, RegistrationStatus } from '../../api';
 import { track } from '../../main/actions';
 import { State } from '../../main/state';
 import { throwIfUndefined } from '../../utils';
@@ -69,12 +69,17 @@ export interface RegistrationLoadedAction extends Action {
     registration: RegistrationDto;
 }
 
-export const loadRegistration = (id: string) => (dispatch: Dispatch) => {
+export const loadRegistration = (id: string) => (dispatch: Dispatch, getState: () => State) => {
     const apiProxy = new RegistrationApiProxy();
     track(apiProxy.getRegistration(id), dispatch)
         .then(r => {
             const action: RegistrationLoadedAction = { type: REGISTRATION_LOADED, registration: r };
             dispatch(action);
+
+            // TODO: Verify pattern
+            if (action.registration.status > RegistrationStatus.Registration) {
+                loadPossibleCourses()(dispatch, getState);
+            }
         });
 }
 

@@ -156,7 +156,7 @@ const handleRegistration: Reducer<RegistrationState, Action> = (state, action) =
                 possibleCourses: []
             }
         case REGISTRATION_COURSE_SELECTED:
-            return update(state, { $merge: { status: RegistrationStatus.Committment } });
+            return update(state, { $merge: { status: RegistrationStatus.Commitment } });
         default:
             return state;
     }

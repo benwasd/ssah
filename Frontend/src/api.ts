@@ -708,7 +708,7 @@ export class RegistrationDto {
 export enum RegistrationStatus {
     Registration = 0, 
     CourseSelection = 1, 
-    Committment = 2, 
+    Commitment = 2, 
     Committed = 3, 
 }
 
