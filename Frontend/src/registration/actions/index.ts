@@ -88,7 +88,7 @@ export const unsetRegistration = () => (dispatch: Dispatch) => {
     dispatch(action);
 }
 
-export const REGISTRATION_SUBMIT = 'REGISTRATION_SUBMITTED';
+export const REGISTRATION_SUBMITTED = 'REGISTRATION_SUBMITTED';
 
 export interface RegistrationSubmittedAction extends Action {
     registrationId: string;
@@ -128,7 +128,7 @@ export const submitOrUpdateRegistration = (onSubmittedOrUpdated?: (registrationI
 
     if (registrationDto.registrationId) {
         track(apiProxy.update(registrationDto), dispatch).then(r => {
-            const action: RegistrationSubmittedAction = { type: REGISTRATION_SUBMIT, applicantId: r.applicantId, registrationId: r.registrationId };
+            const action: RegistrationSubmittedAction = { type: REGISTRATION_SUBMITTED, applicantId: r.applicantId, registrationId: r.registrationId };
             dispatch(action);
 
             if (onSubmittedOrUpdated) {
@@ -138,7 +138,7 @@ export const submitOrUpdateRegistration = (onSubmittedOrUpdated?: (registrationI
     }
     else {
         track(apiProxy.register(registrationDto), dispatch).then(r => {
-            const action: RegistrationSubmittedAction = { type: REGISTRATION_SUBMIT, applicantId: r.applicantId, registrationId: r.registrationId };
+            const action: RegistrationSubmittedAction = { type: REGISTRATION_SUBMITTED, applicantId: r.applicantId, registrationId: r.registrationId };
             dispatch(action);
 
             if (onSubmittedOrUpdated) {
@@ -146,6 +146,16 @@ export const submitOrUpdateRegistration = (onSubmittedOrUpdated?: (registrationI
             }
         });
     }
+}
+
+export const REGISTRATION_COURSE_SELECTED = 'REGISTRATION_COURSE_SELECTED';
+
+export interface RegistrationCourseSelectedAction extends Action {
+}
+
+export const courseSelected = () => (dispatch: Dispatch) => {
+    const action: RegistrationCourseSelectedAction = { type: REGISTRATION_COURSE_SELECTED };
+    dispatch(action);
 }
 
 export const REGISTRATION_COMMITTED = 'REGISTRATION_COMMITTED';
@@ -175,7 +185,7 @@ export const commitRegistration = (onCommitted?: () => void) => (dispatch: Dispa
         });
 
     track(apiProxy.commitRegistration(commitRegistrationDto), dispatch).then(r => {
-        const action: RegistrationCommittedAction = { type: REGISTRATION_SUBMIT };
+        const action: RegistrationCommittedAction = { type: REGISTRATION_SUBMITTED };
         dispatch(action);
 
         if (onCommitted) {

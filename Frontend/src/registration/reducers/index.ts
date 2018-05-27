@@ -9,8 +9,10 @@ import {
     PARTICIPAENT_CHANGE, ParticipantChangeAction, 
     REGISTRATION_SHOW_ALL_VALIDATION_ERRORS, RegistrationShowAllValidationErrorsAction,
     REGISTRATION_LOADED, RegistrationLoadedAction,
+    REGISTRATION_UNSET,
+    REGISTRATION_COURSE_SELECTED,
     PARTICIPANT_SELECT_COURSE, ParticipantSelectCourseAction,
-    REGISTRATION_POSSIBLE_COURSES_LOADED, RegistrationPossibleCoursesLoadedAction, REGISTRATION_UNSET,
+    REGISTRATION_POSSIBLE_COURSES_LOADED, RegistrationPossibleCoursesLoadedAction,
 } from '../actions';
 import { ApplicantState, AvailabilityState, ParticipantState, RegistrationState } from '../state';
 
@@ -153,6 +155,8 @@ const handleRegistration: Reducer<RegistrationState, Action> = (state, action) =
                 }),
                 possibleCourses: []
             }
+        case REGISTRATION_COURSE_SELECTED:
+            return update(state, { $merge: { status: RegistrationStatus.Committment } });
         default:
             return state;
     }

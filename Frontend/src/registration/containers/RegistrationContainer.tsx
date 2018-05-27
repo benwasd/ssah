@@ -6,11 +6,13 @@ import { Button } from 'semantic-ui-react';
 import { RegistrationStatus } from '../../api';
 import { State } from '../../main/state';
 import { throwIfUndefined } from '../../utils';
-import { showAllValidationErrors, submitOrUpdateRegistration, loadRegistration, unsetRegistration, commitRegistration} from '../actions';
+import { showAllValidationErrors, submitOrUpdateRegistration, loadRegistration, unsetRegistration, courseSelected, commitRegistration} from '../actions';
 import { RegistrationSteps } from '../components/RegistrationSteps';
 import { hasAllForRegistration, hasAllForRegistrationParticipant, RegistrationState } from '../state';
 import { RegistrationStep1Container } from './RegistrationStep1Container';
 import { RegistrationStep2Container } from './RegistrationStep2Container';
+import { RegistrationStep3Container } from './RegistrationStep3Container';
+import { RegistrationStep4Container } from './RegistrationStep4Container';
 
 interface InternalRegistrationContainerProps extends RouteComponentProps<{ id: string | null }> {
     registration: RegistrationState;
@@ -18,6 +20,7 @@ interface InternalRegistrationContainerProps extends RouteComponentProps<{ id: s
     submitOrUpdateRegistration(onSubmittedOrUpdated?: (id: string) => void);
     loadRegistration(id: string);
     unsetRegistration();
+    courseSelected();
     commitRegistration(onCommitted?: () => void);
 }
 
@@ -53,7 +56,7 @@ class InternalRegistrationContainer extends React.Component<InternalRegistration
         }
     }
 
-    submitOrUpdateAndNavigate = () => {
+    submitOrUpdate = () => {
         const onSubmitted = newId => {
             if (this.props.match.params.id !== newId) {
                 this.props.history.push('/registration/' + newId);
@@ -74,7 +77,11 @@ class InternalRegistrationContainer extends React.Component<InternalRegistration
         }
     }
 
-    commitAndNavigate = () => {
+    courseSelected = () => {
+        this.props.courseSelected();
+    }
+
+    commit = () => {
         const onCommitted = () => {
             this.props.loadRegistration(throwIfUndefined(this.props.registration.id));
         }
@@ -85,10 +92,12 @@ class InternalRegistrationContainer extends React.Component<InternalRegistration
     render() {
         const status = this.getStatus();
         const activeSection = status === RegistrationStatus.Registration
-            ? (<RegistrationStep1Container />)
+            ? <RegistrationStep1Container />
             : status === RegistrationStatus.CourseSelection
-                ? (<RegistrationStep2Container />)
-                : (<h1></h1>);
+                ? <RegistrationStep2Container />
+                : status === RegistrationStatus.Committment
+                    ? (<RegistrationStep3Container />)
+                    : (<RegistrationStep4Container />);
 
         return (<>
             <RegistrationSteps 
@@ -98,11 +107,15 @@ class InternalRegistrationContainer extends React.Component<InternalRegistration
                 applicantGivenname={this.props.registration.applicant.givenname} />
             {activeSection}
             {status === RegistrationStatus.Registration &&
-                <Button primary onClick={this.submitOrUpdateAndNavigate} className='mt-3'>
+                <Button primary onClick={this.submitOrUpdate} className='mt-3'>
                     {this.props.registration.id ? 'Aktualisieren' : 'Registrieren'}
                 </Button>}
             {status === RegistrationStatus.CourseSelection &&
-                <Button primary onClick={this.commitAndNavigate} className='mt-3'>
+                <Button primary onClick={this.courseSelected} className='mt-3'>
+                    Weiter
+                </Button>}
+            {status === RegistrationStatus.Committment &&
+                <Button primary onClick={this.commit} className='mt-3' size='large'>
                     Bestätigen
                 </Button>}
         </>);
@@ -142,6 +155,7 @@ export const RegistrationContainer = connect(
         submitOrUpdateRegistration,
         loadRegistration,
         unsetRegistration,
+        courseSelected,
         commitRegistration
     }
 )(InternalRegistrationContainer)

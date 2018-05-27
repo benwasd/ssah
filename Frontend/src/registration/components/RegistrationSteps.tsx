@@ -43,6 +43,10 @@ export class RegistrationSteps extends React.Component<RegistrationStepsProps> {
             heading = "Hallo " + this.props.applicantGivenname;
             leadText = "Schön, machen Sie den Ersten Schritt in den Schnee.";
         }
+        else if (this.props.status === RegistrationStatus.Committment) {
+            heading = "Hallo " + this.props.applicantGivenname;
+            leadText = "Schön, machen Sie den Ersten Schritt in den Schnee.";
+        }
         else {
             heading = "Geschafft";
             leadText = "Wir freuen uns auf Sie.";
@@ -70,8 +74,8 @@ export class RegistrationSteps extends React.Component<RegistrationStepsProps> {
                         <div className="description">Wählen Sie den passenden Kurs</div>
                     </div>
                 </a>
-                <a className={this.getStepClassName(RegistrationStatus.Committed)}
-                   onClick={this.getChangeStepFunc(RegistrationStatus.Committed)}>
+                <a className={this.getStepClassName(RegistrationStatus.Committment)}
+                   onClick={this.getChangeStepFunc(RegistrationStatus.Committment)}>
                     <i className="handshake outline icon"></i>
                     <div className="content longer">
                         <div className="title">Bestätigung</div>

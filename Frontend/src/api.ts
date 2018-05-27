@@ -708,7 +708,8 @@ export class RegistrationDto {
 export enum RegistrationStatus {
     Registration = 0, 
     CourseSelection = 1, 
-    Committed = 2, 
+    Committment = 2, 
+    Committed = 3, 
 }
 
 export class RegistrationParticipantDto extends EntityDto {
