@@ -34,7 +34,6 @@ namespace SSAH.Infrastructure.Api.Controllers
         private readonly ICollectionMapper<RegistrationParticipantDto, RegistrationParticipant> _collectionMapper;
         private readonly ICollectionMapper<CommitRegistrationParticipantDto, RegistrationParticipant> _commitCollectionMapper;
         private readonly IOptions<GroupCourseOptionsCollection> _groupCourseOptions;
-        private readonly INotificationService _notificationService;
         private readonly IQueue _queue;
 
         public RegistrationController(
@@ -47,7 +46,6 @@ namespace SSAH.Infrastructure.Api.Controllers
             ICollectionMapper<RegistrationParticipantDto, RegistrationParticipant> collectionMapper,
             ICollectionMapper<CommitRegistrationParticipantDto, RegistrationParticipant> commitCollectionMapper,
             IOptions<GroupCourseOptionsCollection> groupCourseOptions,
-            INotificationService notificationService,
             IQueue queue)
         {
             _unitOfWork = unitOfWork;
@@ -58,15 +56,8 @@ namespace SSAH.Infrastructure.Api.Controllers
             _mapper = mapper;
             _collectionMapper = collectionMapper;
             _commitCollectionMapper = commitCollectionMapper;
-            _queue = queue;
             _groupCourseOptions = groupCourseOptions;
-            _notificationService = notificationService;
-        }
-
-        [HttpGet]
-        public async Task Send()
-        {
-            await _notificationService.SendSms("41754125375", "Hallo");
+            _queue = queue;
         }
 
         [HttpGet]
