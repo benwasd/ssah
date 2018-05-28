@@ -60,7 +60,7 @@ namespace SSAH.Infrastructure.DbAccess.Domain.Seeder
                 Surname = "Sägesser",
                 Givenname = "Martina",
                 DateOfBirth = new DateTime(1987, 12, 6),
-                PhoneNumber = "+41 88 123 123",
+                PhoneNumber = "+41 75 412 53 75",
                 Qualifications = new[]
                 {
                     new Qualification { CompletionYear = 2010, Discipline = Discipline.Ski, EducationTitle = "Kids Instructor" },
@@ -74,7 +74,7 @@ namespace SSAH.Infrastructure.DbAccess.Domain.Seeder
                 Surname = "Müller",
                 Givenname = "Joel",
                 DateOfBirth = new DateTime(1990, 2, 8),
-                PhoneNumber = "+41 88 123 124",
+                PhoneNumber = "+41 75 412 53 75",
                 Qualifications = new[]
                 {
                     new Qualification { CompletionYear = 2009, Discipline = Discipline.Snowboard, EducationTitle = "Kids Instructor" },
@@ -89,7 +89,7 @@ namespace SSAH.Infrastructure.DbAccess.Domain.Seeder
                 Surname = "Peter",
                 Givenname = "Simon",
                 DateOfBirth = new DateTime(1987, 4, 7),
-                PhoneNumber = "+41 88 123 125",
+                PhoneNumber = "+41 75 412 53 75",
                 Qualifications = new[]
                 {
                     new Qualification { CompletionYear = 2008, Discipline = Discipline.Ski, EducationTitle = "Kids Instructor" }

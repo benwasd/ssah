@@ -7,6 +7,8 @@ namespace SSAH.Core
         public const string NAME = "Environment";
 
         public string RegistrationFrontendUrl { get; set; }
+
+        public string InstructorCourseDetailFrontendUrl { get; set; }
     }
 
     public static class EnvironmentOptionsMonitorExtensions
