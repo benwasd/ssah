@@ -34,6 +34,7 @@ namespace SSAH.Infrastructure
             builder.RegisterType<LoggerFactory>().UsingConstructor(typeof(System.Collections.Generic.IEnumerable<ILoggerProvider>), typeof(IOptionsMonitor<LoggerFilterOptions>)).As<ILoggerFactory>().SingleInstance();
             builder.RegisterType<DebugLoggerProvider>().As<ILoggerProvider>().SingleInstance();
             builder.RegisterGeneric(typeof(Logger<>)).As(typeof(ILogger<>));
+            builder.RegisterType<Logger<ILogger>>().As(typeof(ILogger));
 
             // Services
             builder.RegisterType<JsonSerializationService>().As<ISerializationService>().InstancePerDependency();

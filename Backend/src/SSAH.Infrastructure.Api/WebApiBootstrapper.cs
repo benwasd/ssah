@@ -32,15 +32,14 @@ namespace SSAH.Infrastructure.Api
 
         public static void UseSnowSchoolAdministrationHub(this IApplicationBuilder app, IHostingEnvironment env, IContainer container)
         {
-            app.UseScopeMiddleware(container.Resolve<IUnitOfWorkFactory<ILifetimeScope>>());
-            app.UseGlobalExceptionHandler();
-            app.UseCors(ConfigureCorsUsage);
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseScopeMiddleware(container.Resolve<IUnitOfWorkFactory<ILifetimeScope>>());
+            app.UseGlobalExceptionHandler();
+            app.UseCors(ConfigureCorsUsage);
             app.UseMvc();
             app.UseSignalR(ConfigureSignalRUsage);
         }

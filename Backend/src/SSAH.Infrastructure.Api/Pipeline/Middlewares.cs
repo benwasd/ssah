@@ -12,6 +12,21 @@ namespace SSAH.Infrastructure.Api.Pipeline
 {
     public static class Middlewares
     {
+        public static IApplicationBuilder UseScopeMiddleware(this IApplicationBuilder app, IUnitOfWorkFactory<ILifetimeScope> unitOfWorkFactory)
+        {
+            app.Use(async (context, next) =>
+            {
+                using (var unitOfWork = unitOfWorkFactory.Begin())
+                {
+                    context.SetRequestUnitOfWork(unitOfWork);
+
+                    await next();
+                }
+            });
+
+            return app;
+        }
+
         public static IApplicationBuilder UseGlobalExceptionHandler(this IApplicationBuilder app)
         {
             app.Use(async (context, next) =>
@@ -29,21 +44,6 @@ namespace SSAH.Infrastructure.Api.Pipeline
                     logger?.LogCritical(ex, "Global Exception Handler caught an exception.");
 
                     throw;
-                }
-            });
-
-            return app;
-        }
-
-        public static IApplicationBuilder UseScopeMiddleware(this IApplicationBuilder app, IUnitOfWorkFactory<ILifetimeScope> unitOfWorkFactory)
-        {
-            app.Use(async (context, next) =>
-            {
-                using (var unitOfWork = unitOfWorkFactory.Begin())
-                {
-                    context.SetRequestUnitOfWork(unitOfWork);
-
-                    await next();
                 }
             });
 
