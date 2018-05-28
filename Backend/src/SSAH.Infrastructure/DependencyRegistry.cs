@@ -27,6 +27,7 @@ namespace SSAH.Infrastructure
             builder.RegisterGeneric(typeof(OptionsCache<>)).As(typeof(IOptionsMonitorCache<>)).SingleInstance();
             builder.AddOption<GroupCourseOptionsCollection>("GroupCourseOptions");
             builder.AddOption<DemandingThresholdOptions>("DemandingThresholdOptions");
+            builder.AddOption<NiveauOptionsCollection>(NiveauOptionsCollection.NAME);
 
             // Logger
             builder.RegisterType<LoggerFactory>().UsingConstructor(typeof(System.Collections.Generic.IEnumerable<ILoggerProvider>), typeof(IOptionsMonitor<LoggerFilterOptions>)).As<ILoggerFactory>().SingleInstance();
