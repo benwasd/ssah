@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { Form, Checkbox } from 'semantic-ui-react';
+import { Form } from 'semantic-ui-react';
 
-import { ApplicantState } from '../state';
-import { toDropdownValue, getEnumElementsAsDropdownItemProps, fromDropdownValue } from '../../utils';
 import { Language } from '../../api';
+import { languages } from '../../resources';
+import { fromDropdownValue, getEnumElementsAsDropdownItemProps, toDropdownValue } from '../../utils';
+import { ApplicantState } from '../state';
 
 export interface ApplicantProps {
     surname: string;
@@ -32,7 +33,7 @@ export class Applicant extends React.Component<ApplicantProps> {
     }
 
     get languageOptions() {
-        return getEnumElementsAsDropdownItemProps(Language, ["Schweizerdeutsch", "Deutsch", "Französisch", "Italienisch", "Englisch", "Russisch"]);
+        return getEnumElementsAsDropdownItemProps(Language, languages);
     }
 
     render() {
