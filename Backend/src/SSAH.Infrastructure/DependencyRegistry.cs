@@ -26,8 +26,9 @@ namespace SSAH.Infrastructure
             builder.RegisterGeneric(typeof(OptionsFactory<>)).As(typeof(IOptionsFactory<>)).InstancePerDependency();
             builder.RegisterGeneric(typeof(OptionsCache<>)).As(typeof(IOptionsMonitorCache<>)).SingleInstance();
             builder.AddOption<EnvironmentOptions>(EnvironmentOptions.NAME);
-            builder.AddOption<GroupCourseOptionsCollection>(GroupCourseOptionsCollection.NAME);
             builder.AddOption<DemandingThresholdOptions>(DemandingThresholdOptions.NAME);
+            builder.AddOption<GroupCourseOptionsCollection>(GroupCourseOptionsCollection.NAME);
+            builder.AddOption<NiveauOptionsCollection>(NiveauOptionsCollection.NAME);
             builder.AddOption<SmsGatewayOptions>(SmsGatewayOptions.NAME);
 
             // Logger

@@ -48,14 +48,13 @@ namespace SSAH.Core.Domain.Entities
 
         public IEnumerable<CourseParticipant> AddParticipantsToProposalCourse(IOptions<GroupCourseOptionsCollection> groupCourseOptions, ICourseCreationService courseCreationService)
         {
-            foreach (var registrationParticipant in RegistrationParticipants)
+            foreach (var participant in RegistrationParticipants)
             {
                 // TODO: Use damanding service and verify the registration participants 
-                var courseOptions = groupCourseOptions.Value.SingleOrDefault(c => c.Identifier == registrationParticipant.CourseIdentifier && c.Discipline == registrationParticipant.Discipline);
-                var course = courseCreationService.GetOrCreateProposalGroupCourse(registrationParticipant.CourseStartDate.Value, registrationParticipant.NiveauId, courseOptions);
-                var participant = registrationParticipant.ToParticipant(Applicant);
+                var courseOptions = groupCourseOptions.Value.SingleOrDefault(c => c.Match(participant.Discipline, participant.NiveauId) && c.Identifier == participant.CourseIdentifier);
+                var course = courseCreationService.GetOrCreateProposalGroupCourse(participant.CourseStartDate.Value, participant.NiveauId, courseOptions);
 
-                var courseParticipant = new CourseParticipant { Participant = participant };
+                var courseParticipant = new CourseParticipant { Participant = participant.ToParticipant(Applicant) };
                 course.Participants.Add(courseParticipant);
 
                 yield return courseParticipant;
