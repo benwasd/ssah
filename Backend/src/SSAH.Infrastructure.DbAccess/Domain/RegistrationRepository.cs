@@ -21,11 +21,19 @@ namespace SSAH.Infrastructure.DbAccess.Domain
             _registrationParticipantSet = registrationParticipantSet;
         }
 
-        public IEnumerable<RegistrationWithParticipant> GetRegisteredParticipantOverlappingPeriod(Discipline discipline, DateTime from, DateTime to)
+        public IEnumerable<RegistrationWithParticipant> GetRegisteredParticipantOverlappingPeriod(CourseType courseType, Discipline discipline, int niveauId, DateTime from, DateTime to, bool onlyUncommittedRegistrations = false)
         {
-            return GetRegisteredParticipants()
-                .Where(rp => rp.RegistrationParticipant.Discipline == discipline)
+            var result = GetRegisteredParticipants()
+                .Where(rp => rp.RegistrationParticipant.CourseType == courseType && rp.RegistrationParticipant.Discipline == discipline && rp.RegistrationParticipant.NiveauId == niveauId)
                 .Where(rp => from <= rp.Registration.AvailableTo && rp.Registration.AvailableFrom <= to);
+
+            if (onlyUncommittedRegistrations)
+            {
+                // Note: Keep condition in sync with Registration.Status
+                result = result.Where(r => r.Registration.RegistrationParticipants.All(rp => rp.ResultingParticipantId == null));
+            }
+
+            return result;
         }
 
         public async Task<IEnumerable<Registration>> GetByApplicantAsync(Guid applicantId)

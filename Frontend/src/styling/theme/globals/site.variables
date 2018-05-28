@@ -29,10 +29,10 @@
 --------------------*/
 
 /* This is the single variable that controls them all */
-@emSize   : 14px;
+@emSize   : 16px;
 
 /* The size of page text  */
-@fontSize : 14px;
+@fontSize : 16px;
 
 
 /*-------------------
@@ -61,14 +61,14 @@
   Page Heading
 ---------------*/
 
-@headerFontWeight : @bold;
-@headerLineHeight : unit((18 / 14), em);
+@headerFontWeight : 400;
+@headerLineHeight : unit((18 / 16), em);
 
-@h1 : unit((28 / 14), rem);
-@h2 : unit((24 / 14), rem);
-@h3 : unit((18 / 14), rem);
-@h4 : unit((15 / 14), rem);
-@h5 : unit((14 / 14), rem);
+@h1 : unit((45 / 16), rem);
+@h2 : unit((32 / 16), rem);
+@h3 : unit((24 / 16), rem);
+@h4 : unit((20 / 16), rem);
+@h5 : unit((16 / 16), rem);
 
 /*--------------
    Form Input
@@ -209,10 +209,10 @@
      Breakpoints
 --------------------*/
 
-@mobileBreakpoint            : 320px;
+@mobileBreakpoint            : 360px;
 @tabletBreakpoint            : 768px;
 @computerBreakpoint          : 992px;
-@largeMonitorBreakpoint      : 1200px;
+@largeMonitorBreakpoint      : 992px;
 @widescreenMonitorBreakpoint : 1920px;
 
 /*-------------------
@@ -510,7 +510,7 @@
 @headerMargin       : @headerTopMargin 0em @headerBottomMargin;
 
 /* Minimum Mobile Width */
-@pageMinWidth       : 320px;
+@pageMinWidth       : 360px;
 
 /* Positive / Negative Dupes */
 @successBackgroundColor : @positiveBackgroundColor;

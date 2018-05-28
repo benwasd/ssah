@@ -169,6 +169,39 @@ export class RegistrationApiProxy extends ApiProxyBase {
         this.baseUrl = baseUrl ? baseUrl : this.getBaseUrl("");
     }
 
+    send(): Promise<void> {
+        let url_ = this.baseUrl + "/api/Registration/Send";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json", 
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processSend(_response));
+        });
+    }
+
+    protected processSend(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
     getRegistration(registrationId: string): Promise<RegistrationDto> {
         let url_ = this.baseUrl + "/api/Registration/GetRegistration?";
         if (registrationId === undefined || registrationId === null)
@@ -654,7 +687,6 @@ export class RegistrationDto {
     givenname: string;
     residence: string;
     phoneNumber: string;
-    preferSimultaneousCourseExecutionForParticipants: boolean;
     availableFrom: Date;
     availableTo: Date;
     status: RegistrationStatus;
@@ -668,7 +700,6 @@ export class RegistrationDto {
             this.givenname = data["givenname"];
             this.residence = data["residence"];
             this.phoneNumber = data["phoneNumber"];
-            this.preferSimultaneousCourseExecutionForParticipants = data["preferSimultaneousCourseExecutionForParticipants"];
             this.availableFrom = data["availableFrom"] ? new Date(data["availableFrom"].toString()) : <any>undefined;
             this.availableTo = data["availableTo"] ? new Date(data["availableTo"].toString()) : <any>undefined;
             this.status = data["status"];
@@ -695,7 +726,6 @@ export class RegistrationDto {
         data["givenname"] = this.givenname;
         data["residence"] = this.residence;
         data["phoneNumber"] = this.phoneNumber;
-        data["preferSimultaneousCourseExecutionForParticipants"] = this.preferSimultaneousCourseExecutionForParticipants;
         data["availableFrom"] = this.availableFrom ? this.availableFrom.toISOString() : <any>undefined;
         data["availableTo"] = this.availableTo ? this.availableTo.toISOString() : <any>undefined;
         data["status"] = this.status;
@@ -711,7 +741,8 @@ export class RegistrationDto {
 export enum RegistrationStatus {
     Registration = 0, 
     CourseSelection = 1, 
-    Committed = 2, 
+    Commitment = 2, 
+    Committed = 3, 
 }
 
 export class RegistrationParticipantDto extends EntityDto {

@@ -12,12 +12,12 @@ namespace SSAH.Tests.Unit.Solver
     [TestFixture]
     public class SolverTests
     {
-        private Infrastructure.Solver.Solver _solver;
+        private SSAH.Infrastructure.Solver.Solver _solver;
 
         [SetUp]
         public void SetUp()
         {
-            _solver = new Infrastructure.Solver.Solver();
+            _solver = new SSAH.Infrastructure.Solver.Solver();
         }
 
         [Test]

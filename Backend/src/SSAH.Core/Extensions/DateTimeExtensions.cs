@@ -10,7 +10,7 @@ namespace SSAH.Core.Extensions
     {
         public static int WeekDiff(DateTime a, DateTime b)
         {
-            var x = Math.Abs((a.Date - b.Date).TotalDays) + 1;
+            var x = Math.Abs((a.Date.GetMondayOfWeek() - b.Date.GetMondayOfWeek()).TotalDays);
             var y = Math.Floor(x / 7);
 
             return (int)y;

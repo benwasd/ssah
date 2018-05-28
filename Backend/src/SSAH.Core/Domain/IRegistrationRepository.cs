@@ -9,7 +9,7 @@ namespace SSAH.Core.Domain
 {
     public interface IRegistrationRepository : IRepository<Registration>
     {
-        IEnumerable<RegistrationWithParticipant> GetRegisteredParticipantOverlappingPeriod(Discipline discipline, DateTime from, DateTime to);
+        IEnumerable<RegistrationWithParticipant> GetRegisteredParticipantOverlappingPeriod(CourseType courseType, Discipline discipline, int niveauId, DateTime from, DateTime to, bool onlyUncommittedRegistrations = false);
 
         Task<IEnumerable<Registration>> GetByApplicantAsync(Guid applicantId);
     }

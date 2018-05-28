@@ -1,10 +1,10 @@
 import { Dispatch } from 'react-redux';
 import { Action } from 'redux';
-
-import { CommitRegistrationDto, CommitRegistrationParticipantDto, PossibleCourseDto, RegistrationApiProxy, RegistrationDto, RegistrationParticipantDto } from '../../api';
+import { RegistrationDto, RegistrationParticipantDto, RegistrationStatus, PossibleCourseDto, CommitRegistrationDto, CommitRegistrationParticipantDto, RegistrationApiProxy } from '../../api';
+import { track } from '../../main/actions';
 import { State } from '../../main/state';
 import { throwIfUndefined } from '../../utils';
-import { ApplicantState, AvailabilityState, hasAllRegistrationProperties, ParticipantState } from '../state';
+import { ApplicantState, AvailabilityState, ParticipantState } from '../state';
 
 export const APPLICANT_CHANGE = 'APPLICANT_CHANGE';
 
@@ -28,7 +28,7 @@ export const availabilityChange = (change: AvailabilityState) => (dispatch: Disp
     dispatch(action);
 }
 
-export const PARTICIPAENT_CHANGE = 'PARTICIPAENT_CHANGE';
+export const PARTICIPANT_CHANGE = 'PARTICIPANT_CHANGE';
 
 export interface ParticipantChangeAction extends Action {
     participantIndex: number;
@@ -36,7 +36,7 @@ export interface ParticipantChangeAction extends Action {
 }
 
 export const changeParticipant = (partipiantIndex: number, change: Partial<ParticipantState>) => (dispatch: Dispatch) => {
-    const action: ParticipantChangeAction = { type: PARTICIPAENT_CHANGE, participantIndex: partipiantIndex, change: change };
+    const action: ParticipantChangeAction = { type: PARTICIPANT_CHANGE, participantIndex: partipiantIndex, change: change };
     dispatch(action);
 }
 
@@ -51,21 +51,48 @@ export const selectCoursesForParticipants = (selectedCoursesByParticipant: { [pa
     dispatch(action);
 }
 
+export const REGISTRATION_SHOW_ALL_VALIDATION_ERRORS = 'REGISTRATION_SHOW_ALL_VALIDATION_ERRORS';
+
+export interface RegistrationShowAllValidationErrorsAction extends Action {
+    showAllValidationErrors: boolean;
+}
+
+export const showAllValidationErrors = (showAllValidationErrors: boolean) => (dispatch: Dispatch) => {
+    const action: RegistrationShowAllValidationErrorsAction = { type: REGISTRATION_SHOW_ALL_VALIDATION_ERRORS, showAllValidationErrors };
+    dispatch(action);
+}
+
 export const REGISTRATION_LOADED = 'REGISTRATION_LOADED';
 
 export interface RegistrationLoadedAction extends Action {
     registration: RegistrationDto;
 }
 
-export const loadRegistration = (id: string) => (dispatch: Dispatch) => {
+export const loadRegistration = (id: string) => (dispatch: Dispatch, getState: () => State) => {
     const apiProxy = new RegistrationApiProxy();
-    apiProxy.getRegistration(id).then(r => {
-        const action: RegistrationLoadedAction = { type: REGISTRATION_LOADED, registration: r };
-        dispatch(action);
-    });
+    track(apiProxy.getRegistration(id), dispatch)
+        .then(r => {
+            const action: RegistrationLoadedAction = { type: REGISTRATION_LOADED, registration: r };
+            dispatch(action);
+
+            // TODO: Verify pattern
+            if (action.registration.status > RegistrationStatus.Registration) {
+                loadPossibleCourses()(dispatch, getState);
+            }
+        });
 }
 
-export const REGISTRATION_SUBMIT = 'REGISTRATION_SUBMITTED';
+export const REGISTRATION_UNSET = 'REGISTRATION_UNSET';
+
+export interface RegistrationUnsetAction extends Action {
+}
+
+export const unsetRegistration = () => (dispatch: Dispatch) => {
+    const action: RegistrationUnsetAction = { type: REGISTRATION_UNSET };
+    dispatch(action);
+}
+
+export const REGISTRATION_SUBMITTED = 'REGISTRATION_SUBMITTED';
 
 export interface RegistrationSubmittedAction extends Action {
     registrationId: string;
@@ -83,31 +110,28 @@ export const submitOrUpdateRegistration = (onSubmittedOrUpdated?: (registrationI
     registrationDto.givenname = registrationState.applicant.givenname;
     registrationDto.phoneNumber = registrationState.applicant.phoneNumber;
     registrationDto.residence = registrationState.applicant.residence;
-    registrationDto.preferSimultaneousCourseExecutionForParticipants = registrationState.applicant.preferSimultaneousCourseExecutionForParticipants;
     registrationDto.availableFrom = throwIfUndefined(registrationState.availability.availableFrom);
     registrationDto.availableTo = throwIfUndefined(registrationState.availability.availableTo);
     registrationDto.status = registrationState.status;
-    registrationDto.participants = registrationState.participants
-        .filter(hasAllRegistrationProperties)
-        .map(p => {
-            const partipiantDto = new RegistrationParticipantDto();
-            if (p.id && p.rowVersion) {
-                partipiantDto.id = p.id;
-                partipiantDto.rowVersion = p.rowVersion;
-            }
-            partipiantDto.name = p.name;
-            partipiantDto.courseType = throwIfUndefined(p.courseType);
-            partipiantDto.discipline = throwIfUndefined(p.discipline);
-            partipiantDto.niveauId = throwIfUndefined(p.niveauId);
-            partipiantDto.ageGroup = p.ageGroup ? parseInt(p.ageGroup) : undefined;
-            partipiantDto.language = registrationState.applicant.language;
+    registrationDto.participants = registrationState.participants.map(p => {
+        const partipiantDto = new RegistrationParticipantDto();
+        if (p.id && p.rowVersion) {
+            partipiantDto.id = p.id;
+            partipiantDto.rowVersion = p.rowVersion;
+        }
+        partipiantDto.name = p.name;
+        partipiantDto.courseType = throwIfUndefined(p.courseType);
+        partipiantDto.discipline = throwIfUndefined(p.discipline);
+        partipiantDto.niveauId = throwIfUndefined(p.niveauId);
+        partipiantDto.ageGroup = p.ageGroup ? parseInt(p.ageGroup) : undefined;
+        partipiantDto.language = registrationState.applicant.language;
 
-            return partipiantDto;
-        });
+        return partipiantDto;
+    });
 
     if (registrationDto.registrationId) {
-        apiProxy.update(registrationDto).then(r => {
-            const action: RegistrationSubmittedAction = { type: REGISTRATION_SUBMIT, applicantId: r.applicantId, registrationId: r.registrationId };
+        track(apiProxy.update(registrationDto), dispatch).then(r => {
+            const action: RegistrationSubmittedAction = { type: REGISTRATION_SUBMITTED, applicantId: r.applicantId, registrationId: r.registrationId };
             dispatch(action);
 
             if (onSubmittedOrUpdated) {
@@ -116,8 +140,8 @@ export const submitOrUpdateRegistration = (onSubmittedOrUpdated?: (registrationI
         });
     }
     else {
-        apiProxy.register(registrationDto).then(r => {
-            const action: RegistrationSubmittedAction = { type: REGISTRATION_SUBMIT, applicantId: r.applicantId, registrationId: r.registrationId };
+        track(apiProxy.register(registrationDto), dispatch).then(r => {
+            const action: RegistrationSubmittedAction = { type: REGISTRATION_SUBMITTED, applicantId: r.applicantId, registrationId: r.registrationId };
             dispatch(action);
 
             if (onSubmittedOrUpdated) {
@@ -127,6 +151,15 @@ export const submitOrUpdateRegistration = (onSubmittedOrUpdated?: (registrationI
     }
 }
 
+export const REGISTRATION_COURSE_SELECTED = 'REGISTRATION_COURSE_SELECTED';
+
+export interface RegistrationCourseSelectedAction extends Action {
+}
+
+export const courseSelected = () => (dispatch: Dispatch) => {
+    const action: RegistrationCourseSelectedAction = { type: REGISTRATION_COURSE_SELECTED };
+    dispatch(action);
+}
 
 export const REGISTRATION_COMMITTED = 'REGISTRATION_COMMITTED';
 
@@ -140,22 +173,20 @@ export const commitRegistration = (onCommitted?: () => void) => (dispatch: Dispa
     const commitRegistrationDto = new CommitRegistrationDto();
     commitRegistrationDto.registrationId = throwIfUndefined(registrationState.id);
     commitRegistrationDto.payment = "NOOP";
-    commitRegistrationDto.participants = registrationState.participants
-        .filter(hasAllRegistrationProperties)
-        .map(p => {
-            const commitPartipiantDto = new CommitRegistrationParticipantDto();
-            commitPartipiantDto.id = throwIfUndefined(p.id);
-            commitPartipiantDto.rowVersion = throwIfUndefined(p.rowVersion);
-            commitPartipiantDto.ageGroup = parseInt(p.ageGroup);
-            commitPartipiantDto.language = throwIfUndefined(registrationState.applicant.language);
-            commitPartipiantDto.courseIdentifier = throwIfUndefined(p.committing).courseIdentifier;
-            commitPartipiantDto.courseStartDate = throwIfUndefined(p.committing).courseStartDate;
+    commitRegistrationDto.participants = registrationState.participants.map(p => {
+        const commitPartipiantDto = new CommitRegistrationParticipantDto();
+        commitPartipiantDto.id = throwIfUndefined(p.id);
+        commitPartipiantDto.rowVersion = throwIfUndefined(p.rowVersion);
+        commitPartipiantDto.ageGroup = parseInt(p.ageGroup);
+        commitPartipiantDto.language = throwIfUndefined(registrationState.applicant.language);
+        commitPartipiantDto.courseIdentifier = throwIfUndefined(p.committing).courseIdentifier;
+        commitPartipiantDto.courseStartDate = throwIfUndefined(p.committing).courseStartDate;
 
-            return commitPartipiantDto;
-        });
+        return commitPartipiantDto;
+    });
 
-    apiProxy.commitRegistration(commitRegistrationDto).then(r => {
-        const action: RegistrationCommittedAction = { type: REGISTRATION_SUBMIT };
+    track(apiProxy.commitRegistration(commitRegistrationDto), dispatch).then(r => {
+        const action: RegistrationCommittedAction = { type: REGISTRATION_SUBMITTED };
         dispatch(action);
 
         if (onCommitted) {
@@ -172,7 +203,8 @@ export interface RegistrationPossibleCoursesLoadedAction extends Action {
 
 export const loadPossibleCourses = () => (dispatch: Dispatch, getState: () => State) => {
     const apiProxy = new RegistrationApiProxy();
-    apiProxy.possibleCourseDatesPerParticipant(throwIfUndefined<string>(getState().registration.id)).then(r => {
+    const registrationId = throwIfUndefined<string>(getState().registration.id);
+    track(apiProxy.possibleCourseDatesPerParticipant(registrationId), dispatch).then(r => {
         const action: RegistrationPossibleCoursesLoadedAction = { type: REGISTRATION_POSSIBLE_COURSES_LOADED, possibleCourses: r }
         dispatch(action);
     });

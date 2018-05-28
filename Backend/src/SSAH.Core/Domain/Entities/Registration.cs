@@ -21,8 +21,6 @@ namespace SSAH.Core.Domain.Entities
 
         public virtual Applicant Applicant { get; set; }
 
-        public bool PreferSimultaneousCourseExecutionForParticipants { get; set; }
-
         public DateTime AvailableFrom { get; set; }
 
         public DateTime AvailableTo { get; set; }
@@ -31,18 +29,18 @@ namespace SSAH.Core.Domain.Entities
         {
             get
             {
-                if (this.RegistrationParticipants.Count == 0)
+                if (RegistrationParticipants.Count == 0)
                 {
                     return RegistrationStatus.Registration;
                 }
-                else if (this.RegistrationParticipants.All(rp => rp.ResultingParticipantId.HasValue))
+
+                // Note: Keep condition in sync with RegistrationRepository.GetRegisteredParticipantOverlappingPeriod
+                if (RegistrationParticipants.All(rp => rp.ResultingParticipantId.HasValue))
                 {
                     return RegistrationStatus.Committed;
                 }
-                else
-                {
-                    return RegistrationStatus.CourseSelection;
-                }
+
+                return RegistrationStatus.CourseSelection;
             }
         }
 
@@ -53,7 +51,7 @@ namespace SSAH.Core.Domain.Entities
             foreach (var registrationParticipant in RegistrationParticipants)
             {
                 // TODO: Use damanding service and verify the registration participants 
-                var courseOptions = groupCourseOptions.Value.SingleOrDefault(c => c.Identifier == registrationParticipant.CourseIdentifier);
+                var courseOptions = groupCourseOptions.Value.SingleOrDefault(c => c.Identifier == registrationParticipant.CourseIdentifier && c.Discipline == registrationParticipant.Discipline);
                 var course = courseCreationService.GetOrCreateProposalGroupCourse(registrationParticipant.CourseStartDate.Value, registrationParticipant.NiveauId, courseOptions);
                 var participant = registrationParticipant.ToParticipant(Applicant);
 

@@ -40,6 +40,7 @@ namespace SSAH.Infrastructure.Api.Hubs
                 // TODO Handle send exceptions
                 _notificationSubscription = _queue
                     .OfType<ICommitedCourseChangeMessage>()
+                    .Where(m => m.InstructorId.HasValue)
                     .Subscribe(m => Notify(m.GetType(), m.InstructorId.ToString(), m.CourseId.ToString()));
             }
         }

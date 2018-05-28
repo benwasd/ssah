@@ -263,5 +263,8 @@ __pycache__/
 # Frontend dist
 Frontend/dist/
 
+# Custom appsettings
+Backend/src/SSAH.Startup/appsettings.custom.json
+
 # Output
 Build/temp

@@ -3,19 +3,22 @@ import update from 'immutability-helper';
 
 import { CourseType, Discipline, RegistrationStatus, PossibleCourseDto } from '../../api';
 import { noopAction, noopReducer } from '../../utils';
+import { ApplicantState, AvailabilityState, ParticipantState, RegistrationState } from '../state';
 import { 
-    APPLICANT_CHANGE, ApplicantChangeAction, 
-    AVAILABILITY_CHANGE, AvailabilityChangeAction, 
-    PARTICIPAENT_CHANGE, ParticipantChangeAction, 
-    REGISTRATION_LOADED, RegistrationLoadedAction,
+    APPLICANT_CHANGE, ApplicantChangeAction,
+    AVAILABILITY_CHANGE, AvailabilityChangeAction,
+    PARTICIPANT_CHANGE, ParticipantChangeAction,
     PARTICIPANT_SELECT_COURSE, ParticipantSelectCourseAction,
-    REGISTRATION_POSSIBLE_COURSES_LOADED, RegistrationPossibleCoursesLoadedAction
+    REGISTRATION_POSSIBLE_COURSES_LOADED, RegistrationPossibleCoursesLoadedAction,
+    REGISTRATION_SHOW_ALL_VALIDATION_ERRORS, RegistrationShowAllValidationErrorsAction,
+    REGISTRATION_LOADED, RegistrationLoadedAction,
+    REGISTRATION_UNSET,
+    REGISTRATION_COURSE_SELECTED,
 } from '../actions';
-import { ApplicantState, AvailabilityState, ParticipantState, RegistrationState, hasAllRegistrationProperties } from '../state';
 
 const handleApplicant: Reducer<ApplicantState, Action> = (state, action) => {
     if (state === undefined) {
-        return { givenname: "", surname: "", residence: "", phoneNumber: "", preferSimultaneousCourseExecutionForParticipants: true };
+        return { givenname: "", surname: "", residence: "", phoneNumber: "" };
     }
     
     switch (action.type) {
@@ -29,7 +32,7 @@ const handleApplicant: Reducer<ApplicantState, Action> = (state, action) => {
 
 const handleAvailability: Reducer<AvailabilityState, Action> = (state, action) => {
     if (state === undefined) {
-        return {};
+        return { availableFrom: undefined, availableTo: undefined };
     }
     
     switch (action.type) {
@@ -43,38 +46,38 @@ const handleAvailability: Reducer<AvailabilityState, Action> = (state, action) =
 
 const handleParticipants: Reducer<ParticipantState[], Action> = (state, action) => {
     if (state === undefined) {
-        return [ 
-            { name: "", ageGroup: "" },
-            { name: "", ageGroup: "" }
-        ];
+        return [];
     }
 
+    let newState;
     switch (action.type) {
-        case PARTICIPAENT_CHANGE:
+        case PARTICIPANT_CHANGE:
             const changeAction = action as ParticipantChangeAction;
 
-            let newState = update(state, { [changeAction.participantIndex]: { $merge: changeAction.change } });
-            if (newState.every(p => hasAllRegistrationProperties(p))) {
-                newState = newState.concat({ name: "", ageGroup: "" });
+            if (changeAction.participantIndex >= state.length) {
+                newState = state.concat([ Object.assign({ name: "", ageGroup: "", courseType: CourseType.Group }, changeAction.change) ]);
+            }
+            else {
+                newState = update(state, { [changeAction.participantIndex]: { $merge: changeAction.change } });
             }
 
-            return newState as ParticipantState[];
+            return newState;
         case PARTICIPANT_SELECT_COURSE:
             const selectCourseAction = action as ParticipantSelectCourseAction;
-            const participantIds = Object.getOwnPropertyNames(selectCourseAction.selectedCoursesByParticipant);
-
-            let newState2 = state;
-            participantIds.forEach(participantId => {
-                const participantIndex = state.findIndex(p => p.id === participantId);
-                const courseSelection = selectCourseAction.selectedCoursesByParticipant[participantId];
-                const committing = { courseIdentifier: courseSelection.identifier, courseStartDate: courseSelection.startDate };
-                newState2 = update(
-                    newState2, 
-                    { [participantIndex]: { $merge: { committing: committing } } }
-                ) as ParticipantState[];
-            });
             
-            return newState2;
+            newState = state;
+            state.forEach((participant, participantIndex) => {
+                let committing: { courseIdentifier: number, courseStartDate: Date } | null = null;
+                
+                const courseSelection = selectCourseAction.selectedCoursesByParticipant[participant.id as any];
+                if (courseSelection) {
+                    committing = { courseIdentifier: courseSelection.identifier, courseStartDate: courseSelection.startDate };
+                }
+
+                newState = update(newState, { [participantIndex]: { committing: { $set: committing } } });
+            });
+
+            return newState;
         default: 
             return state;
     }
@@ -99,6 +102,7 @@ const handleRegistration: Reducer<RegistrationState, Action> = (state, action) =
         return {
             id: null,
             status: RegistrationStatus.Registration,
+            showAllValidationErrors: false,
             applicant: handleApplicant(undefined, noopAction()),
             availability: handleAvailability(undefined, noopAction()),
             participants: handleParticipants(undefined, noopAction()),
@@ -107,20 +111,22 @@ const handleRegistration: Reducer<RegistrationState, Action> = (state, action) =
     }
 
     switch (action.type) {
+        case REGISTRATION_SHOW_ALL_VALIDATION_ERRORS: 
+            const showAllValidationErrorsAction = action as RegistrationShowAllValidationErrorsAction;
+            return update(state, { $merge: { showAllValidationErrors: showAllValidationErrorsAction.showAllValidationErrors } });
         case REGISTRATION_LOADED:
             const loadedAction = action as RegistrationLoadedAction;
-
             return {
                 id: loadedAction.registration.registrationId ? loadedAction.registration.registrationId : null,
                 status: loadedAction.registration.status,
+                showAllValidationErrors: false,
                 applicant: {
                     id: loadedAction.registration.applicantId,
                     surname: loadedAction.registration.surname,
                     givenname: loadedAction.registration.givenname,
                     residence: loadedAction.registration.residence,
                     phoneNumber: loadedAction.registration.phoneNumber,
-                    language: loadedAction.registration.participants.length > 0 ? loadedAction.registration.participants[0].language : undefined,
-                    preferSimultaneousCourseExecutionForParticipants: loadedAction.registration.preferSimultaneousCourseExecutionForParticipants
+                    language: loadedAction.registration.participants.length > 0 ? loadedAction.registration.participants[0].language : undefined
                 },
                 availability: {
                     availableFrom: loadedAction.registration.availableFrom,
@@ -138,7 +144,19 @@ const handleRegistration: Reducer<RegistrationState, Action> = (state, action) =
                     }
                 }),
                 possibleCourses: []
-            }
+            };
+        case REGISTRATION_UNSET:
+            return {
+                id: null,
+                status: RegistrationStatus.Registration,
+                showAllValidationErrors: false,
+                applicant: handleApplicant(undefined, noopAction()),
+                availability: handleAvailability(undefined, noopAction()),
+                participants: handleParticipants(undefined, noopAction()),
+                possibleCourses: handlePossibleCourses(undefined, noopAction())
+            };
+        case REGISTRATION_COURSE_SELECTED:
+            return update(state, { $merge: { status: RegistrationStatus.Commitment } });
         default:
             return state;
     }
@@ -147,6 +165,7 @@ const handleRegistration: Reducer<RegistrationState, Action> = (state, action) =
 export interface RegistrationReducerTree {
     id: Reducer<string | null, Action>;
     status: Reducer<RegistrationStatus, Action>;
+    showAllValidationErrors: Reducer<boolean, Action>;
     applicant: Reducer<ApplicantState, Action>;
     availability: Reducer<AvailabilityState, Action>;
     participants: Reducer<ParticipantState[], Action>;
@@ -156,6 +175,7 @@ export interface RegistrationReducerTree {
 export const reducer = combineReducers(<RegistrationReducerTree>{
     id: noopReducer(null),
     status: noopReducer(RegistrationStatus.Registration),
+    showAllValidationErrors: noopReducer(false),
     applicant: handleApplicant,
     availability: handleAvailability,
     participants: handleParticipants,

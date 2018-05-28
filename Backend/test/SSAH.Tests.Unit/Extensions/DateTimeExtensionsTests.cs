@@ -22,7 +22,7 @@ namespace SSAH.Tests.Unit.Extensions
             var weeks2 = DateTimeExtensions.WeekDiff(date2, date1);
 
             // Assert
-            Assert.AreEqual(weeks1, 1);
+            Assert.AreEqual(0, weeks1);
             Assert.AreEqual(weeks2, weeks1);
         }
 
@@ -38,7 +38,7 @@ namespace SSAH.Tests.Unit.Extensions
             var weeks2 = DateTimeExtensions.WeekDiff(date2, date1);
 
             // Assert
-            Assert.AreEqual(weeks1, 1);
+            Assert.AreEqual(1, weeks1);
             Assert.AreEqual(weeks2, weeks1);
         }
 
@@ -54,7 +54,23 @@ namespace SSAH.Tests.Unit.Extensions
             var weeks2 = DateTimeExtensions.WeekDiff(date2, date1);
 
             // Assert
-            Assert.AreEqual(weeks1, 3);
+            Assert.AreEqual(3, weeks1);
+            Assert.AreEqual(weeks2, weeks1);
+        }
+
+        [Test]
+        public void WeekDiff_UnevenLongPeriodMondaySunday()
+        {
+            // Arrange
+            var date1 = new DateTime(2018, 4, 30);
+            var date2 = new DateTime(2018, 6, 10);
+
+            // Act
+            var weeks1 = DateTimeExtensions.WeekDiff(date1, date2);
+            var weeks2 = DateTimeExtensions.WeekDiff(date2, date1);
+
+            // Assert
+            Assert.AreEqual(5, weeks1);
             Assert.AreEqual(weeks2, weeks1);
         }
 
