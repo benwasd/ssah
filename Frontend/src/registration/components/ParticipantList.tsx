@@ -3,7 +3,7 @@ import { omit } from 'lodash';
 
 import { CourseType } from '../../api';
 import { ParticipantState } from '../state';
-import { Participant, ParticipantProps } from './Participant';
+import { Participant, ParticipantComponentProps } from './Participant';
 
 export interface ParticipantListProps {
     participants: ParticipantState[];
@@ -38,7 +38,7 @@ export class ParticipantList extends React.Component<ParticipantListProps, Parti
                                     showAllValidationErrors: this.props.showAllValidationErrors,
                                     isNewRow: i >= this.props.participants.length && i !== 0
                                 }
-                            ) as ParticipantProps;
+                            ) as ParticipantComponentProps;
                             
                             return (
                                 <Participant key={p.id || i} {...props} />

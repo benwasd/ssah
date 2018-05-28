@@ -5,12 +5,12 @@ import { Discipline } from '../../api';
 import './NiveauVisualizer.less';
 
 import './../../assets';
-import * as skiSvg from './../../assets/Discipline-Ski.svg';
-import * as snowboardSvg from './../../assets/Discipline-Snowboard.svg';
-import * as kidsVillagePng from './../../assets/Snowly.png';
-import * as chroneKingQueenSvg from './../../assets/Crone-KingQueen.svg';
-import * as chronePrincePrincessSvg from './../../assets/Crone-PrincePrincess.svg';
-import * as StarSvg from './../../assets/Star.svg';
+import * as skiSvg from './../../assets/discipline-ski.svg';
+import * as snowboardSvg from './../../assets/discipline-snowboard.svg';
+import * as kidsVillagePng from './../../assets/snowly.png';
+import * as chroneKingQueenSvg from './../../assets/crone-kingqueen.svg';
+import * as chronePrincePrincessSvg from './../../assets/crone-princeprincess.svg';
+import * as starSvg from './../../assets/star.svg';
 
 export interface NiveauVisualizerProps {
     discipline?: Discipline;
@@ -62,7 +62,7 @@ export class NiveauVisualizer extends React.Component<NiveauVisualizerProps> {
                 case 112:
                 case 122:
                 case 132:
-                    niveauIcon = StarSvg;
+                    niveauIcon = starSvg;
                     break;
             }
         }

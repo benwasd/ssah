@@ -1,13 +1,19 @@
 import * as React from 'react';
-import { Dropdown, DropdownItemProps, Input, Modal, Icon, Button, Header, Image, Form } from 'semantic-ui-react';
+import { Button, Image, Input, Modal } from 'semantic-ui-react';
 
 import { CourseType, Discipline } from '../../api';
-import { fromDropdownValue, getEnumElementsAsDropdownItemProps, toDropdownValue } from '../../utils';
-import { ParticipantState } from '../state';
 import { NiveauVisualizer } from '../../main/components/NiveauVisualizer';
+import { leagueBadges, skiRootQuestion, snowboardRootQuestion } from '../../resources';
+import { getEnumElementsAsDropdownItemProps } from '../../utils';
+import { ParticipantState } from '../state';
+import { NiveauEvaluation } from './NiveauEvaluation';
 import './Participant.less';
 
-export interface ParticipantProps {
+import './../../assets';
+import * as skiSvg from './../../assets/discipline-ski.svg';
+import * as snowboardSvg from './../../assets/discipline-snowboard.svg';
+
+export interface ParticipantComponentProps {
     name: string;
     courseType?: CourseType;
     discipline?: Discipline;
@@ -18,35 +24,24 @@ export interface ParticipantProps {
     isNewRow: boolean;
 }
 
-export interface ParticipantCState {
+export interface ParticipantComponentState {
     isNiveauModalOpen: boolean;
+    discipline?: Discipline;
+    niveauId?: number;
 }
 
-export class Participant extends React.Component<ParticipantProps, ParticipantCState> {
-    constructor(props: ParticipantProps) {
+export class Participant extends React.Component<ParticipantComponentProps, ParticipantComponentState> {
+    constructor(props: ParticipantComponentProps) {
         super(props);
-        this.state = { isNiveauModalOpen: false };
+        this.state = { isNiveauModalOpen: false, discipline: undefined, niveauId: undefined };
     }
 
     get disciplineOptions() {
         return getEnumElementsAsDropdownItemProps(Discipline);
     }
-
-    get niveauOptions(): DropdownItemProps[] {
-        return [
-            { text: "Kids Village", value: toDropdownValue(100) },
-            { text: "Blue Prince/Princess", value: toDropdownValue(110) },
-            { text: "Blue King/Queen", value: toDropdownValue(111) },
-            { text: "Blue Star", value: toDropdownValue(112) },
-        ];
-    }
     
     handleChange = (event: React.ChangeEvent<HTMLInputElement>, { name, value }) => {
         this.props.change({ [name]: value });
-    }
-
-    handleDropdownValueChange = (event: React.ChangeEvent<HTMLInputElement>, { name, value }) => {
-        this.props.change({ [name]: fromDropdownValue(parseInt(value)) });
     }
 
     isEmptyAndValidatedOnNotNewRow = (propertySelector: (ApplicantProps) => any) => {
@@ -64,8 +59,13 @@ export class Participant extends React.Component<ParticipantProps, ParticipantCS
         this.setState({ isNiveauModalOpen: true });
     }
 
-    closeNiveauModal = () => {
-        this.setState({ isNiveauModalOpen: false });
+    abortCloseNiveauModal = () => {
+        this.setState({ isNiveauModalOpen: false, discipline: undefined, niveauId: undefined });
+    }
+
+    successCloseNiveauModal = () => {
+        this.props.change({ discipline: this.state.discipline, niveauId: this.state.niveauId });
+        this.setState({ isNiveauModalOpen: false, discipline: undefined, niveauId: undefined });
     }
 
     render() {
@@ -84,7 +84,7 @@ export class Participant extends React.Component<ParticipantProps, ParticipantCS
                         placeholder='Jahrgang' 
                         name='ageGroup' 
                         fluid
-                        value={this.props.ageGroup} 
+                        value={this.props.ageGroup}
                         onChange={this.handleChange}
                         error={this.isEmptyAndValidatedOnNotNewRow(p => p.ageGroup)} />
                 </td>
@@ -98,45 +98,57 @@ export class Participant extends React.Component<ParticipantProps, ParticipantCS
                     <Button fluid onClick={this.openNiveauModal} className={this.hasErrorInModal() ? 'error' : ''}>
                         Stufe ermitteln
                     </Button>
-                    <Modal open={this.state.isNiveauModalOpen} onOpen={this.openNiveauModal} onClose={this.closeNiveauModal} dimmer={'blurring'} size='small'>
+                    <Modal open={this.state.isNiveauModalOpen} onClose={this.abortCloseNiveauModal} dimmer={'blurring'} size='small'>
                         <Modal.Header>
                             Passende Stufe finden
                         </Modal.Header>
                         <Modal.Content>
                             <div className='small lead pb-3'>
-                                 Beantworten Sie die folgenden Fragen, sodass wir <i>{this.props.name}</i> gut Einteilen können.
+                                 Was für eine Sportart?
                             </div>
-                            <div>
-                                <Form className='tablet column'>
-                                    <Form.Field required>
-                                        <label>Disziplin</label>
-                                        <Dropdown 
-                                            placeholder='Disziplin'
-                                            name='discipline' 
-                                            selection fluid
-                                            options={this.disciplineOptions}
-                                            value={toDropdownValue(this.props.discipline)}
-                                            selectOnBlur={false}
-                                            onChange={this.handleDropdownValueChange}
-                                            error={this.isEmptyAndValidatedOnNotNewRow(p => p.discipline)} />
-                                    </Form.Field>
-                                    <Form.Field required>
-                                        <label>Niveau</label>
-                                        <Dropdown 
-                                            placeholder='Niveau'
-                                            name='niveauId' 
-                                            selection fluid
-                                            options={this.niveauOptions}
-                                            value={toDropdownValue(this.props.niveauId)}
-                                            selectOnBlur={false}
-                                            onChange={this.handleDropdownValueChange}
-                                            error={this.isEmptyAndValidatedOnNotNewRow(p => p.niveauId)} />
-                                    </Form.Field>
-                                </Form>
+                            <div className='text-center pb-5'>
+                                <Button.Group>
+                                    <Button toggle
+                                        active={this.state.discipline === Discipline.Ski} 
+                                        onClick={() => this.setState({ discipline: Discipline.Ski, niveauId: undefined })}>
+                                        <Image src={skiSvg} size='mini' />
+                                    </Button>
+                                    <Button toggle
+                                        active={this.state.discipline === Discipline.Snowboard}
+                                        onClick={() => this.setState({ discipline: Discipline.Snowboard, niveauId: undefined })}>
+                                        <Image src={snowboardSvg} size='mini' />
+                                    </Button>
+                                </Button.Group>
                             </div>
+
+                            {this.state.discipline !== undefined && <>
+                                <div className='small lead'>
+                                    Beantworten Sie die folgenden Fragen, sodass wir <i>{this.props.name}</i> gut Einteilen können.
+                                </div>
+                                <div className='pb-5'>
+                                    <NiveauEvaluation 
+                                        question={this.state.discipline === Discipline.Ski ? skiRootQuestion : snowboardRootQuestion}
+                                        niveauEvaluated={niveauId => this.setState({ niveauId })} />
+                                </div>
+                            </>}
+
+                            {this.state.discipline !== undefined && this.state.niveauId !== undefined && <>
+                                <div className='small lead pb-3'>
+                                    Es ist folgende Stufe geeignet.
+                                </div>
+                                <div className='pb-2'>
+                                    <Image src={leagueBadges[this.state.discipline][this.state.niveauId]} className='m-auto' />
+                                </div>
+                            </>}
                         </Modal.Content>
                         <Modal.Actions>
-                            <Button primary onClick={this.closeNiveauModal}>
+                            <Button 
+                                onClick={this.abortCloseNiveauModal}>
+                                Abbrechen
+                            </Button>
+                            <Button primary 
+                                onClick={this.successCloseNiveauModal}
+                                disabled={this.state.discipline === undefined || this.state.niveauId === undefined}>
                                 Ok
                             </Button>
                         </Modal.Actions>
