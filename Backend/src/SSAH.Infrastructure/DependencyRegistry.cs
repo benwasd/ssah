@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Debug;
 using Microsoft.Extensions.Options;
 
+using SSAH.Core;
 using SSAH.Core.Domain.Objects;
 using SSAH.Core.Services;
 using SSAH.Infrastructure.Services;
@@ -24,6 +25,7 @@ namespace SSAH.Infrastructure
             builder.RegisterGeneric(typeof(OptionsMonitor<>)).As(typeof(IOptionsMonitor<>)).SingleInstance();
             builder.RegisterGeneric(typeof(OptionsFactory<>)).As(typeof(IOptionsFactory<>)).InstancePerDependency();
             builder.RegisterGeneric(typeof(OptionsCache<>)).As(typeof(IOptionsMonitorCache<>)).SingleInstance();
+            builder.AddOption<EnvironmentOptions>(EnvironmentOptions.NAME);
             builder.AddOption<GroupCourseOptionsCollection>(GroupCourseOptionsCollection.NAME);
             builder.AddOption<DemandingThresholdOptions>(DemandingThresholdOptions.NAME);
             builder.AddOption<SmsGatewayOptions>(SmsGatewayOptions.NAME);

@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 using Autofac;
 
+using Microsoft.Extensions.Options;
+
 using SSAH.Core.Domain.Entities;
 using SSAH.Core.Domain.Messages;
 using SSAH.Core.Domain.Objects;
@@ -32,19 +34,22 @@ namespace SSAH.Core.Domain.Demanding
             private readonly INotificationService _notificationService;
             private readonly IUnitOfWorkFactory<IRepository<RegistrationParticipant>> _hasDemandUpdateUnitOfWork;
             private readonly IUnitOfWorkFactory<INotificationService> _notificationUnitOfWork;
+            private readonly IOptionsMonitor<EnvironmentOptions> _environmentOptions;
 
             public Handler(
                 IDemandService demandService,
                 IRegistrationRepository registrationRepository,
                 INotificationService notificationService,
                 IUnitOfWorkFactory<IRepository<RegistrationParticipant>> hasDemandUpdateUnitOfWork,
-                IUnitOfWorkFactory<INotificationService> notificationUnitOfWork)
+                IUnitOfWorkFactory<INotificationService> notificationUnitOfWork,
+                IOptionsMonitor<EnvironmentOptions> environmentOptions)
             {
                 _demandService = demandService;
                 _registrationRepository = registrationRepository;
                 _notificationService = notificationService;
                 _hasDemandUpdateUnitOfWork = hasDemandUpdateUnitOfWork;
                 _notificationUnitOfWork = notificationUnitOfWork;
+                _environmentOptions = environmentOptions;
             }
 
             protected override void OnNextCore(IInterestRegisteredChangeMessage message)
@@ -145,7 +150,8 @@ namespace SSAH.Core.Domain.Demanding
                 {
                     string[] messageLines = {
                         $"Hallo {registrationParticipant.Registration.Applicant.Givenname}",
-                        $"Für {registrationParticipant.RegistrationParticipant.Name} wurde eine passende Kursdurchführung gefunden."
+                        $"Für {registrationParticipant.RegistrationParticipant.Name} wurde eine passende Kursdurchführung gefunden. Schauen Sie bei Gelegenheit vorbei:",
+                        string.Format(_environmentOptions.Current().RegistrationFrontendUrl, registrationParticipant.Registration.Id)
                     };
 
                     await unitOfWork.Dependent.SendNotification(
