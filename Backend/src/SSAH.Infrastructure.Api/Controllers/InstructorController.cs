@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 using SSAH.Core;
 using SSAH.Core.Domain;
@@ -20,16 +21,18 @@ namespace SSAH.Infrastructure.Api.Controllers
     public class InstructorController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
         private readonly ICourseRepository _courseRepository;
         private readonly ISerializationService _serializerService;
+        private readonly IOptions<NiveauOptionsCollection> _niveauOptionsCollection;
+        private readonly IMapper _mapper;
 
-        public InstructorController(IUnitOfWork unitOfWork, IMapper mapper, ICourseRepository courseRepository, ISerializationService serializerService)
+        public InstructorController(IUnitOfWork unitOfWork, ICourseRepository courseRepository, ISerializationService serializerService, IOptions<NiveauOptionsCollection> niveauOptionsCollection, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
-            _mapper = mapper;
             _courseRepository = courseRepository;
             _serializerService = serializerService;
+            _niveauOptionsCollection = niveauOptionsCollection;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -52,7 +55,7 @@ namespace SSAH.Infrastructure.Api.Controllers
             var passedPartipiantIds = closeCourseDto.Participants.Where(x => x.Passed).Select(x => x.Id).ToArray();
 
             var course = await GetCourseOfInstructor(instructorId, closeCourseDto.Id);
-            course.Close(passedPartipiantIds, _serializerService);
+            course.Close(passedPartipiantIds, _niveauOptionsCollection.Value, _serializerService);
 
             await _unitOfWork.CommitAsync();
         }
