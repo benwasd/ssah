@@ -7,22 +7,54 @@ using System.Threading.Tasks;
 
 using Microsoft.Extensions.Options;
 
+using SSAH.Core.Domain;
+using SSAH.Core.Domain.Entities;
 using SSAH.Core.Services;
 
 namespace SSAH.Infrastructure.Services
 {
     public class NotificationService : INotificationService
     {
-        private readonly IOptions<SmsGatewayOptions> _options;
+        private readonly INotificationEntryRepository _notificationEntryRepository;
         private readonly ISerializationService _serializationService;
+        private readonly IPhoneNumberService _phoneNumberService;
+        private readonly IOptions<SmsGatewayOptions> _options;
 
-        public NotificationService(IOptions<SmsGatewayOptions> options, ISerializationService serializationService)
+        public NotificationService(INotificationEntryRepository notificationEntryRepository, ISerializationService serializationService, IPhoneNumberService phoneNumberService, IOptions<SmsGatewayOptions> options)
         {
-            _options = options;
+            _notificationEntryRepository = notificationEntryRepository;
             _serializationService = serializationService;
+            _phoneNumberService = phoneNumberService;
+            _options = options;
         }
 
-        public async Task SendSms(string phoneNumber, string message)
+        public bool HasNotified(string phoneNumber, string notificationId, string subject)
+        {
+            var normalizedNumber = _phoneNumberService.NormalizePhoneNumber(phoneNumber);
+
+            return _notificationEntryRepository.HasEntry(normalizedNumber, notificationId, subject);
+        }
+
+        public Task SendNotification(string phoneNumber, string notificationId, string subject, string message)
+        {
+            if (!_phoneNumberService.IsValidPhoneNumber(phoneNumber))
+            {
+                return Task.CompletedTask;
+            }
+
+            if (!_phoneNumberService.IsMobilePhoneNumber(phoneNumber))
+            {
+                return Task.CompletedTask;
+            }
+
+            var normalizedNumber = _phoneNumberService.NormalizePhoneNumber(phoneNumber);
+
+            _notificationEntryRepository.Add(new NotificationEntry { PhoneNumber = normalizedNumber, NotificationId = notificationId, NotificationSubject = subject });
+
+            return SendSms(normalizedNumber, message);
+        }
+
+        private async Task SendSms(string phoneNumber, string message)
         {
             var contentDictionary = new Dictionary<string, string>
             {

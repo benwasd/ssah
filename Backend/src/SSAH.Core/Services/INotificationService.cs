@@ -4,6 +4,8 @@ namespace SSAH.Core.Services
 {
     public interface INotificationService
     {
-        Task SendSms(string phoneNumber, string message);
+        bool HasNotified(string phoneNumber, string notificationId, string subject);
+
+        Task SendNotification(string phoneNumber, string notificationId, string subject, string message);
     }
 }

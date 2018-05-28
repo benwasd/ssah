@@ -102,10 +102,10 @@ namespace SSAH.Core.Domain.Demanding
                     $"Für {registrationParticipant.RegistrationParticipant.Name} wurde eine passende Kursdurchführung gefunden."
                 };
 
-                _notificationService.SendSms(
-                    registrationParticipant.Registration.Applicant.PhoneNumber,
-                    string.Join(Environment.NewLine, messageLines)
-                );
+                //_notificationService.SendNotificationSms(
+                //    registrationParticipant.Registration.Applicant.PhoneNumber,
+                //    string.Join(Environment.NewLine, messageLines)
+                //);
             }
 
             private static IEnumerable<DemandingCriterias> GetCriteriasAffectedFromChange(Registration changedRegistration)
