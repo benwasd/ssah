@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 using Autofac;
 
@@ -25,8 +24,8 @@ namespace SSAH.Infrastructure
             builder.RegisterGeneric(typeof(OptionsMonitor<>)).As(typeof(IOptionsMonitor<>)).SingleInstance();
             builder.RegisterGeneric(typeof(OptionsFactory<>)).As(typeof(IOptionsFactory<>)).InstancePerDependency();
             builder.RegisterGeneric(typeof(OptionsCache<>)).As(typeof(IOptionsMonitorCache<>)).SingleInstance();
-            builder.AddOption<GroupCourseOptionsCollection>("GroupCourseOptions");
-            builder.AddOption<DemandingThresholdOptions>("DemandingThresholdOptions");
+            builder.AddOption<GroupCourseOptionsCollection>(GroupCourseOptionsCollection.NAME);
+            builder.AddOption<DemandingThresholdOptions>(DemandingThresholdOptions.NAME);
             builder.AddOption<SmsGatewayOptions>(SmsGatewayOptions.NAME);
 
             // Logger
@@ -51,6 +50,7 @@ namespace SSAH.Infrastructure
             return new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile("appsettings.custom.json", optional: true, reloadOnChange: true)
                 .Build();
         }
     }
