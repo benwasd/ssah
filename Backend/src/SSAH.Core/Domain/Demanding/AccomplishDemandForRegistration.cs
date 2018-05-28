@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 
 using Autofac;
 
@@ -20,31 +21,33 @@ namespace SSAH.Core.Domain.Demanding
         protected override IEnumerable<IDisposable> SetupCore(IQueue queue, IContainer rootContainer)
         {
             yield return queue
-                .OfType<InterestRegisteredChangedMessage>()
-                .SubscribeInUnitOfWorkScope<InterestRegisteredChangedMessage, Handler>(rootContainer);
+                .OfType<IInterestRegisteredChangeMessage>()
+                .SubscribeInUnitOfWorkScope<IInterestRegisteredChangeMessage, Handler>(rootContainer);
         }
 
-        public class Handler : ObserverBase<InterestRegisteredChangedMessage>
+        public class Handler : ObserverBase<IInterestRegisteredChangeMessage>
         {
             private readonly IDemandService _demandService;
             private readonly IRegistrationRepository _registrationRepository;
             private readonly INotificationService _notificationService;
+            private readonly IUnitOfWorkFactory<INotificationService> _isolatedNotificationService;
 
-            public Handler(IDemandService demandService, IRegistrationRepository registrationRepository, INotificationService notificationService)
+            public Handler(IDemandService demandService, IRegistrationRepository registrationRepository, INotificationService notificationService, IUnitOfWorkFactory<INotificationService> isolatedNotificationService)
             {
                 _demandService = demandService;
                 _registrationRepository = registrationRepository;
                 _notificationService = notificationService;
+                _isolatedNotificationService = isolatedNotificationService;
             }
 
-            protected override void OnNextCore(InterestRegisteredChangedMessage message)
+            protected override void OnNextCore(IInterestRegisteredChangeMessage message)
             {
                 var changedRegistration = _registrationRepository.GetById(message.RegistrationId);
 
                 foreach (var participantAffectedFromChange in AllWaitingRegistrationParticipantAffectedFromChange(changedRegistration).Where(p => p.Registration.Id != message.RegistrationId))
                 {
                     var hadNoDemand = HadNoDemandWhenCreatedOrChanged(participantAffectedFromChange);
-                    var alreadyNotified = WasAlreadyNotified(participantAffectedFromChange, Constants.NotificationIds.ACCOMPLISH_DEMAND_FOR_REGISTRATION);
+                    var alreadyNotified = WasAlreadyNotified(participantAffectedFromChange);
                     if (hadNoDemand && !alreadyNotified)
                     {
                         var demand = _demandService.GetGroupCourseDemand(
@@ -56,7 +59,7 @@ namespace SSAH.Core.Domain.Demanding
 
                         if (demand.Any())
                         {
-                            Notify(participantAffectedFromChange, Constants.NotificationIds.ACCOMPLISH_DEMAND_FOR_REGISTRATION);
+                            NotifyAsync(participantAffectedFromChange).Wait();
                         }
                     }
                 }
@@ -90,22 +93,38 @@ namespace SSAH.Core.Domain.Demanding
                 return true;
             }
 
-            private bool WasAlreadyNotified(RegistrationWithParticipant registrationParticipant, string notificationId)
+            private bool WasAlreadyNotified(RegistrationWithParticipant registrationParticipant)
             {
-                return false;
+                return _notificationService.HasNotified(
+                    registrationParticipant.Registration.Applicant.PhoneNumber,
+                    Constants.NotificationIds.ACCOMPLISH_DEMAND_FOR_REGISTRATION,
+                    NotificationSubject(registrationParticipant)
+                );
+            }
+            
+            private async Task NotifyAsync(RegistrationWithParticipant registrationParticipant)
+            {
+                using (var unitOfWork = _isolatedNotificationService.Begin())
+                {
+                    string[] messageLines = {
+                        $"Hallo {registrationParticipant.Registration.Applicant.Givenname}",
+                        $"Für {registrationParticipant.RegistrationParticipant.Name} wurde eine passende Kursdurchführung gefunden."
+                    };
+
+                    await unitOfWork.Dependent.SendNotification(
+                        registrationParticipant.Registration.Applicant.PhoneNumber,
+                        Constants.NotificationIds.ACCOMPLISH_DEMAND_FOR_REGISTRATION,
+                        NotificationSubject(registrationParticipant),
+                        string.Join(Environment.NewLine, messageLines)
+                    );
+
+                    unitOfWork.Commit();
+                }                
             }
 
-            private void Notify(RegistrationWithParticipant registrationParticipant, string notificationId)
+            private static string NotificationSubject(RegistrationWithParticipant registrationParticipant)
             {
-                string[] messageLines = {
-                    $"Hallo {registrationParticipant.Registration.Applicant.Givenname}",
-                    $"Für {registrationParticipant.RegistrationParticipant.Name} wurde eine passende Kursdurchführung gefunden."
-                };
-
-                //_notificationService.SendNotificationSms(
-                //    registrationParticipant.Registration.Applicant.PhoneNumber,
-                //    string.Join(Environment.NewLine, messageLines)
-                //);
+                return $"reg={registrationParticipant.Registration.Id} par={registrationParticipant.RegistrationParticipant.Id}";
             }
 
             private static IEnumerable<DemandingCriterias> GetCriteriasAffectedFromChange(Registration changedRegistration)

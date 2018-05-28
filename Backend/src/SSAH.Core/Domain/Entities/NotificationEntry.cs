@@ -4,7 +4,7 @@ namespace SSAH.Core.Domain.Entities
 {
     public class NotificationEntry : EntityBase
     {
-        [StringLength(Constants.StringLengths.CODE)]
+        [StringLength(Constants.StringLengths.NAME)]
         public string NotificationId { get; set; }
 
         [StringLength(Constants.StringLengths.CODE)]
