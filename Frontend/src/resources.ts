@@ -122,6 +122,7 @@ export const snowboardRootQuestion: NiveauQuestion = {
 }
 
 export const languages = ["Schweizerdeutsch", "Deutsch", "Französisch", "Italienisch", "Englisch", "Russisch"];
+export const courseTypes = ["Gruppenkurs"];
 
 import './assets';
 import * as sskv_ski from './assets/sskv_ski.png';
