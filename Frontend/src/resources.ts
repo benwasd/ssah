@@ -19,23 +19,7 @@ export const skiRootQuestion: NiveauQuestion = {
                 responses: [
                     {
                         response: "Kids Village",
-                        followingQuestion: {
-                            question: "YZ",
-                            responses: [
-                                {
-                                    response: "Kids Village",
-                                    niveau: 110
-                                },
-                                {
-                                    response: "Blue Prince/Princess",
-                                    niveau: 111
-                                },
-                                {
-                                    response: "Blue King/Queen",
-                                    niveau: 112
-                                }
-                            ]
-                        }
+                        niveau: 110
                     },
                     {
                         response: "Blue Prince/Princess",
@@ -44,6 +28,22 @@ export const skiRootQuestion: NiveauQuestion = {
                     {
                         response: "Blue King/Queen",
                         niveau: 112
+                    },
+                    {
+                        response: "Blue Star",
+                        niveau: 120
+                    },
+                    {
+                        response: "Red Prince/Princess",
+                        niveau: 121
+                    },
+                    {
+                        response: "Red King/Queen",
+                        niveau: 122
+                    },
+                    {
+                        response: "Red Star",
+                        niveau: 130
                     }
                 ]
             }
@@ -77,23 +77,7 @@ export const snowboardRootQuestion: NiveauQuestion = {
                 responses: [
                     {
                         response: "Kids Village",
-                        followingQuestion: {
-                            question: "YZ",
-                            responses: [
-                                {
-                                    response: "Kids Village",
-                                    niveau: 110
-                                },
-                                {
-                                    response: "Blue Prince/Princess",
-                                    niveau: 111
-                                },
-                                {
-                                    response: "Blue King/Queen",
-                                    niveau: 112
-                                }
-                            ]
-                        }
+                        niveau: 110
                     },
                     {
                         response: "Blue Prince/Princess",
@@ -102,6 +86,18 @@ export const snowboardRootQuestion: NiveauQuestion = {
                     {
                         response: "Blue King/Queen",
                         niveau: 112
+                    },
+                    {
+                        response: "Blue Star",
+                        niveau: 120
+                    },
+                    {
+                        response: "Red Prince/Princess",
+                        niveau: 121
+                    },
+                    {
+                        response: "Red King/Queen",
+                        niveau: 122
                     }
                 ]
             }
@@ -112,7 +108,7 @@ export const snowboardRootQuestion: NiveauQuestion = {
                 question: "Kann der Teilnehmer bremsen?",
                 responses: [
                     {
-                        response: "Ja im Pflug",
+                        response: "Ja",
                         niveau: 110
                     },
                     {
@@ -155,7 +151,7 @@ export const leagueBadges = {
         130: black_prince_ski
     },
     1: { // Discipline.Snowboard
-        101: sskv_sb,
+        100: sskv_sb,
         110: blue_princeprincess_sb,
         111: blue_kingqueen_sb,
         112: blue_star_sb,
