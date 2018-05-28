@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace SSAH.Core.Domain.Objects
 {
@@ -13,6 +14,13 @@ namespace SSAH.Core.Domain.Objects
         public int WeekInterval { get; set; } = 1;
 
         public Discipline Discipline { get; set; }
+
+        public int[] NiveauIds { get; set; }
+
+        public bool Match(Discipline discipline, int niveauId)
+        {
+            return Discipline == discipline && NiveauIds != null && NiveauIds.Contains(niveauId);
+        }
 
         public GroupCoursePeriodOptionsCollection Periods { get; set; }
     }

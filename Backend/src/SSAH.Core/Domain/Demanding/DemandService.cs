@@ -41,7 +41,7 @@ namespace SSAH.Core.Domain.Demanding
 
         public IEnumerable<GroupCourse> GetPotentialGroupCourses(Discipline discipline, int niveauId, DateTime from, DateTime to)
         {
-            var matchingGroupCourseOptions = _groupCourseOptionsCollection.Value.Where(gc => gc.Discipline == discipline && gc.ValidFrom <= from && to <= gc.ValidTo);
+            var matchingGroupCourseOptions = _groupCourseOptionsCollection.Value.Where(gc => gc.Match(discipline, niveauId) && gc.ValidFrom <= from && to <= gc.ValidTo);
             var currentOrUpcommingSeasonStart = _seasonRepository.GetCurrentOrUpcommingOrThrow(DateTime.Today).Start;
 
             foreach (var groupCourseOption in matchingGroupCourseOptions)
