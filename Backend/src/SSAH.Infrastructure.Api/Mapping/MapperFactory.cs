@@ -21,6 +21,7 @@ namespace SSAH.Infrastructure.Api.Mapping
             });
 
             _mapperConfiguration.CompileMappings();
+            _mapperConfiguration.AssertConfigurationIsValid();
         }
 
         public IMapper GetMapper(ILifetimeScope lifetimeScope)

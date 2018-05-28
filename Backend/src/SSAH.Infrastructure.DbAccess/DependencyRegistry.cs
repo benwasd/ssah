@@ -19,6 +19,7 @@ namespace SSAH.Infrastructure.DbAccess
             // Domain
             builder.RegisterGeneric(typeof(Repository<>)).As(typeof(IRepository<>)).InstancePerDependency();
             builder.RegisterType<CourseRepository>().As<ICourseRepository>().InstancePerDependency();
+            builder.RegisterType<NotificationEntryRepository>().As<INotificationEntryRepository>().InstancePerDependency();
             builder.RegisterType<RegistrationRepository>().As<IRegistrationRepository>().InstancePerDependency();
             builder.RegisterType<SeasonRepository>().As<ISeasonRepository>().InstancePerDependency();
 

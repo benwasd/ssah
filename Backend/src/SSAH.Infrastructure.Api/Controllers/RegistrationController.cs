@@ -56,8 +56,8 @@ namespace SSAH.Infrastructure.Api.Controllers
             _mapper = mapper;
             _collectionMapper = collectionMapper;
             _commitCollectionMapper = commitCollectionMapper;
-            _queue = queue;
             _groupCourseOptions = groupCourseOptions;
+            _queue = queue;
         }
 
         [HttpGet]

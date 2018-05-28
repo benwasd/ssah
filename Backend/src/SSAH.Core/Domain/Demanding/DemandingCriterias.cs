@@ -26,6 +26,19 @@ namespace SSAH.Core.Domain.Demanding
             };
         }
 
+        public static DemandingCriterias CreateFromRegistration(Registration registration, CourseType courseType, Discipline discipline, int niveauId)
+        {
+            return new DemandingCriterias
+            {
+                CourseType = courseType,
+                Discipline = discipline,
+                NiveauId = niveauId,
+                From = registration.AvailableFrom.Date,
+                To = registration.AvailableTo.Date,
+                IsCourse = false
+            };
+        }
+  
         public static DemandingCriterias CreateFromCourse(GroupCourse course, ISerializationService serializationService)
         {
             var courseDates = course.GetAllCourseDates(serializationService).ToArray();

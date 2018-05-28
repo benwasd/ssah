@@ -4,7 +4,7 @@ using SSAH.Core.Messaging;
 
 namespace SSAH.Core.Domain.Messages
 {
-    public class InterestRegisteredMessage : MessageBase
+    public class InterestRegisteredMessage : MessageBase, IInterestRegisteredChangeMessage
     {
         public InterestRegisteredMessage(Guid registrationId)
         {

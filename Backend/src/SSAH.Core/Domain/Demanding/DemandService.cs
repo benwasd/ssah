@@ -59,7 +59,7 @@ namespace SSAH.Core.Domain.Demanding
 
         public IEnumerable<GroupCourseDemand> GetGroupCourseDemand(Discipline discipline, int niveauId, DateTime from, DateTime to, IEnumerable<RegistrationWithParticipant> includingRegistrations = null)
         {
-            var potentialParticipants = TryAdd(_registrationRepository.GetRegisteredParticipantOverlappingPeriod(discipline, niveauId, from, to), includingRegistrations).ToArray();
+            var potentialParticipants = TryAdd(_registrationRepository.GetRegisteredParticipantOverlappingPeriod(CourseType.Group, discipline, niveauId, from, to), includingRegistrations).ToArray();
             var potentialParticipantCriterias = potentialParticipants.Select(DemandingCriterias.CreateFromRegistration).ToArray();
             var potentialCourses = GetPotentialGroupCourses(discipline, niveauId, from, to);
 
@@ -120,9 +120,9 @@ namespace SSAH.Core.Domain.Demanding
         private DateTime CalculateFirstCourseStartLappingInPeriod(DateTime currentOrUpcommingSeasonStart, DateTime from, GroupCourseOptions groupCourseOptions)
         {
             var weeksSinceSeasonStart = DateTimeExtensions.WeekDiff(currentOrUpcommingSeasonStart, from);
-            var offset = (int)Math.Ceiling((double)weeksSinceSeasonStart / groupCourseOptions.WeekInterval);
+            var coursesSinceSeasonStart = (int)Math.Floor((double)weeksSinceSeasonStart / groupCourseOptions.WeekInterval);
 
-            return currentOrUpcommingSeasonStart.AddDays(offset * 7);
+            return currentOrUpcommingSeasonStart.AddDays(coursesSinceSeasonStart * groupCourseOptions.WeekInterval * 7);
         }
 
         private GroupCourse CreateEarlyProposalGroupCourse(DateTime courseStartDate, int niveauId, GroupCourseOptions groupCourseOptions)

@@ -2,7 +2,6 @@
 
 using SSAH.Core.Domain.CourseCreation;
 using SSAH.Core.Domain.Demanding;
-using SSAH.Core.Domain.Messages;
 using SSAH.Core.Messaging;
 
 namespace SSAH.Core
@@ -14,8 +13,9 @@ namespace SSAH.Core
             // Domain
             builder.RegisterType<CourseCreationService>().As<ICourseCreationService>().InstancePerDependency();
             builder.RegisterType<DemandService>().As<IDemandService>().InstancePerDependency();
-            builder.RegisterType<MessageObserverTest>().As<AutoAttachMessageObserverBase>().InstancePerDependency();
             builder.RegisterType<CreateCourses>().As<AutoAttachMessageObserverBase>().InstancePerDependency();
+            builder.RegisterType<NewCourseCreated>().As<AutoAttachMessageObserverBase>().InstancePerDependency();
+            builder.RegisterType<AccomplishDemandForRegistration>().As<AutoAttachMessageObserverBase>().InstancePerDependency();
             
             // Messaging
             builder.RegisterType<Queue>().As<IQueue>().SingleInstance();
