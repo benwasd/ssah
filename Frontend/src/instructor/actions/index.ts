@@ -27,7 +27,7 @@ export interface CoursesLoadedAction extends Action {
 export const loadCourses = () => (dispatch: Dispatch, getState: () => State) => {
     const instructorId = getState().instructor.instructorId;
     if (!instructorId) {
-        throw new Error("Instructor is not set, login first");
+        throw new Error("Instructor is not set, login first.");
     }
     
     const apiProxy = new InstructorApiProxy();
