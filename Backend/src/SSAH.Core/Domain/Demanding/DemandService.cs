@@ -59,7 +59,7 @@ namespace SSAH.Core.Domain.Demanding
 
         public IEnumerable<GroupCourseDemand> GetGroupCourseDemand(Discipline discipline, int niveauId, DateTime from, DateTime to, IEnumerable<RegistrationWithParticipant> includingRegistrations = null)
         {
-            var potentialParticipants = TryAdd(_registrationRepository.GetRegisteredParticipantOverlappingPeriod(discipline, niveauId, from, to), includingRegistrations).ToArray();
+            var potentialParticipants = TryAdd(_registrationRepository.GetRegisteredParticipantOverlappingPeriod(CourseType.Group, discipline, niveauId, from, to), includingRegistrations).ToArray();
             var potentialParticipantCriterias = potentialParticipants.Select(DemandingCriterias.CreateFromRegistration).ToArray();
             var potentialCourses = GetPotentialGroupCourses(discipline, niveauId, from, to);
 

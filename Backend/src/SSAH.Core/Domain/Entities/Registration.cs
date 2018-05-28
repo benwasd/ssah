@@ -29,18 +29,18 @@ namespace SSAH.Core.Domain.Entities
         {
             get
             {
-                if (this.RegistrationParticipants.Count == 0)
+                if (RegistrationParticipants.Count == 0)
                 {
                     return RegistrationStatus.Registration;
                 }
-                else if (this.RegistrationParticipants.All(rp => rp.ResultingParticipantId.HasValue))
+
+                // Note: Keep condition in sync with RegistrationRepository.GetRegisteredParticipantOverlappingPeriod
+                if (RegistrationParticipants.All(rp => rp.ResultingParticipantId.HasValue))
                 {
                     return RegistrationStatus.Committed;
                 }
-                else
-                {
-                    return RegistrationStatus.CourseSelection;
-                }
+
+                return RegistrationStatus.CourseSelection;
             }
         }
 

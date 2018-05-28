@@ -16,6 +16,7 @@ namespace SSAH.Core
             builder.RegisterType<DemandService>().As<IDemandService>().InstancePerDependency();
             builder.RegisterType<MessageObserverTest>().As<AutoAttachMessageObserverBase>().InstancePerDependency();
             builder.RegisterType<CreateCourses>().As<AutoAttachMessageObserverBase>().InstancePerDependency();
+            builder.RegisterType<AccomplishDemandForRegistration>().As<AutoAttachMessageObserverBase>().InstancePerDependency();
             
             // Messaging
             builder.RegisterType<Queue>().As<IQueue>().SingleInstance();
