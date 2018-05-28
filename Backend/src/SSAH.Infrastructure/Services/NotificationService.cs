@@ -38,6 +38,11 @@ namespace SSAH.Infrastructure.Services
 
         public bool HasNotified(string phoneNumber, string notificationId, string subject)
         {
+            if (!CanSendSmsToPhoneNumber(phoneNumber, notificationId, new[] { subject }))
+            {
+                return false;
+            }
+
             var normalizedNumber = _phoneNumberService.NormalizePhoneNumber(phoneNumber);
 
             return _notificationEntryRepository.HasEntry(normalizedNumber, notificationId, subject);
@@ -45,15 +50,8 @@ namespace SSAH.Infrastructure.Services
 
         public Task SendNotification(string phoneNumber, string notificationId, string[] subjects, string message)
         {
-            if (!_phoneNumberService.IsValidPhoneNumber(phoneNumber))
+            if (!CanSendSmsToPhoneNumber(phoneNumber, notificationId, subjects))
             {
-                _logger.LogInformation($"The notification '{notificationId}' can't send to invalid phone number '{phoneNumber}', subjects: {string.Join(", ", subjects)}");
-                return Task.CompletedTask;
-            }
-
-            if (!_phoneNumberService.IsMobilePhoneNumber(phoneNumber))
-            {
-                _logger.LogInformation($"The notification '{notificationId}' can't send to non mobile number '{phoneNumber}', subjects: {string.Join(", ", subjects)}");
                 return Task.CompletedTask;
             }
 
@@ -65,6 +63,23 @@ namespace SSAH.Infrastructure.Services
             }
 
             return SendSms(normalizedNumber, message);
+        }
+
+        private bool CanSendSmsToPhoneNumber(string phoneNumber, string notificationId, string[] subjects)
+        {
+            if (!_phoneNumberService.IsValidPhoneNumber(phoneNumber))
+            {
+                _logger.LogInformation($"The notification '{notificationId}' can't send to invalid phone number '{phoneNumber}', subject: {string.Join(", ", subjects)}");
+                return false;
+            }
+
+            if (!_phoneNumberService.IsMobilePhoneNumber(phoneNumber))
+            {
+                _logger.LogInformation($"The notification '{notificationId}' can't send to non mobile number '{phoneNumber}', subject: {string.Join(", ", subjects)}");
+                return false;
+            }
+
+            return true;
         }
 
         private async Task SendSms(string phoneNumber, string message)

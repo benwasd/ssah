@@ -30,6 +30,8 @@ namespace SSAH.Tests.Unit.Infrastructure.Services
         [TestCase("+41 79 778 12 12", true)]
         [TestCase("+41 79 778 12 1", false)]
         [TestCase("079 778 12 12", true)]
+        [TestCase("0", false)]
+        [TestCase("Abc0123", false)]
         public void Validate(string number, bool expectedResult)
         {
             // Arrange
@@ -48,6 +50,9 @@ namespace SSAH.Tests.Unit.Infrastructure.Services
         [TestCase("075 778 12 12", true)]
         [TestCase("031 122 12 12", false)]
         [TestCase("033 122 12 12", false)]
+        [TestCase("0", false)]
+        [TestCase("Abc0123", false)]
+        [TestCase("+41 778 12 22 B", false)]
         public void IsMobileNumber(string number, bool expectedResult)
         {
             // Arrange
