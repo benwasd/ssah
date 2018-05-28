@@ -12,7 +12,5 @@ namespace SSAH.Core.Domain.Messages
         }
 
         public Guid RegistrationId { get; }
-
-        public bool Canceled => false;
     }
 }

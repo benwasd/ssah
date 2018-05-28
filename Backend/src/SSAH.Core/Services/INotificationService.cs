@@ -6,6 +6,6 @@ namespace SSAH.Core.Services
     {
         bool HasNotified(string phoneNumber, string notificationId, string subject);
 
-        Task SendNotification(string phoneNumber, string notificationId, string subject, string message);
+        Task SendNotification(string phoneNumber, string notificationId, string[] subjects, string message);
     }
 }

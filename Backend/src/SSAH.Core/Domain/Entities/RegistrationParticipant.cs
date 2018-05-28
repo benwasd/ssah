@@ -31,6 +31,8 @@ namespace SSAH.Core.Domain.Entities
 
         public DateTime? CourseStartDate { get; set; }
 
+        public bool HasDemandWhenLastCreatedOrModified { get; set; }
+
         public Participant ToParticipant(Applicant applicant)
         {
             if (ResultingParticipantId != null)

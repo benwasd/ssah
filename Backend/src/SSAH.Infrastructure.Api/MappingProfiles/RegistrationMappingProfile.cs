@@ -56,7 +56,8 @@ namespace SSAH.Infrastructure.Api.MappingProfiles
                 .ForMember(dest => dest.ResultingParticipantId, opt => opt.Ignore())
                 .ForMember(dest => dest.ResultingParticipant, opt => opt.Ignore())
                 .ForMember(dest => dest.CourseIdentifier, opt => opt.Ignore())
-                .ForMember(dest => dest.CourseStartDate, opt => opt.Ignore());
+                .ForMember(dest => dest.CourseStartDate, opt => opt.Ignore())
+                .ForMember(dest => dest.HasDemandWhenLastCreatedOrModified, opt => opt.Ignore());
 
             CreateDtoToEntityMap<CommitRegistrationParticipantDto, RegistrationParticipant>()
                 .ForMember(dest => dest.RegistrationId, opt => opt.Ignore())
@@ -65,7 +66,8 @@ namespace SSAH.Infrastructure.Api.MappingProfiles
                 .ForMember(dest => dest.Name, opt => opt.Ignore())
                 .ForMember(dest => dest.CourseType, opt => opt.Ignore())
                 .ForMember(dest => dest.Discipline, opt => opt.Ignore())
-                .ForMember(dest => dest.NiveauId, opt => opt.Ignore());
+                .ForMember(dest => dest.NiveauId, opt => opt.Ignore())
+                .ForMember(dest => dest.HasDemandWhenLastCreatedOrModified, opt => opt.Ignore());
         }
     }
 }

@@ -30,36 +30,45 @@ namespace SSAH.Core.Domain.Demanding
             private readonly IDemandService _demandService;
             private readonly IRegistrationRepository _registrationRepository;
             private readonly INotificationService _notificationService;
-            private readonly IUnitOfWorkFactory<INotificationService> _isolatedNotificationService;
+            private readonly IUnitOfWorkFactory<IRepository<RegistrationParticipant>> _hasDemandUpdateUnitOfWork;
+            private readonly IUnitOfWorkFactory<INotificationService> _notificationUnitOfWork;
 
-            public Handler(IDemandService demandService, IRegistrationRepository registrationRepository, INotificationService notificationService, IUnitOfWorkFactory<INotificationService> isolatedNotificationService)
+            public Handler(
+                IDemandService demandService,
+                IRegistrationRepository registrationRepository,
+                INotificationService notificationService,
+                IUnitOfWorkFactory<IRepository<RegistrationParticipant>> hasDemandUpdateUnitOfWork,
+                IUnitOfWorkFactory<INotificationService> notificationUnitOfWork)
             {
                 _demandService = demandService;
                 _registrationRepository = registrationRepository;
                 _notificationService = notificationService;
-                _isolatedNotificationService = isolatedNotificationService;
+                _hasDemandUpdateUnitOfWork = hasDemandUpdateUnitOfWork;
+                _notificationUnitOfWork = notificationUnitOfWork;
             }
 
             protected override void OnNextCore(IInterestRegisteredChangeMessage message)
             {
                 var changedRegistration = _registrationRepository.GetById(message.RegistrationId);
 
-                foreach (var participantAffectedFromChange in AllWaitingRegistrationParticipantAffectedFromChange(changedRegistration).Where(p => p.Registration.Id != message.RegistrationId))
+                foreach (var participantAffectedFromChange in AllWaitingRegistrationParticipantAffectedFromChange(changedRegistration))
                 {
-                    var hadNoDemand = HadNoDemandWhenCreatedOrChanged(participantAffectedFromChange);
-                    var alreadyNotified = WasAlreadyNotified(participantAffectedFromChange);
-                    if (hadNoDemand && !alreadyNotified)
+                    if (participantAffectedFromChange.Registration.Id == message.RegistrationId)
                     {
-                        var demand = _demandService.GetGroupCourseDemand(
-                            participantAffectedFromChange.RegistrationParticipant.Discipline,
-                            participantAffectedFromChange.RegistrationParticipant.NiveauId,
-                            participantAffectedFromChange.Registration.AvailableFrom,
-                            participantAffectedFromChange.Registration.AvailableTo
-                        );
-
-                        if (demand.Any())
+                        var demand = GetDemand(participantAffectedFromChange);
+                        UpdateHasDemandIndicator(participantAffectedFromChange.RegistrationParticipant.Id, hasDemandWhenLastCreatedOrModified: demand.Any());
+                    }
+                    else
+                    {
+                        var hadNoDemand = HadNoDemandWhenCreatedOrModified(participantAffectedFromChange);
+                        var alreadyNotified = WasAlreadyNotified(participantAffectedFromChange);
+                        if (hadNoDemand && !alreadyNotified)
                         {
-                            NotifyAsync(participantAffectedFromChange).Wait();
+                            var demand = GetDemand(participantAffectedFromChange);
+                            if (demand.Any())
+                            {
+                                NotifyAsync(participantAffectedFromChange).Wait();
+                            }
                         }
                     }
                 }
@@ -88,9 +97,37 @@ namespace SSAH.Core.Domain.Demanding
                 }
             }
 
-            private bool HadNoDemandWhenCreatedOrChanged(RegistrationWithParticipant participantAffectedFromChange)
+            private IEnumerable<GroupCourseDemand> GetDemand(RegistrationWithParticipant participantAffectedFromChange)
             {
-                return true;
+                if (participantAffectedFromChange.RegistrationParticipant.CourseType == CourseType.Group)
+                {
+                    return _demandService.GetGroupCourseDemand(
+                        participantAffectedFromChange.RegistrationParticipant.Discipline,
+                        participantAffectedFromChange.RegistrationParticipant.NiveauId,
+                        participantAffectedFromChange.Registration.AvailableFrom,
+                        participantAffectedFromChange.Registration.AvailableTo
+                    );
+                }
+                else
+                {
+                    return Enumerable.Empty<GroupCourseDemand>();
+                }
+            }
+
+            private void UpdateHasDemandIndicator(Guid registrationParticipantId, bool hasDemandWhenLastCreatedOrModified)
+            {
+                using (var unitOfWork = _hasDemandUpdateUnitOfWork.Begin())
+                {
+                    var participant = unitOfWork.Dependent.GetById(registrationParticipantId);
+                    participant.HasDemandWhenLastCreatedOrModified = hasDemandWhenLastCreatedOrModified;
+
+                    unitOfWork.Commit();
+                }
+            }
+
+            private static bool HadNoDemandWhenCreatedOrModified(RegistrationWithParticipant participantAffectedFromChange)
+            {
+                return participantAffectedFromChange.RegistrationParticipant.HasDemandWhenLastCreatedOrModified == false;
             }
 
             private bool WasAlreadyNotified(RegistrationWithParticipant registrationParticipant)
@@ -104,7 +141,7 @@ namespace SSAH.Core.Domain.Demanding
             
             private async Task NotifyAsync(RegistrationWithParticipant registrationParticipant)
             {
-                using (var unitOfWork = _isolatedNotificationService.Begin())
+                using (var unitOfWork = _notificationUnitOfWork.Begin())
                 {
                     string[] messageLines = {
                         $"Hallo {registrationParticipant.Registration.Applicant.Givenname}",
@@ -114,12 +151,12 @@ namespace SSAH.Core.Domain.Demanding
                     await unitOfWork.Dependent.SendNotification(
                         registrationParticipant.Registration.Applicant.PhoneNumber,
                         Constants.NotificationIds.ACCOMPLISH_DEMAND_FOR_REGISTRATION,
-                        NotificationSubject(registrationParticipant),
+                        new [] { NotificationSubject(registrationParticipant) },
                         string.Join(Environment.NewLine, messageLines)
                     );
 
                     unitOfWork.Commit();
-                }                
+                }
             }
 
             private static string NotificationSubject(RegistrationWithParticipant registrationParticipant)

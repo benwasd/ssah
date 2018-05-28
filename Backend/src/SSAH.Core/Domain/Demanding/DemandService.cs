@@ -119,7 +119,7 @@ namespace SSAH.Core.Domain.Demanding
 
         private DateTime CalculateFirstCourseStartLappingInPeriod(DateTime currentOrUpcommingSeasonStart, DateTime from, GroupCourseOptions groupCourseOptions)
         {
-            var weeksSinceSeasonStart = DateTimeExtensions.WeekDiff(currentOrUpcommingSeasonStart, from) + 1;
+            var weeksSinceSeasonStart = DateTimeExtensions.WeekDiff(currentOrUpcommingSeasonStart, from);
             var coursesSinceSeasonStart = (int)Math.Floor((double)weeksSinceSeasonStart / groupCourseOptions.WeekInterval);
 
             return currentOrUpcommingSeasonStart.AddDays(coursesSinceSeasonStart * groupCourseOptions.WeekInterval * 7);

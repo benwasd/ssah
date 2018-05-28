@@ -6,14 +6,11 @@ namespace SSAH.Core.Domain.Messages
 {
     public class InterestRegisteredChangedMessage : MessageBase, IInterestRegisteredChangeMessage
     {
-        public InterestRegisteredChangedMessage(Guid registrationId, bool canceled = false)
+        public InterestRegisteredChangedMessage(Guid registrationId)
         {
             RegistrationId = registrationId;
-            Canceled = canceled;
         }
 
         public Guid RegistrationId { get; }
-
-        public bool Canceled { get; }
     }
 }

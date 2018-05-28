@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 using SSAH.Core.Domain;
@@ -19,13 +20,20 @@ namespace SSAH.Infrastructure.Services
         private readonly ISerializationService _serializationService;
         private readonly IPhoneNumberService _phoneNumberService;
         private readonly IOptions<SmsGatewayOptions> _options;
+        private readonly ILogger<NotificationService> _logger;
 
-        public NotificationService(INotificationEntryRepository notificationEntryRepository, ISerializationService serializationService, IPhoneNumberService phoneNumberService, IOptions<SmsGatewayOptions> options)
+        public NotificationService(
+            INotificationEntryRepository notificationEntryRepository,
+            ISerializationService serializationService,
+            IPhoneNumberService phoneNumberService,
+            IOptions<SmsGatewayOptions> options,
+            ILogger<NotificationService> logger)
         {
             _notificationEntryRepository = notificationEntryRepository;
             _serializationService = serializationService;
             _phoneNumberService = phoneNumberService;
             _options = options;
+            _logger = logger;
         }
 
         public bool HasNotified(string phoneNumber, string notificationId, string subject)
@@ -35,21 +43,26 @@ namespace SSAH.Infrastructure.Services
             return _notificationEntryRepository.HasEntry(normalizedNumber, notificationId, subject);
         }
 
-        public Task SendNotification(string phoneNumber, string notificationId, string subject, string message)
+        public Task SendNotification(string phoneNumber, string notificationId, string[] subjects, string message)
         {
             if (!_phoneNumberService.IsValidPhoneNumber(phoneNumber))
             {
+                _logger.LogInformation($"The notification '{notificationId}' can't send to invalid phone number '{phoneNumber}', subjects: {string.Join(", ", subjects)}");
                 return Task.CompletedTask;
             }
 
             if (!_phoneNumberService.IsMobilePhoneNumber(phoneNumber))
             {
+                _logger.LogInformation($"The notification '{notificationId}' can't send to non mobile number '{phoneNumber}', subjects: {string.Join(", ", subjects)}");
                 return Task.CompletedTask;
             }
 
             var normalizedNumber = _phoneNumberService.NormalizePhoneNumber(phoneNumber);
 
-            _notificationEntryRepository.Add(new NotificationEntry { PhoneNumber = normalizedNumber, NotificationId = notificationId, NotificationSubject = subject });
+            foreach (var subject in subjects)
+            {
+                _notificationEntryRepository.Add(new NotificationEntry { PhoneNumber = normalizedNumber, NotificationId = notificationId, NotificationSubject = subject });
+            }
 
             return SendSms(normalizedNumber, message);
         }
