@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 using SSAH.Core.Domain.Objects;
 
@@ -8,6 +9,7 @@ namespace SSAH.Core.Domain.Entities
     {
         public Guid RegistrationId { get; set; }
 
+        [StringLength(Constants.StringLengths.NAME)]
         public string Name { get; set; }
 
         public CourseType CourseType { get; set; }
