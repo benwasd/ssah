@@ -3,6 +3,7 @@ import { Dispatch } from 'react-redux';
 import { Action } from 'redux';
 
 import { CloseCourseDto, CourseDto, CourseParticipantFeedbackDto, InstructorApiProxy } from '../../api';
+import { track } from '../../main/actions';
 import { State } from '../../main/state';
 import { throwIfUndefined } from '../../utils';
 
@@ -33,30 +34,30 @@ export const loadCourses = () => (dispatch: Dispatch, getState: () => State) => 
     const apiProxy = new InstructorApiProxy();
     const from = moment().startOf('day').add(-7, 'days').toDate();
     const to = moment().startOf('day').add(14, 'days').toDate();
-    apiProxy.getMyCourses(instructorId, from, to).then(r => {
+    track(apiProxy.getMyCourses(instructorId, from, to), dispatch).then(r => {
         const action: CoursesLoadedAction = { type: COURSES_LOADED, courses: r };
         dispatch(action);
     });
 }
 
-export const COURSE_RELOAD = 'COURSE_RELOAD';
+export const COURSE_LOADED = 'COURSE_LOADED';
 
-export interface CourseReloadedAction extends Action {
+export interface CourseLoadedAction extends Action {
     course: CourseDto;
 }
 
-export const reloadCourse = (instructorId: string, courseId: string) => (dispatch: Dispatch, getState: () => State) => {
-    const currentInstructorId = getState().instructor.instructorId;
-    if (currentInstructorId == null || instructorId == null || currentInstructorId.toUpperCase() != instructorId.toUpperCase()) {
-        return;
+export const loadCourse = (courseId: string) => (dispatch: Dispatch, getState: () => State) => {
+    const instructorId = getState().instructor.instructorId;
+    if (!instructorId) {
+        throw new Error("Instructor is not set, login first.");
     }
     
     const apiProxy = new InstructorApiProxy();
-    apiProxy.getMyCourse(instructorId, courseId).then(r => {
+    track(apiProxy.getMyCourse(instructorId, courseId), dispatch).then(r => {
         const from = moment().startOf('day').add(-7, 'days').toDate();
         const to = moment().startOf('day').add(14, 'days').toDate();
         if (from <= r.startDate && r.startDate <= to) {
-            const action: CourseReloadedAction = { type: COURSE_RELOAD, course: r };
+            const action: CourseLoadedAction = { type: COURSE_LOADED, course: r };
             dispatch(action);
         }
     });
@@ -69,14 +70,15 @@ export interface CourseClosedAction extends Action {
 }
 
 export const closeCourse = (courseId: string, courseRowVersion: string, participantsFeedback: CourseParticipantFeedbackDto[]) => (dispatch: Dispatch, getState: () => State) => {
+    const instructorId = throwIfUndefined(getState().instructor.instructorId);
     const closeCourseDto = new CloseCourseDto();
     closeCourseDto.id = courseId;
     closeCourseDto.rowVersion = courseRowVersion;
     closeCourseDto.participants = participantsFeedback;
 
     const apiProxy = new InstructorApiProxy();
-    apiProxy.closeCourse(throwIfUndefined(getState().instructor.instructorId), closeCourseDto).then(() => {
+    track(apiProxy.closeCourse(instructorId, closeCourseDto), dispatch).then(() => {
         const action: CourseClosedAction = { type: COURSE_CLOSED, closedCourse: closeCourseDto };
         dispatch(action);
-    })
+    });
 }

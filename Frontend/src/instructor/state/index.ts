@@ -1,7 +1,7 @@
 import { CourseDto } from "../../api";
 
 export interface InstructorState {
-    instructorId: string | null;
-    instructorName: string | null;
+    instructorId: string | undefined;
+    instructorName: string | undefined;
     courses: CourseDto[];
 }

@@ -29,7 +29,7 @@ interface InternalRegistrationContainerState {
 }
 
 class InternalRegistrationContainer extends React.Component<InternalRegistrationContainerProps, InternalRegistrationContainerState> {    
-    unsubscribeHistoryListen: () => void;
+    private unsubscribeHistoryListen: () => void;
 
     constructor(props: InternalRegistrationContainerProps) {
         super(props);
@@ -37,16 +37,16 @@ class InternalRegistrationContainer extends React.Component<InternalRegistration
     }
 
     componentWillMount() {
-        this.initStateByPathname(this.props.location.pathname);
+        this.handleNavigate(this.props.location.pathname);
         this.unsubscribeHistoryListen = this.props.history
-            .listen((location, action) => this.initStateByPathname(location.pathname));
+            .listen((location, action) => this.handleNavigate(location.pathname));
     }
     
     componentWillUnmount() {
         this.unsubscribeHistoryListen();
     }
 
-    initStateByPathname(pathname: string) {
+    handleNavigate(pathname: string) {
         if (pathname.toLowerCase() === '/register') {
             this.props.unsetRegistration();
             this.unsetStatus();
