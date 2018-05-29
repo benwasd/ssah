@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { HubConnectionBuilder, HubConnection } from '@aspnet/signalr';
+import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
 import { connect } from 'react-redux';
 
 import { State } from '../../main/state';
+import { baseApiUrl } from '../../resources';
 import { loadCourse } from '../actions';
 
 interface InternalSocketConnectedRefreshWrapper {
@@ -15,7 +16,7 @@ class InternalSocketConnectedRefreshWrapper extends React.Component<InternalSock
 
     componentWillMount() {
         this.connection = new HubConnectionBuilder()
-            .withUrl("http://localhost:51474/courseChange")
+            .withUrl(baseApiUrl + "/courseChange")
             .build();
 
         this.connection.on("Notify", (messageType: string, instructorId: string, courseId: string) => {

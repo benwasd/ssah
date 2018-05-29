@@ -8,6 +8,7 @@ namespace SSAH.Startup
         public static IContainer BootstrapDbAccessContainer()
         {
             var containerBuilder = new ContainerBuilder();
+            SSAH.Infrastructure.DependencyRegistry.Configure(containerBuilder);
             SSAH.Infrastructure.DbAccess.DependencyRegistry.Configure(containerBuilder);
 
             containerBuilder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
