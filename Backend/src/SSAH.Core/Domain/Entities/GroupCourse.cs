@@ -75,7 +75,7 @@ namespace SSAH.Core.Domain.Entities
             return result;
         }
 
-        protected override void AddVisitedDaysToPassedParticipants(Guid[] passedParticipantIds, ISerializationService serializationService)
+        protected override void AddVisitedDaysToPassedParticipants(Guid[] passedParticipantIds, NiveauOptionsCollection niveauOptionsCollection, ISerializationService serializationService)
         {
             var courseDates = GetAllCourseDates(serializationService).ToArray();
 
@@ -88,7 +88,7 @@ namespace SSAH.Core.Domain.Entities
                         {
                             Discipline = Discipline,
                             NiveauId = NiveauId,
-                            NiveauName = "N",
+                            NiveauName = niveauOptionsCollection.Where(no => no.Id == NiveauId).Select(no => no.Name).Single(),
                             DayStart = courseDay.Start,
                             DayDuration = courseDay.Duration
                         }

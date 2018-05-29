@@ -5,7 +5,7 @@ import { CourseDto } from '../../api';
 import { noopAction, noopReducer } from '../../utils';
 import {
     COURSES_LOADED, CoursesLoadedAction,
-    COURSE_RELOAD, CourseReloadedAction,
+    COURSE_LOADED, CourseLoadedAction,
     INSTRUCTOR_LOGIN, InstructorLoginAction
 } from '../actions';
 import { InstructorState } from '../state';
@@ -17,19 +17,19 @@ const handleCourses: Reducer<CourseDto[], Action> = (state, action) => {
 
     switch (action.type) {
         case COURSES_LOADED: 
-            const loadedAction = action as CoursesLoadedAction;
-            return loadedAction.courses;
+            const allLoadedAction = action as CoursesLoadedAction;
+            return allLoadedAction.courses;
 
-        case COURSE_RELOAD:
-            const reloadedAction = action as CourseReloadedAction;
+        case COURSE_LOADED:
+            const loadedAction = action as CourseLoadedAction;
             
-            const courseIndex = state.findIndex(c => c.id === reloadedAction.course.id);
+            const courseIndex = state.findIndex(c => c.id === loadedAction.course.id);
             let newState;
             if (courseIndex >= 0) {
-                newState = update(state, { [courseIndex]: { $set: reloadedAction.course } });
+                newState = update(state, { [courseIndex]: { $set: loadedAction.course } });
             }
             else {
-                newState = state.concat(reloadedAction.course);
+                newState = state.concat(loadedAction.course);
             }
 
             return newState;
@@ -40,7 +40,7 @@ const handleCourses: Reducer<CourseDto[], Action> = (state, action) => {
 
 const handleInstructor: Reducer<InstructorState, Action> = (state, action) => {
     if (state === undefined) {
-        return { instructorId: null, instructorName: null, courses: handleCourses(undefined, noopAction()) }
+        return { instructorId: undefined, instructorName: undefined, courses: handleCourses(undefined, noopAction()) }
     }
 
     switch (action.type) {

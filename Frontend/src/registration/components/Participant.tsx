@@ -35,11 +35,7 @@ export class Participant extends React.Component<ParticipantComponentProps, Part
         super(props);
         this.state = { isNiveauModalOpen: false, discipline: undefined, niveauId: undefined };
     }
-
-    get disciplineOptions() {
-        return getEnumElementsAsDropdownItemProps(Discipline);
-    }
-    
+   
     handleChange = (event: React.ChangeEvent<HTMLInputElement>, { name, value }) => {
         this.props.change({ [name]: value });
     }

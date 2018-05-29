@@ -7,6 +7,8 @@ namespace SSAH.Infrastructure.Api.Dtos
 {
     public class CourseDto : EntityDto
     {
+        public CourseStatus CourseStatus { get; set; }
+
         public CourseType CourseType { get; set; }
 
         public Discipline Discipline { get; set; }

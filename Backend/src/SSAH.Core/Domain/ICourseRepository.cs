@@ -17,7 +17,7 @@ namespace SSAH.Core.Domain
 
         IEnumerable<GroupCourse> GetMatchingGroupCourses(Discipline discipline, CourseStatus status, int niveauId, DateTime startDate, int optionsIdentifier, Guid[] excludedGroupCourseIds);
 
-        IEnumerable<GroupCourse> GetAllGroupCourses(Guid instructorId, CourseStatus status);
+        IEnumerable<GroupCourse> GetAllGroupCourses(Guid instructorId, CourseStatus[] status);
 
         Task<IEnumerable<GroupCourse>> GetAllGroupCourses(Guid instructorId, CourseStatus status, DateTime from, DateTime to);
         
