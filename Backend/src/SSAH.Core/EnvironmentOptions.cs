@@ -6,6 +6,8 @@ namespace SSAH.Core
     {
         public const string NAME = "Environment";
 
+        public string ConnectionString { get; set; }
+
         public string RegistrationFrontendUrl { get; set; }
 
         public string InstructorCourseDetailFrontendUrl { get; set; }
