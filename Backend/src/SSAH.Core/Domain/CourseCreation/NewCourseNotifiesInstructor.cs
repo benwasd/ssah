@@ -16,7 +16,7 @@ using SSAH.Core.Services;
 
 namespace SSAH.Core.Domain.CourseCreation
 {
-    public class NewCourseNotifyInstructor : AutoAttachMessageObserverBase
+    public class NewCourseNotifiesInstructor : AutoAttachMessageObserverBase
     {
         protected override IEnumerable<IDisposable> SetupCore(IQueue queue, IContainer rootContainer)
         {
