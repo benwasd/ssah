@@ -1,3 +1,5 @@
+import { baseApiUrl } from "./resources";
+
 export class ApiProxyBase {
     transformOptions(options: RequestInit): Promise<RequestInit> {
         options.credentials = 'include';
@@ -9,6 +11,6 @@ export class ApiProxyBase {
     }
 
     getBaseUrl(baseUrl: string) {
-        return "http://localhost:51474";
+        return baseApiUrl;
     }
 }

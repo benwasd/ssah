@@ -164,3 +164,6 @@ export const leagueBadges = {
         122: red_star_sb
     }
 };
+
+// Default: http://localhost:51474
+export const baseApiUrl: string = (window as any).ssah.baseUrl;
