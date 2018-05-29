@@ -24,6 +24,7 @@ namespace SSAH.Infrastructure.Api.MappingProfiles
         private void MapEntitiesToDtos()
         {
             CreateEntityToDtoMap<GroupCourse, CourseDto>()
+                .ForMember(dest => dest.CourseStatus, opt => opt.MapFrom(src => src.Status))
                 .ForMember(dest => dest.CourseType, opt => opt.MapFrom(src => CourseType.Group))
                 .ForMember(dest => dest.Participants, opt => opt.MapFrom(src => src.Participants.Select(p => p.Participant)))
                 .ForMember(dest => dest.ActualCourseStart, opt => opt.Ignore())

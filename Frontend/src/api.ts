@@ -444,6 +444,7 @@ export class EntityDto {
 }
 
 export class CourseDto extends EntityDto {
+    courseStatus: CourseStatus;
     courseType: CourseType;
     discipline: Discipline;
     niveauId: number;
@@ -456,6 +457,7 @@ export class CourseDto extends EntityDto {
     init(data?: any) {
         super.init(data);
         if (data) {
+            this.courseStatus = data["courseStatus"];
             this.courseType = data["courseType"];
             this.discipline = data["discipline"];
             this.niveauId = data["niveauId"];
@@ -484,6 +486,7 @@ export class CourseDto extends EntityDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["courseStatus"] = this.courseStatus;
         data["courseType"] = this.courseType;
         data["discipline"] = this.discipline;
         data["niveauId"] = this.niveauId;
@@ -503,6 +506,13 @@ export class CourseDto extends EntityDto {
         super.toJSON(data);
         return data; 
     }
+}
+
+export enum CourseStatus {
+    EarlyProposal = 0, 
+    Proposal = 1, 
+    Committed = 2, 
+    Closed = 3, 
 }
 
 export enum CourseType {

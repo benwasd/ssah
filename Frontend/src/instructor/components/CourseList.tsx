@@ -1,9 +1,11 @@
 import * as React from 'react';
 import * as moment from 'moment';
+import { Link } from 'react-router-dom';
 import { sortBy } from 'lodash';
 
-import { CourseDto, Discipline, CourseType } from '../../api';
-import { Link } from 'react-router-dom';
+import { CourseDto } from '../../api';
+import { NiveauVisualizer } from '../../main/components/NiveauVisualizer';
+import { courseTypes } from '../../resources';
 
 export interface CourseListProps {
     courses: CourseDto[];
@@ -17,11 +19,11 @@ export class CourseList extends React.Component<CourseListProps> {
 
     render() {
         return (<>
-            <h1>Zukünftige Kurse</h1>
+            <h2>Zukünftige Kurse</h2>
             <div className="ui relaxed divided list">
                 {this.noEntriesIfEmpty(this.orderdFutureCourses().map(this.renderCourse))}
             </div>
-            <h1>Vergangene Kurse</h1>
+            <h2>Vergangene Kurse</h2>
             <div className="ui relaxed divided list">
                 {this.noEntriesIfEmpty(this.orderdPastCourses().map(this.renderCourse))}
             </div>
@@ -41,9 +43,11 @@ export class CourseList extends React.Component<CourseListProps> {
     private renderCourse = (course: CourseDto) => {
         return (
             <div className="item" key={course.id}>
-                <i className="large github middle aligned icon"></i>
-                <div className="content">
-                    <Link className="header" to={"/instructor/course/" + course.id}>{Discipline[course.discipline]} {CourseType[course.courseType]} mit {course.participants.length} Teilnehmer, Start {moment(course.actualCourseStart).format('LLLL')}</Link>
+                <div className="right floated content">
+                    <NiveauVisualizer discipline={course.discipline} niveauId={course.niveauId} />
+                </div>
+                <div className="middle aligned content">
+                    <Link className="header" to={"/course/" + course.id}>{courseTypes[course.courseType]} mit {course.participants.length} Teilnehmer, Start {moment(course.actualCourseStart).format('LLLL')}</Link>
                     <div className="description">Zuletzt aktualisiert {moment(course.lastModificationDate).fromNow()} ({moment(course.lastModificationDate).format('LLL')})</div>
                 </div>
             </div>

@@ -31,7 +31,7 @@ export class App extends React.Component {
                                     <HashRouter basename="/instructor">
                                         <Switch>
                                             <Route path="/login" component={InstructorLoginContainer} />
-                                            <Route path="/instructor/course/:id" component={CourseDetailContainer} />
+                                            <Route path="/course/:id" component={CourseDetailContainer} />
                                             <Route path="/" component={CourseListContainer} />
                                         </Switch>
                                     </HashRouter>

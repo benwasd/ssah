@@ -3,10 +3,11 @@ import { HubConnectionBuilder, HubConnection } from '@aspnet/signalr';
 import { connect } from 'react-redux';
 
 import { State } from '../../main/state';
-import { reloadCourse } from '../actions';
+import { loadCourse } from '../actions';
 
 interface InternalSocketConnectedRefreshWrapper {
-    reloadCourse(instructorId: string, courseId: string);
+    currentInstructorId: string;
+    loadCourse(courseId: string);
 }
 
 class InternalSocketConnectedRefreshWrapper extends React.Component<InternalSocketConnectedRefreshWrapper> {
@@ -18,8 +19,12 @@ class InternalSocketConnectedRefreshWrapper extends React.Component<InternalSock
             .build();
 
         this.connection.on("Notify", (messageType: string, instructorId: string, courseId: string) => {
-            console.log(messageType, instructorId, courseId);
-            this.props.reloadCourse(instructorId, courseId);
+            if (!this.props.currentInstructorId || !instructorId || this.props.currentInstructorId.toUpperCase() != instructorId.toUpperCase()) {
+                return;
+            }
+            else {
+                this.props.loadCourse(courseId);
+            }
         });
 
         this.connection.start();
@@ -40,9 +45,10 @@ class InternalSocketConnectedRefreshWrapper extends React.Component<InternalSock
 export const SocketConnectedRefreshWrapper = connect(
     (state: State): Partial<InternalSocketConnectedRefreshWrapper> => {
         return { 
+            currentInstructorId: state.instructor.instructorId
         };
     },
     { 
-        reloadCourse
+        loadCourse
     }
 )(InternalSocketConnectedRefreshWrapper)

@@ -1,7 +1,8 @@
 import * as React from 'react';
+import { RouteComponentProps } from 'react-router';
 import { Button, Dropdown, DropdownItemProps, DropdownProps } from 'semantic-ui-react';
 
-export interface InstructorLoginProps {
+export interface InstructorLoginProps extends RouteComponentProps<{}>  {
     login(instructorId: string, instructorName: string);
 }
 
@@ -24,15 +25,27 @@ export class InstructorLogin extends React.Component<InstructorLoginProps> {
 
     onLogin = () => {
         if (this.dropdownElement){
-            var el = this.dropdownElement as any;
-            this.props.login(el.getSelectedItem().value, el.getSelectedItem().text);
+            var dropdownElement = this.dropdownElement as any;
+            var selectedItem = dropdownElement.getSelectedItem() as DropdownItemProps
+            this.props.login(selectedItem.value as string, selectedItem.text as string);
         }
+
+        this.props.history.push('/');
     }
 
     render() {
         return (<>
-            <Dropdown ref={e => this.dropdownElement = e} placeholder='Wähle dich aus.' fluid selection options={this.options} selectOnBlur={false} />
-            <Button onClick={this.onLogin}>Login</Button>
+            <div className='w-50 mb-2'>
+                <Dropdown
+                    ref={e => this.dropdownElement = e}
+                    placeholder='Wähle dich aus.'
+                    fluid selection
+                    options={this.options}
+                    selectOnBlur={false} />
+            </div>
+            <div>
+                <Button onClick={this.onLogin}>Login</Button>
+            </div>
         </>);
     }
 }

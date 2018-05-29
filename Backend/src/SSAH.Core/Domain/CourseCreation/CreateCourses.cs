@@ -92,11 +92,11 @@ namespace SSAH.Core.Domain.CourseCreation
 
                     if (isNew)
                     {
-                        _queue.Publish(new CommittedCourseCreatedMessage(course.Instructor.Id, course.Id));
+                        _queue.Publish(new CommittedCourseCreatedMessage(course.Instructor?.Id, course.Id));
                     }
                     else
                     {
-                        _queue.Publish(new CommittedCourseChangedMessage(course.Instructor.Id, course.Id));
+                        _queue.Publish(new CommittedCourseChangedMessage(course.Instructor?.Id, course.Id));
                     }
 
                     committedGroupCourseIds = committedGroupCourseIds.Concat(new[] { course.Id }).ToArray();

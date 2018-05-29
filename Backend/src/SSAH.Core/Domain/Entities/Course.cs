@@ -53,14 +53,14 @@ namespace SSAH.Core.Domain.Entities
             }
         }
 
-        public void Close(Guid[] passedParticipantIds, ISerializationService serializationService)
+        public void Close(Guid[] passedParticipantIds, NiveauOptionsCollection niveauOptionsCollection, ISerializationService serializationService)
         {
             if (Status != CourseStatus.Committed)
             {
                 throw new InvalidOperationException("Only committed courses can be closed.");
             }
 
-            AddVisitedDaysToPassedParticipants(passedParticipantIds, serializationService);
+            AddVisitedDaysToPassedParticipants(passedParticipantIds, niveauOptionsCollection, serializationService);
 
             Status = CourseStatus.Closed;
         }
@@ -79,6 +79,6 @@ namespace SSAH.Core.Domain.Entities
 
         protected abstract int EvaluateMaximalBoundedInstructorCount();
 
-        protected abstract void AddVisitedDaysToPassedParticipants(Guid[] passedParticipantIds, ISerializationService serializationService);
+        protected abstract void AddVisitedDaysToPassedParticipants(Guid[] passedParticipantIds, NiveauOptionsCollection niveauOptionsCollection, ISerializationService serializationService);
     }
 }

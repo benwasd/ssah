@@ -10,8 +10,7 @@ export class AppHeader extends React.Component {
                         SSAH
                     </a>
                     <a href="#/register" className="item">Register</a>
-                    <a href="#/instructor/login" className="item">Instructor Login</a>
-                    <a href="#/instructor" className="item">Instructor</a>
+                    <a href="#/instructor/login" className="item">Instructor</a>
                 </div>
             </div>
         );
