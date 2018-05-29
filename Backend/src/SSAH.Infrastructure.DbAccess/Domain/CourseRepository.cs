@@ -47,9 +47,9 @@ namespace SSAH.Infrastructure.DbAccess.Domain
                 .Where(c => !excludedGroupCourseIds.Contains(c.Id));
         }
 
-        public IEnumerable<GroupCourse> GetAllGroupCourses(Guid instructorId, CourseStatus status)
+        public IEnumerable<GroupCourse> GetAllGroupCourses(Guid instructorId, CourseStatus[] status)
         {
-            return _groupCourseSet.Where(gc => gc.InstructorId == instructorId && gc.Status == status);
+            return _groupCourseSet.Where(gc => gc.InstructorId == instructorId && status.Contains(gc.Status));
         }
 
         public async Task<IEnumerable<GroupCourse>> GetAllGroupCourses(Guid instructorId, CourseStatus status, DateTime from, DateTime to)

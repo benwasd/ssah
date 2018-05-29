@@ -14,7 +14,7 @@ namespace SSAH.Core
             builder.RegisterType<CourseCreationService>().As<ICourseCreationService>().InstancePerDependency();
             builder.RegisterType<DemandService>().As<IDemandService>().InstancePerDependency();
             builder.RegisterType<CreateCourses>().As<AutoAttachMessageObserverBase>().InstancePerDependency();
-            builder.RegisterType<NewCourseCreated>().As<AutoAttachMessageObserverBase>().InstancePerDependency();
+            builder.RegisterType<NewCourseNotifyInstructor>().As<AutoAttachMessageObserverBase>().InstancePerDependency();
             builder.RegisterType<AccomplishDemandForRegistration>().As<AutoAttachMessageObserverBase>().InstancePerDependency();
             
             // Messaging
