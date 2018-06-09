@@ -35,7 +35,7 @@ namespace SSAH.Infrastructure.Solver
                         var language = UniqueLanguages(courseOfParticipant, languageOfParticipants, k);
                         var courseDaysInSameNiveau = CourseDaysInSameNiveauStandardDeviation(courseOfParticipant, courseDaysInSameNiveauOfParticipants, k);
 
-                        var valueForCourse = ageGroup * language * courseDaysInSameNiveau;
+                        var valueForCourse = (ageGroup + 1) * language * (courseDaysInSameNiveau + 1);
 
                         return valueForCourse;
                     })
@@ -64,7 +64,7 @@ namespace SSAH.Infrastructure.Solver
                 .Select(ak => ak.ageGroup)
                 .ToList();
 
-            return StandardDeviation(ageGroups, 3) + 1;
+            return StandardDeviation(ageGroups, 3);
         }
 
         public static double UniqueLanguages(int[] courseOfParticipant, int[] languageOfParticipants, int courseFilter)
@@ -91,7 +91,7 @@ namespace SSAH.Infrastructure.Solver
                 .Select(ak => ak.courseDaysInSameNiveau)
                 .ToList();
 
-            return StandardDeviation(courseDaysInSameNiveaus, 3) + 1;
+            return StandardDeviation(courseDaysInSameNiveaus, 3);
         }
 
         public static double StandardDeviation(ICollection<int> sequence, int digits)
