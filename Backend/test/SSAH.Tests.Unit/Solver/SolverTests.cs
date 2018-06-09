@@ -44,6 +44,38 @@ namespace SSAH.Tests.Unit.Solver
         }
 
         [Test]
+        public void SolverSeperatesHardSituation()
+        {
+            // Arrange
+            var participants = new[]
+            {
+                new SolverParticipant(new Guid("00000000-0000-0000-0000-000000000001"), 2014, Language.French, 0),
+                new SolverParticipant(new Guid("00000000-0000-0000-0000-000000000002"), 1998, Language.Italian, 0),
+                new SolverParticipant(new Guid("00000000-0000-0000-0000-000000000003"), 1980, Language.SwissGerman, 0),
+                new SolverParticipant(new Guid("00000000-0000-0000-0000-000000000004"), 2012, Language.French, 0),
+                new SolverParticipant(new Guid("00000000-0000-0000-0000-000000000005"), 2010, Language.SwissGerman, 0),
+                new SolverParticipant(new Guid("00000000-0000-0000-0000-000000000006"), 1990, Language.SwissGerman, 0),
+                new SolverParticipant(new Guid("00000000-0000-0000-0000-000000000007"), 2015, Language.French, 0),
+                new SolverParticipant(new Guid("00000000-0000-0000-0000-000000000008"), 1999, Language.Italian, 0),
+                new SolverParticipant(new Guid("00000000-0000-0000-0000-000000000009"), 2011, Language.French, 1)
+            };
+
+            var solverParam1 = new SolverParam(1, participants);
+            var solverParam2 = new SolverParam(2, participants);
+
+            // Act
+            var result1 = _solver.Solve(solverParam1);
+            var result2 = _solver.Solve(solverParam2);
+
+            // Assert
+            //AssertSolverResultIsEquivalent(
+            //    expectedComposition: new[] { new[] { 2005, 2000 }, new[] { 1993, 1989 } },
+            //    actualResult: result,
+            //    identifierPropertyResolver: p => p.AgeGroup
+            //);
+        }
+
+        [Test]
         public void SolveTrickyConstellation()
         {
             // Arrange
