@@ -46,10 +46,7 @@ namespace SSAH.Core.Domain.Entities
         {
             var participantCount = Participants.Count;
             var result = 0;
-
-            // TODO: Move thresholds into configuration
-            // TODO: Improve handling based on the standard deviation of participiants age group
-            // TODO: Improve handling based on the standard deviation of participiants language
+            
 
             if (participantCount >= 25) // 21- = floor(x/8)+1 instructors
             {
