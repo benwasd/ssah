@@ -4,7 +4,6 @@ import { Image } from 'semantic-ui-react';
 import { Discipline } from '../../api';
 import './NiveauVisualizer.less';
 
-import './../../assets';
 import * as skiSvg from './../../assets/discipline-ski.svg';
 import * as snowboardSvg from './../../assets/discipline-snowboard.svg';
 import * as kidsVillagePng from './../../assets/snowly.png';
