@@ -121,7 +121,7 @@ class InternalRegistrationContainer extends React.Component<InternalRegistration
                 <Button primary onClick={this.submitOrUpdate} className='mt-3'>
                     {this.props.registration.id ? 'Aktualisieren & Weiter' : 'Registrieren'}
                 </Button>}
-            {status === RegistrationStatus.CourseSelection &&
+            {status === RegistrationStatus.CourseSelection && this.props.registration.possibleCourses.length > 0 &&
                 <Button primary onClick={this.courseSelected} className='mt-3'>
                     Weiter
                 </Button>}
