@@ -17,7 +17,7 @@ export class CourseDateVisualizer extends React.Component<CourseDateVisualizerPr
         const firstPeriodElement = this.props.periods[0];
         const lastPeriodElement = this.props.periods[this.props.periods.length - 1];
         const start = firstPeriodElement.start;
-        const oneWeekAfterStart = moment(firstPeriodElement.end).add(1, "w").toDate();
+        const oneWeekAfterStart = moment(firstPeriodElement.end).startOf('week').add(1, "w").toDate();
 
         const allPeriodElementsInSameWeek = this.props.periods.every(p => start <= p.start && p.end <= oneWeekAfterStart);
         const periodElementsOnSameDay = moment(firstPeriodElement.start).startOf('day').isSame(moment(lastPeriodElement.end).startOf('day'));
