@@ -15,8 +15,7 @@ export interface SummaryProps {
 
 export class Summary extends React.Component<SummaryProps> {
     render() {
-        return (<>
-            <h2>Sind die folgenden Angaben richtig?</h2>
+        return (
             <table className="ui very basic collapsing unstackable celled table">
                 <tbody>
                     <tr>
@@ -67,6 +66,6 @@ export class Summary extends React.Component<SummaryProps> {
                     })}
                 </tbody>
             </table>
-        </>)
+        )
     }
 }
