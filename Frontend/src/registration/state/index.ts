@@ -55,7 +55,9 @@ export function hasAllForRegistrationParticipant(p: ParticipantState) {
         && p.niveauId != null
         && p.courseType != null
         && p.discipline != null
-        && !!p.ageGroup;
+        && !!p.ageGroup
+        && parseInt(p.ageGroup) > 1900
+        && parseInt(p.ageGroup) < new Date().getFullYear()
 }
 
 export function hasCourseSelectionForAllParticipants(r: RegistrationState) {
