@@ -1,7 +1,13 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
+using AutoMapper;
+
+using SSAH.Core.Domain;
 using SSAH.Core.Domain.Entities;
+using SSAH.Core.Domain.Objects;
 using SSAH.Core.Extensions;
+using SSAH.Core.Services;
 using SSAH.Infrastructure.Api.Dtos;
 using SSAH.Infrastructure.Api.Mapping;
 
@@ -26,7 +32,8 @@ namespace SSAH.Infrastructure.Api.MappingProfiles
                 .ForMember(dest => dest.RegistrationId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Participants, opt => opt.MapFrom(src => src.RegistrationParticipants));
 
-            CreateEntityToDtoMap<RegistrationParticipant, RegistrationParticipantDto>();
+            CreateEntityToDtoMap<RegistrationParticipant, RegistrationParticipantDto>()
+                .ForMember(dest => dest.CommittedCoursePeriods, opt => opt.ResolveUsing<GetAllCourseDatesFromAssignedProposalCourse>());
 
             CreateMap<Registration, RegistrationOverviewDto>()
                 .ForMember(dest => dest.RegistrationId, opt => opt.MapFrom(src => src.Id))
@@ -68,6 +75,28 @@ namespace SSAH.Infrastructure.Api.MappingProfiles
                 .ForMember(dest => dest.Discipline, opt => opt.Ignore())
                 .ForMember(dest => dest.NiveauId, opt => opt.Ignore())
                 .ForMember(dest => dest.HasDemandWhenLastCreatedOrModified, opt => opt.Ignore());
+        }
+
+        public class GetAllCourseDatesFromAssignedProposalCourse : IValueResolver<RegistrationParticipant, RegistrationParticipantDto, ICollection<Period>>
+        {
+            public ICollection<Period> Resolve(RegistrationParticipant source, RegistrationParticipantDto destination, ICollection<Period> destMember, ResolutionContext context)
+            {
+                if (source.ResultingParticipantId.HasValue && source.CourseIdentifier.HasValue && source.CourseStartDate.HasValue)
+                {
+                    var courseRepository = (ICourseRepository)context.Mapper.ServiceCtor(typeof(ICourseRepository));
+                    var serializationService = (ISerializationService)context.Mapper.ServiceCtor(typeof(ISerializationService));
+                    
+                    var groupCourse = courseRepository.GetGroupCourseOfRegistrationParticipantOrDefault(
+                        source.ResultingParticipantId.Value,
+                        source.CourseStartDate.Value,
+                        source.CourseIdentifier.Value
+                    );
+
+                    return groupCourse.GetAllCourseDates(serializationService).ToArray();
+                }
+
+                return new Period[0];
+            }
         }
     }
 }

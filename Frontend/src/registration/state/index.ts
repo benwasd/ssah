@@ -1,5 +1,4 @@
-import { Reducer } from "redux";
-import { Discipline, CourseType, Language, RegistrationStatus, PossibleCourseDto } from "../../api";
+import { CourseType, Discipline, Language, Period, PossibleCourseDto, RegistrationStatus } from '../../api';
 
 export interface RegistrationState {
     id: string | null;
@@ -36,7 +35,8 @@ export interface ParticipantState {
     committing?: {
         courseIdentifier: number;
         courseStartDate: Date;
-    }
+    };
+    committedCoursePeriods?: Period[];
 }
 
 export function hasAllForRegistration(r: RegistrationState) {

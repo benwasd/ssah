@@ -40,6 +40,11 @@ namespace SSAH.Infrastructure.DbAccess.Domain
                 .FirstOrDefault();
         }
 
+        public GroupCourse GetGroupCourseOfRegistrationParticipantOrDefault(Guid resultingParticipantId, DateTime startDate, int optionsIdentifier)
+        {
+            return _groupCourseSet.FirstOrDefault(gc => gc.Participants.Any(p => p.ParticipantId == resultingParticipantId) && gc.OptionsIdentifier == optionsIdentifier && gc.StartDate == startDate);
+        }
+
         public IEnumerable<GroupCourse> GetMatchingGroupCourses(Discipline discipline, CourseStatus status, int niveauId, DateTime startDate, int optionsIdentifier, Guid[] excludedGroupCourseIds)
         {
             return _groupCourseSet
