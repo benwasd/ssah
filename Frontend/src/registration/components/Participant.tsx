@@ -39,11 +39,17 @@ export class Participant extends React.Component<ParticipantComponentProps, Part
         this.props.change({ [name]: value });
     }
 
-    isEmptyAndValidatedOnNotNewRow = (propertySelector: (ApplicantProps) => any) => {
+    isEmptyAndValidatedOnNotNewRow = (propertySelector: (ApplicantProps) => any, additionalInvalidator?: (v: any) => boolean) => {
         const propertyValue = propertySelector(this.props);
-        const isEmpty = typeof(propertyValue) === "number" ? propertyValue == null : !propertyValue;
+        let isEmpty = typeof(propertyValue) === "number" ? propertyValue == null : !propertyValue;
         const fullyValidated = this.props.showAllValidationErrors;
-        return isEmpty && fullyValidated && !this.props.isNewRow;
+        const onNotNewRow = !this.props.isNewRow;
+
+        if (additionalInvalidator) {
+            isEmpty = isEmpty || additionalInvalidator(propertyValue);
+        }
+
+        return isEmpty && fullyValidated && onNotNewRow;
     }
 
     hasErrorInModal = () => {
@@ -81,7 +87,7 @@ export class Participant extends React.Component<ParticipantComponentProps, Part
                         fluid
                         value={this.props.ageGroup}
                         onChange={this.handleChange}
-                        error={this.isEmptyAndValidatedOnNotNewRow(p => p.ageGroup)} />
+                        error={this.isEmptyAndValidatedOnNotNewRow(p => p.ageGroup, v => !(1900 < parseInt(v) && parseInt(v) < new Date().getFullYear()))} />
                 </td>
                 <td className='three wide niveauId'>
                     <NiveauVisualizer

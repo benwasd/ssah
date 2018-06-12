@@ -6,7 +6,7 @@ import update from 'immutability-helper';
 import { State } from '../../main/state';
 import { applicantChange, availabilityChange, changeParticipant } from '../actions';
 import { Applicant, ApplicantProps } from '../components/Applicant';
-import { ApplicantCard } from '../components/ApplicantCard';
+import { HowItWorksCard } from '../components/HowItWorksCard';
 import { AvailabilitySelector, AvailabilitySelectorProps } from '../components/AvailabilitySelector';
 import { ParticipantList, ParticipantListProps } from '../components/ParticipantList';
 
@@ -39,7 +39,7 @@ export class RegistrationStep1Container extends React.Component {
                     <AvailabilitySelectorContainer />
                 </Grid.Column>
                 <Grid.Column floated='right' only='large screen' computer={5}>
-                    <ApplicantCard />
+                    <HowItWorksCard />
                 </Grid.Column>
                 <Grid.Column width={16}>
                 </Grid.Column>

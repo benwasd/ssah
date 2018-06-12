@@ -1,9 +1,11 @@
 import * as React from 'react';
 
+import { SummaryContainer } from './SummaryContainer';
+
 export class RegistrationStep4Container extends React.Component {
     render() {
-        return (<>
-            <h1>Step 4</h1>
-        </>);
+        return (
+            <SummaryContainer />
+        );
     }
 }

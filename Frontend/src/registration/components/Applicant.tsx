@@ -67,7 +67,7 @@ export class Applicant extends React.Component<ApplicantProps> {
                         error={this.isEmptyAndValidated(p => p.surname)} />
                 </Form.Field>
                 <Form.Field required>
-                    <label>Ort</label>
+                    <label>Ort / Hotel</label>
                     <Form.Input
                         placeholder='Hotel Bellvue'
                         name='residence'

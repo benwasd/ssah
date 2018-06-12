@@ -1,5 +1,4 @@
-import { Reducer } from "redux";
-import { Discipline, CourseType, Language, RegistrationStatus, PossibleCourseDto } from "../../api";
+import { CourseType, Discipline, Language, Period, PossibleCourseDto, RegistrationStatus } from '../../api';
 
 export interface RegistrationState {
     id: string | null;
@@ -36,7 +35,8 @@ export interface ParticipantState {
     committing?: {
         courseIdentifier: number;
         courseStartDate: Date;
-    }
+    };
+    committedCoursePeriods?: Period[];
 }
 
 export function hasAllForRegistration(r: RegistrationState) {
@@ -55,7 +55,9 @@ export function hasAllForRegistrationParticipant(p: ParticipantState) {
         && p.niveauId != null
         && p.courseType != null
         && p.discipline != null
-        && !!p.ageGroup;
+        && !!p.ageGroup
+        && parseInt(p.ageGroup) > 1900
+        && parseInt(p.ageGroup) < new Date().getFullYear()
 }
 
 export function hasCourseSelectionForAllParticipants(r: RegistrationState) {

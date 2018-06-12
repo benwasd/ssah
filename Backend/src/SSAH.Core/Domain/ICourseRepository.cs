@@ -15,6 +15,8 @@ namespace SSAH.Core.Domain
 
         GroupCourse GetBestParticipantIdMatchingGroupCourseOrDefault(Discipline discipline, CourseStatus status, int niveauId, DateTime startDate, int optionsIdentifier, Guid[] participantIds, Guid[] excludedGroupCourseIds);
 
+        GroupCourse GetGroupCourseOfRegistrationParticipantOrDefault(Guid resultingParticipantId, DateTime startDate, int optionsIdentifier);
+
         IEnumerable<GroupCourse> GetMatchingGroupCourses(Discipline discipline, CourseStatus status, int niveauId, DateTime startDate, int optionsIdentifier, Guid[] excludedGroupCourseIds);
 
         IEnumerable<GroupCourse> GetAllGroupCourses(Guid instructorId, CourseStatus[] status);

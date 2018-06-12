@@ -1,4 +1,6 @@
-﻿using SSAH.Core.Domain.Objects;
+﻿using System.Collections.Generic;
+
+using SSAH.Core.Domain.Objects;
 
 namespace SSAH.Infrastructure.Api.Dtos
 {
@@ -16,5 +18,7 @@ namespace SSAH.Infrastructure.Api.Dtos
 
         /// <summary>Jahrgang</summary>
         public int? AgeGroup { get; set; }
+
+        public ICollection<Period> CommittedCoursePeriods { get; set; }
     }
 }

@@ -110,7 +110,7 @@ namespace SSAH.Core.Domain.CourseCreation
 
             private static SolverResult EfficientResult(IEnumerable<SolverResult> results)
             {
-                return results.OrderBy(r => r.Courses.Count() * r.Score).First();
+                return results.OrderBy(r => r.Score * r.CourseSizeMultiplier).First();
             }
 
             private static Instructor SelectInstructor(IEnumerable<Instructor> availableInstructor)

@@ -729,6 +729,7 @@ export class RegistrationParticipantDto extends EntityDto {
     niveauId: number;
     language?: Language | undefined;
     ageGroup?: number | undefined;
+    committedCoursePeriods: Period[];
 
     init(data?: any) {
         super.init(data);
@@ -739,6 +740,11 @@ export class RegistrationParticipantDto extends EntityDto {
             this.niveauId = data["niveauId"];
             this.language = data["language"];
             this.ageGroup = data["ageGroup"];
+            if (data["committedCoursePeriods"] && data["committedCoursePeriods"].constructor === Array) {
+                this.committedCoursePeriods = [];
+                for (let item of data["committedCoursePeriods"])
+                    this.committedCoursePeriods.push(Period.fromJS(item));
+            }
         }
     }
 
@@ -757,6 +763,11 @@ export class RegistrationParticipantDto extends EntityDto {
         data["niveauId"] = this.niveauId;
         data["language"] = this.language;
         data["ageGroup"] = this.ageGroup;
+        if (this.committedCoursePeriods && this.committedCoursePeriods.constructor === Array) {
+            data["committedCoursePeriods"] = [];
+            for (let item of this.committedCoursePeriods)
+                data["committedCoursePeriods"].push(item.toJSON());
+        }
         super.toJSON(data);
         return data; 
     }

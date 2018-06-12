@@ -28,7 +28,7 @@ namespace SSAH.Infrastructure.Api.MappingProfiles
                 .ForMember(dest => dest.CourseType, opt => opt.MapFrom(src => CourseType.Group))
                 .ForMember(dest => dest.Participants, opt => opt.MapFrom(src => src.Participants.Select(p => p.Participant)))
                 .ForMember(dest => dest.ActualCourseStart, opt => opt.Ignore())
-                .ForMember(dest => dest.CoursePeriods, opt => opt.ResolveUsing<CalleGetAllCourseDatesWithSerializationService>())
+                .ForMember(dest => dest.CoursePeriods, opt => opt.ResolveUsing<GetAllCourseDatesWithSerializationService>())
                 .ForMember(dest => dest.LastModificationDate, opt => opt.MapFrom(src => GetLastModification(src)))
                 .AfterMap((src, dest) =>
                 {
@@ -58,11 +58,11 @@ namespace SSAH.Infrastructure.Api.MappingProfiles
                 .Max();
         }
 
-        public class CalleGetAllCourseDatesWithSerializationService : IValueResolver<GroupCourse, CourseDto, ICollection<Period>>
+        public class GetAllCourseDatesWithSerializationService : IValueResolver<GroupCourse, CourseDto, ICollection<Period>>
         {
             public ICollection<Period> Resolve(GroupCourse source, CourseDto destination, ICollection<Period> destMember, ResolutionContext context)
             {
-                return source.GetAllCourseDates(context.Mapper.ServiceCtor(typeof(ISerializationService)) as ISerializationService).ToArray();
+                return source.GetAllCourseDates((ISerializationService)context.Mapper.ServiceCtor(typeof(ISerializationService))).ToArray();
             }
         }
     }

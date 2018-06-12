@@ -140,7 +140,8 @@ const handleRegistration: Reducer<RegistrationState, Action> = (state, action) =
                         courseType: p.courseType,
                         discipline: p.discipline,
                         niveauId: p.niveauId,
-                        ageGroup: p.ageGroup ? p.ageGroup.toString() : ""
+                        ageGroup: p.ageGroup ? p.ageGroup.toString() : "",
+                        committedCoursePeriods: p.committedCoursePeriods
                     }
                 }),
                 possibleCourses: []
