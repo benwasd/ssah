@@ -9,7 +9,6 @@ import { ParticipantState } from '../state';
 import { NiveauEvaluation } from './NiveauEvaluation';
 import './Participant.less';
 
-import './../../assets';
 import * as skiSvg from './../../assets/discipline-ski.svg';
 import * as snowboardSvg from './../../assets/discipline-snowboard.svg';
 
