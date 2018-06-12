@@ -29,6 +29,9 @@ export class CourseList extends React.Component<CourseListProps> {
             <div className="ui relaxed divided list">
                 {this.noEntriesIfEmpty(this.orderdPastCourses().map(this.renderCourse))}
             </div>
+            <div className='mt-4'>
+                <Link className="ui button" to='/login'>Logout</Link>
+            </div>
         </>);
     }
 
