@@ -2,7 +2,7 @@
 {
     public enum CourseStatus
     {
-        EarlyProposal,
+        Potential,
         Proposal,
         Committed,
         Closed

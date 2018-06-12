@@ -50,7 +50,7 @@ namespace SSAH.Core.Domain.Demanding
 
                 while (courseStartDate < to)
                 {
-                    yield return CreateEarlyProposalGroupCourse(courseStartDate, niveauId, groupCourseOption);
+                    yield return CreatePotentialGroupCourse(courseStartDate, niveauId, groupCourseOption);
 
                     courseStartDate = courseStartDate.AddDays(groupCourseOption.WeekInterval * 7);
                 }
@@ -70,7 +70,7 @@ namespace SSAH.Core.Domain.Demanding
                 var demand = potentialParticipantCriterias.Count(pp => courseCriterias.Match(pp));
 
                 // Feature Proposal: https://github.com/benwasd/ssah/issues/54
-                // Consider instructor availabilities here and compare with MaximalBoundedInstructorCount of early proposal and proposal courses.
+                // Consider instructor availabilities here and compare with MaximalBoundedInstructorCount of potential and proposal courses.
 
                 if (demand >= _demandingThresholdOptions.Value.MinParticipants)
                 {
@@ -125,9 +125,9 @@ namespace SSAH.Core.Domain.Demanding
             return currentOrUpcommingSeasonStart.AddDays(coursesSinceSeasonStart * groupCourseOptions.WeekInterval * 7);
         }
 
-        private GroupCourse CreateEarlyProposalGroupCourse(DateTime courseStartDate, int niveauId, GroupCourseOptions groupCourseOptions)
+        private GroupCourse CreatePotentialGroupCourse(DateTime courseStartDate, int niveauId, GroupCourseOptions groupCourseOptions)
         {
-            return new GroupCourse(groupCourseOptions.Discipline, CourseStatus.EarlyProposal, niveauId, courseStartDate)
+            return new GroupCourse(groupCourseOptions.Discipline, CourseStatus.Potential, niveauId, courseStartDate)
                 .SetPeriodsOptions(_serializationService, groupCourseOptions);
         }
     }
