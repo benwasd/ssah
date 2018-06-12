@@ -9,19 +9,13 @@ export interface InstructorLoginProps extends RouteComponentProps<{}>  {
 export class InstructorLogin extends React.Component<InstructorLoginProps> {
     dropdownElement: React.Component<DropdownProps, React.ComponentState, any> | null = null;
     options: DropdownItemProps[] = [
-        {
-            text: 'Martina Sägesser',
-            value: 'AEEF01D4-14DE-49D1-980A-004AF5135C30'
-        },
-        {
-            text: 'Joel Müller',
-            value: 'AEEF01D4-14DE-49D1-980A-004AF5135C31'
-        },
-        {
-            text: 'Simon Peter',
-            value: 'AEEF01D4-14DE-49D1-980A-004AF5135C32'
-        }
-    ]
+        { text: 'Martina Sägesser', value: 'AEEF01D4-14DE-49D1-980A-004AF5135C30' },
+        { text: 'Joel Müller', value: 'AEEF01D4-14DE-49D1-980A-004AF5135C31' },
+        { text: 'Simon Peter', value: 'AEEF01D4-14DE-49D1-980A-004AF5135C32' },
+        { text: 'Andrina Kunz', value: 'AEEF01D4-14DE-49D1-980A-004AF5135C33' },
+        { text: 'Benjamin Mayr', value: 'AEEF01D4-14DE-49D1-980A-004AF5135C34' },
+        { text: 'Silvia Aebersold', value: 'AEEF01D4-14DE-49D1-980A-004AF5135C35' }
+    ];
 
     onLogin = () => {
         if (this.dropdownElement){

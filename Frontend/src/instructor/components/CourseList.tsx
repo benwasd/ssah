@@ -8,6 +8,7 @@ import { NiveauVisualizer } from '../../main/components/NiveauVisualizer';
 import { courseTypes } from '../../resources';
 
 export interface CourseListProps {
+    loggedInInstructorName: string;
     courses: CourseDto[];
     loadCourses();
 }
@@ -19,11 +20,12 @@ export class CourseList extends React.Component<CourseListProps> {
 
     render() {
         return (<>
-            <h2>Zukünftige Kurse</h2>
+            <h2>Hallo {this.props.loggedInInstructorName}</h2>
+            <h3 className='mt-0'>Zukünftige Kurse</h3>
             <div className="ui relaxed divided list">
                 {this.noEntriesIfEmpty(this.orderdFutureCourses().map(this.renderCourse))}
             </div>
-            <h2>Vergangene Kurse</h2>
+            <h3>Vergangene Kurse</h3>
             <div className="ui relaxed divided list">
                 {this.noEntriesIfEmpty(this.orderdPastCourses().map(this.renderCourse))}
             </div>

@@ -17,6 +17,9 @@ namespace SSAH.Infrastructure.DbAccess.Domain.Seeder
         public static readonly Guid MARTINA_ID = Guid.Parse("AEEF01D4-14DE-49D1-980A-004AF5135C30");
         public static readonly Guid JOEL_ID = Guid.Parse("AEEF01D4-14DE-49D1-980A-004AF5135C31");
         public static readonly Guid SIMON_ID = Guid.Parse("AEEF01D4-14DE-49D1-980A-004AF5135C32");
+        public static readonly Guid ANDRINA_ID = Guid.Parse("AEEF01D4-14DE-49D1-980A-004AF5135C33");
+        public static readonly Guid BENJAMIN_ID = Guid.Parse("AEEF01D4-14DE-49D1-980A-004AF5135C34");
+        public static readonly Guid SILVIA_ID = Guid.Parse("AEEF01D4-14DE-49D1-980A-004AF5135C35");
 
         public InstructorSeeder(IRepository<Instructor> instructorRepository, IUnitOfWork unitOfWork)
         {
@@ -64,6 +67,7 @@ namespace SSAH.Infrastructure.DbAccess.Domain.Seeder
                 Qualifications = new[]
                 {
                     new Qualification { CompletionYear = 2010, Discipline = Discipline.Ski, EducationTitle = "Kids Instructor" },
+                    new Qualification { CompletionYear = 2010, Discipline = Discipline.Snowboard, EducationTitle = "Kids Instructor" },
                     new Qualification { CompletionYear = 2014, Discipline = Discipline.Ski, EducationTitle = "Stufe 1" }
                 }
             };
@@ -77,6 +81,7 @@ namespace SSAH.Infrastructure.DbAccess.Domain.Seeder
                 PhoneNumber = "+41 75 412 53 75",
                 Qualifications = new[]
                 {
+                    new Qualification { CompletionYear = 2009, Discipline = Discipline.Ski, EducationTitle = "Kids Instructor" },
                     new Qualification { CompletionYear = 2009, Discipline = Discipline.Snowboard, EducationTitle = "Kids Instructor" },
                     new Qualification { CompletionYear = 2012, Discipline = Discipline.Snowboard, EducationTitle = "Stufe 1" },
                     new Qualification { CompletionYear = 2015, Discipline = Discipline.Snowboard, EducationTitle = "Stufe 2" }
@@ -92,7 +97,52 @@ namespace SSAH.Infrastructure.DbAccess.Domain.Seeder
                 PhoneNumber = "+41 75 412 53 75",
                 Qualifications = new[]
                 {
-                    new Qualification { CompletionYear = 2008, Discipline = Discipline.Ski, EducationTitle = "Kids Instructor" }
+                    new Qualification { CompletionYear = 2009, Discipline = Discipline.Ski, EducationTitle = "Kids Instructor" },
+                    new Qualification { CompletionYear = 2009, Discipline = Discipline.Snowboard, EducationTitle = "Kids Instructor" }
+                }
+            };
+
+            yield return new Instructor
+            {
+                Id = ANDRINA_ID,
+                Surname = "Andrina",
+                Givenname = "Kunz",
+                DateOfBirth = new DateTime(1993, 1, 7),
+                PhoneNumber = "+41 75 412 53 75",
+                Qualifications = new[]
+                {
+                    new Qualification { CompletionYear = 2009, Discipline = Discipline.Ski, EducationTitle = "Kids Instructor" },
+                    new Qualification { CompletionYear = 2009, Discipline = Discipline.Snowboard, EducationTitle = "Kids Instructor" }
+                }
+            };
+
+            yield return new Instructor
+            {
+                Id = BENJAMIN_ID,
+                Surname = "Benjamin",
+                Givenname = "Mayr",
+                DateOfBirth = new DateTime(1989, 2, 8),
+                PhoneNumber = "+41 75 412 53 75",
+                Qualifications = new[]
+                {
+                    new Qualification { CompletionYear = 2009, Discipline = Discipline.Ski, EducationTitle = "Kids Instructor" },
+                    new Qualification { CompletionYear = 2009, Discipline = Discipline.Snowboard, EducationTitle = "Kids Instructor" }
+                }
+            };
+
+            yield return new Instructor
+            {
+                Id = SILVIA_ID,
+                Surname = "Silvia",
+                Givenname = "Aebersold",
+                DateOfBirth = new DateTime(1967, 12, 1),
+                PhoneNumber = "+41 75 412 53 75",
+                Qualifications = new[]
+                {
+                    new Qualification { CompletionYear = 2012, Discipline = Discipline.Ski, EducationTitle = "Stufe 1" },
+                    new Qualification { CompletionYear = 2012, Discipline = Discipline.Snowboard, EducationTitle = "Stufe 1" },
+                    new Qualification { CompletionYear = 2015, Discipline = Discipline.Ski, EducationTitle = "Stufe 2" },
+                    new Qualification { CompletionYear = 2015, Discipline = Discipline.Snowboard, EducationTitle = "Stufe 2" }
                 }
             };
         }
