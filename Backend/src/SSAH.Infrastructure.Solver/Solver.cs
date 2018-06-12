@@ -8,7 +8,7 @@ namespace SSAH.Infrastructure.Solver
 {
     public class Solver : ISolver
     {
-        public SolverResult Solve(SolverParam param)
+        public IEnumerable<SolverResult> Solve(SolverParam param)
         {
             // readonly
             int[] ageGroupOfParticipants = param.Participants.Select(p => p.AgeGroup).ToArray();
@@ -35,7 +35,7 @@ namespace SSAH.Infrastructure.Solver
                         var language = UniqueLanguages(courseOfParticipant, languageOfParticipants, k);
                         var courseDaysInSameNiveau = CourseDaysInSameNiveauStandardDeviation(courseOfParticipant, courseDaysInSameNiveauOfParticipants, k);
 
-                        var valueForCourse = ageGroup * language * courseDaysInSameNiveau;
+                        var valueForCourse = (ageGroup + 1) * language * (courseDaysInSameNiveau + 1);
 
                         return valueForCourse;
                     })
@@ -47,14 +47,16 @@ namespace SSAH.Infrastructure.Solver
             var bestSolutions = solutions.OrderBy(s => s.Item2).Take(10).ToArray();
 
             // map results
-            var x = bestSolutions.First();
-            var y = x.Item1
-                .Select((courseIndex, participantIndex) => new { courseIndex, participantIndex })
-                .GroupBy(cp => cp.courseIndex)
-                .Select(g => new SolverCourseResult(g.Select(i => param.Participants.ElementAt(i.participantIndex)).ToArray()))
-                .ToList();
-
-            return new SolverResult(x.Item2, y);
+            return bestSolutions
+                .Select(s =>
+                    new SolverResult(
+                        s.Item2,
+                        s.Item1.Select((courseIndex, participantIndex) => new { courseIndex, participantIndex })
+                            .GroupBy(cp => cp.courseIndex)
+                            .Select(g => new SolverCourseResult(g.Select(i => param.Participants.ElementAt(i.participantIndex)).ToArray()))
+                            .ToList()
+                    )
+                );
         }
 
         public static double AgeGroupStandardDeviation(int[] courseOfParticipant, int[] ageGroupOfParticipants, int courseFilter)
@@ -64,7 +66,7 @@ namespace SSAH.Infrastructure.Solver
                 .Select(ak => ak.ageGroup)
                 .ToList();
 
-            return StandardDeviation(ageGroups, 3) + 1;
+            return StandardDeviation(ageGroups, 3);
         }
 
         public static double UniqueLanguages(int[] courseOfParticipant, int[] languageOfParticipants, int courseFilter)
@@ -91,7 +93,7 @@ namespace SSAH.Infrastructure.Solver
                 .Select(ak => ak.courseDaysInSameNiveau)
                 .ToList();
 
-            return StandardDeviation(courseDaysInSameNiveaus, 3) + 1;
+            return StandardDeviation(courseDaysInSameNiveaus, 3);
         }
 
         public static double StandardDeviation(ICollection<int> sequence, int digits)

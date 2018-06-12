@@ -67,7 +67,7 @@ namespace SSAH.Core.Domain.CourseCreation
             {
                 var solverParticipants = proposalGroupCourse.Participants.Select(p => new SolverParticipant(p.Participant, courseNiveauId: proposalGroupCourse.NiveauId)).ToArray();
                 var solverResults = Enumerable.Range(1, proposalGroupCourse.MaximalBoundedInstructorCount())
-                    .Select(i => _solver.Solve(new SolverParam(i, solverParticipants)))
+                    .SelectMany(i => _solver.Solve(new SolverParam(i, solverParticipants)))
                     .ToArray();
 
                 var committedGroupCourseIds = new Guid[0];
@@ -113,7 +113,7 @@ namespace SSAH.Core.Domain.CourseCreation
                 return results.OrderBy(r => r.Courses.Count() * r.Score).First();
             }
 
-            public static Instructor SelectInstructor(IEnumerable<Instructor> availableInstructor)
+            private static Instructor SelectInstructor(IEnumerable<Instructor> availableInstructor)
             {
                 // TODO: Change, currently always try to use the same instructor
                 // var random = new Random();
