@@ -19,6 +19,7 @@
         {
             public const string ACCOMPLISH_DEMAND_FOR_REGISTRATION = nameof(ACCOMPLISH_DEMAND_FOR_REGISTRATION);
             public const string INSTRUCTOR_COURSE_CREATED = nameof(INSTRUCTOR_COURSE_CREATED);
+            public const string APPLICANT_REGISTRATION_COMPLETE = nameof(APPLICANT_REGISTRATION_COMPLETE);
         }
     }
 }
