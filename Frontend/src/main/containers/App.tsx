@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Provider } from 'react-redux';
-import { HashRouter, Route, Switch } from 'react-router-dom';
+import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { applyMiddleware, createStore, Unsubscribe } from 'redux';
 import thunk from 'redux-thunk';
 
@@ -37,6 +37,7 @@ export class App extends React.Component {
                                     </HashRouter>
                                 </SocketConnectedRefreshWrapper>
                             </Route>
+                            <Redirect path='/' to='/register' />
                         </Switch>
                     </HashRouter>
                 </Provider>
