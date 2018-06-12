@@ -1,7 +1,9 @@
-﻿namespace SSAH.Core.Domain.CourseCreation
+﻿using System.Collections.Generic;
+
+namespace SSAH.Core.Domain.CourseCreation
 {
     public interface ISolver
     {
-        SolverResult Solve(SolverParam param);
+        IEnumerable<SolverResult> Solve(SolverParam param);
     }
 }

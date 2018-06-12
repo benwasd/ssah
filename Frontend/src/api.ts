@@ -509,7 +509,7 @@ export class CourseDto extends EntityDto {
 }
 
 export enum CourseStatus {
-    EarlyProposal = 0, 
+    Potential = 0, 
     Proposal = 1, 
     Committed = 2, 
     Closed = 3, 

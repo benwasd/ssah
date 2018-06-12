@@ -10,102 +10,12 @@ export interface NiveauResponse {
 }
 
 export const skiRootQuestion: NiveauQuestion = {
-    question: "Hat der Teilnehmer bereits ein Ski-Abzeichen der Schweizer Skischule?",
+    question: "Kann der/die Teilnehmer(in) bremsen?",
     responses: [
-        {
-            response: "Ja",
-            followingQuestion: {
-                question: "Welches Abzeichen wurde als letztes gemacht?",
-                responses: [
-                    {
-                        response: "Kids Village",
-                        niveau: 110
-                    },
-                    {
-                        response: "Blue Prince/Princess",
-                        niveau: 111
-                    },
-                    {
-                        response: "Blue King/Queen",
-                        niveau: 112
-                    },
-                    {
-                        response: "Blue Star",
-                        niveau: 120
-                    },
-                    {
-                        response: "Red Prince/Princess",
-                        niveau: 121
-                    },
-                    {
-                        response: "Red King/Queen",
-                        niveau: 122
-                    },
-                    {
-                        response: "Red Star",
-                        niveau: 130
-                    }
-                ]
-            }
-        },
         {
             response: "Nein",
             followingQuestion: {
-                question: "Kann der Teilnehmer bremsen?",
-                responses: [
-                    {
-                        response: "Ja im Pflug",
-                        niveau: 110
-                    },
-                    {
-                        response: "Nein",
-                        niveau: 100
-                    }
-                ]
-            }
-        }
-    ]
-}
-
-export const snowboardRootQuestion: NiveauQuestion = {
-    question: "Hat der Teilnehmer bereits ein Snowboard-Abzeichen der Schweizer Skischule?",
-    responses: [
-        {
-            response: "Ja",
-            followingQuestion: {
-                question: "Welches Abzeichen wurde als letztes gemacht?",
-                responses: [
-                    {
-                        response: "Kids Village",
-                        niveau: 110
-                    },
-                    {
-                        response: "Blue Prince/Princess",
-                        niveau: 111
-                    },
-                    {
-                        response: "Blue King/Queen",
-                        niveau: 112
-                    },
-                    {
-                        response: "Blue Star",
-                        niveau: 120
-                    },
-                    {
-                        response: "Red Prince/Princess",
-                        niveau: 121
-                    },
-                    {
-                        response: "Red King/Queen",
-                        niveau: 122
-                    }
-                ]
-            }
-        },
-        {
-            response: "Nein",
-            followingQuestion: {
-                question: "Kann der Teilnehmer bremsen?",
+                question: "Kann er/sie mit angezogenen Skier laufen und aufsteigen?",
                 responses: [
                     {
                         response: "Ja",
@@ -117,6 +27,52 @@ export const snowboardRootQuestion: NiveauQuestion = {
                     }
                 ]
             }
+        },
+        {
+            response: "Ja, im Stemmbogen",
+            followingQuestion: {
+                question: "Kann er/sie, alleine auf den Bügel, die Bergstation des Skilifts erreichen?",
+                responses: [
+                    {
+                        response: "Ja",
+                        niveau: 111
+                    },
+                    {
+                        response: "Nein",
+                        niveau: 110
+                    }
+                ]
+            }
+        },
+        {
+            response: "Ja, auch seitwärts gerutscht",
+            niveau: 112
+        }
+    ]
+}
+
+export const snowboardRootQuestion: NiveauQuestion = {
+    question: "Kann der/die Teilnehmer(in) mit dem Snowboard walzern?",
+    responses: [
+        {
+            response: "Nein",
+            followingQuestion: {
+                question: "War er/sie schon einmal im Snowpark?",
+                responses: [
+                    {
+                        response: "Nein",
+                        niveau: 110
+                    },
+                    {
+                        response: "Ja",
+                        niveau: 112
+                    }
+                ]
+            }
+        },
+        {
+            response: "Ja, wie ein(e) König/Königin",
+            niveau: 112
         }
     ]
 }
