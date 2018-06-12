@@ -1,0 +1,16 @@
+references: strict
+source https://nuget.org/api/v2
+framework: net462
+
+nuget FAKE ~> 4.62.1
+nuget NUnit.Console ~> 3.8.0
+nuget NuGet.CommandLine ~> 4.6.2
+
+nuget NJsonSchema.CodeGeneration.CSharp ~> 9.10.43
+nuget NJsonSchema.CodeGeneration.TypeScript ~> 9.10.43
+nuget NSwag.AssemblyLoader ~> 11.17.0
+nuget NSwag.CodeGeneration.TypeScript ~> 11.17.0
+nuget NSwag.SwaggerGeneration ~> 11.17.0
+nuget NSwag.SwaggerGeneration.WebApi ~> 11.17.0
+nuget OpenCover ~> 4.6.519
+nuget FSharp.Data ~> 2.4

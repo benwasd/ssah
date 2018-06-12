@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.7.0" />
+    <PackageReference Include="libphonenumber-csharp" Version="8.9.6" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.1.0-rc1-final" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.1.0-rc1-final" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.0-rc1-final" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.1.0-rc1-final" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.1.0-rc1-final" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.1.0-rc1-final" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.1.0-rc1-final" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="2.1.0-rc1-final" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.1.0-rc1-final" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0-rc1" />
+    <PackageReference Include="System.Reactive" Version="3.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SSAH.Core\SSAH.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.Extensions.Configuration">
+      <HintPath>..\..\..\..\..\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.extensions.configuration\2.0.1\lib\netstandard2.0\Microsoft.Extensions.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.Abstractions">
+      <HintPath>..\..\..\..\..\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.extensions.configuration.abstractions\2.0.1\lib\netstandard2.0\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging.Debug">
+      <HintPath>..\..\..\..\..\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.extensions.logging.debug\2.0.1\lib\netstandard2.0\Microsoft.Extensions.Logging.Debug.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
