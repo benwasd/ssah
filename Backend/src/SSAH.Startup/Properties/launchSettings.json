@@ -1,0 +1,30 @@
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:51474/",
+      "sslPort": 0
+    }
+  },
+  "profiles": {
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "api/Instructor/GetMyCourses?instructorId=AEEF01D4-14DE-49D1-980A-004AF5135C30",
+      "environmentVariables": {
+        "ASPNETCORE_preventHostingStartup": "true",
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "SSAH.Startup": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "api/Instructor/GetMyCourses?instructorId=AEEF01D4-14DE-49D1-980A-004AF5135C30",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:51475/"
+    }
+  }
+}

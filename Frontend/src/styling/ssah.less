@@ -1,0 +1,65 @@
+@import "~semantic-ui-less/definitions/elements/container"; 
+
+.ui.inverted.menu.fixed {
+    background-color: darkcyan;
+
+    .item img.logo {
+        height: 50px;
+        width: unset !important;
+    }
+}
+
+.main.container {
+    padding: 80px 0;
+}
+
+h1, h2, h3, h4, h5 {
+    letter-spacing: -1px;
+}
+
+.lead {
+    font-weight: 300;
+    font-size: 21px;
+}
+
+.small.lead {
+    font-weight: 300;
+    font-size: 18px;
+}
+
+.ui.modal {
+    margin: auto !important;
+    margin-top: 30px !important;
+    
+    .ui.form {
+        width: 100%;
+    }
+}
+
+@media only screen and (min-width: @tabletBreakpoint) {
+    .ui.form.tablet.column {
+        > .field {
+            display: flex;
+            justify-content: space-between;
+
+            > label {
+                align-self: center;
+                margin: 0;
+                flex: 6;
+            }
+
+            > .field,
+            > .input,
+            > .dropdown,
+            > .checkbox,
+            > .datepicker {
+                align-self: center;
+                flex: 10;
+            }
+        }
+    }
+
+    .ui.modal {
+        margin-top: 80px !important;
+    }
+}
