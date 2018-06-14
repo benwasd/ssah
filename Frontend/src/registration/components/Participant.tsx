@@ -105,7 +105,7 @@ export class Participant extends React.Component<ParticipantComponentProps, Part
                         </Modal.Header>
                         <Modal.Content>
                             <div className='small lead pb-3'>
-                                 Was für eine Sportart?
+                                Was für eine Sportart interessiert den Teilnehmer?
                             </div>
                             <div className='text-center pb-5'>
                                 <Button.Group>
