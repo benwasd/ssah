@@ -10,7 +10,6 @@ export class AppHeader extends React.Component {
                     <a href="#" className="header item">
                         <img className="logo" src={logoPng} />
                     </a>
-                    <div className="item">Snow School Administration Hub</div>
                 </div>
             </div>
         );

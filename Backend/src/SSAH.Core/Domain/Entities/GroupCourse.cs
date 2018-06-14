@@ -46,25 +46,20 @@ namespace SSAH.Core.Domain.Entities
         {
             var participantCount = Participants.Count;
             var result = 0;
-            
 
-            if (participantCount >= 25) // 21- = floor(x/8)+1 instructors
+            if (participantCount >= 21) // 21- = floor(x/7)+1 instructors
             {
-                result = (int)Math.Floor(participantCount / 8m) + 1;
+                result = (int)Math.Floor(participantCount / 7m) + 1;
             }
-            else if(participantCount >= 17) // 17-25 = 4 instructors
-            {
-                result = 4;
-            }
-            else if (participantCount >= 11) // 11-16 = 3 instructors
+            else if (participantCount >= 12) // 12-20 = 3 instructors
             {
                 result = 3;
             }
-            else if (participantCount >= 4) // 4-10 = 2 instructors
+            else if (participantCount >= 6) // 6-11 = 2 instructors
             {
                 result = 2;
             }
-            else if (participantCount >= 1) // 1-3 = 1 instructor
+            else if (participantCount >= 1) // 1-5 = 1 instructor
             {
                 result = 1;
             }

@@ -28,13 +28,15 @@ namespace SSAH.Core.Domain.CourseCreation
 
         public class Handler : ObserverBase<CommittedCourseCreatedMessage>
         {
+            private readonly IUnitOfWork _unitOfWork;
             private readonly IRepository<Instructor> _instructorRepository;
             private readonly ICourseRepository _courseRepository;
             private readonly INotificationService _notificationService;
             private readonly IOptionsMonitor<EnvironmentOptions> _environmentOptions;
 
-            public Handler(IRepository<Instructor> instructorRepository, ICourseRepository courseRepository, INotificationService notificationService, IOptionsMonitor<EnvironmentOptions> environmentOptions)
+            public Handler(IUnitOfWork unitOfWork, IRepository<Instructor> instructorRepository, ICourseRepository courseRepository, INotificationService notificationService, IOptionsMonitor<EnvironmentOptions> environmentOptions)
             {
+                _unitOfWork = unitOfWork;
                 _instructorRepository = instructorRepository;
                 _courseRepository = courseRepository;
                 _notificationService = notificationService;
@@ -73,6 +75,8 @@ namespace SSAH.Core.Domain.CourseCreation
                     new[] { course.Id.ToString() },
                     string.Join(Environment.NewLine, messageLines)
                 ).Wait();
+
+                _unitOfWork.Commit();
             }
 
             protected override void OnErrorCore(Exception error)

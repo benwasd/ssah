@@ -164,8 +164,8 @@ namespace SSAH.Infrastructure.Api.Controllers
 
             foreach (var courseParticipant in courseParticipants)
             {
-                _queue.Publish(new ParticipantRegistredMessage(courseParticipant.ParticipantId, courseParticipant.CourseId));
-            }            
+                _queue.Publish(new ParticipantRegistredMessage(courseParticipant.ParticipantId, courseParticipant.CourseId, registration.Id));
+            }
         }
     }
 }

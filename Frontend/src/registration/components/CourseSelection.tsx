@@ -103,20 +103,20 @@ export class CourseSelection extends React.Component<CourseSelectionProps, Cours
         return (<>
             {(possibleCourseLength === 0) && <>
                 <h2>
-                    Momentan bieten wir für {this.getParticipantDisplayName()}<br /> kein passender Kurs an.
+                    Momentan bieten wir für {this.getParticipantDisplayName()}<br /> keinen passenden Kurs an.
                 </h2>
                 <div>
-                    Wir werden prüfen, ob wir für Sie einen Kurs durchführen können.
-                    Wir werden Sie baldmöglichst per SMS auf der <span className='text-nowrap'>Nummer "{this.props.applicantPhoneNumber}"</span> informieren.
+                    Wir prüfen, ob wir für Sie einen Kurs durchführen können.
+                    Sie werden baldmöglichst per SMS unter der <span className='text-nowrap'>Nummer "{this.props.applicantPhoneNumber}"</span> informiert.
                 </div></>}
 
             {possibleCourseLength > 0 && !participants.every(p => this.props.possibleCourses.some(pc => pc.registrationParticipantId === p.id)) &&<>
                 <h2>
-                    Momentan bieten wir nicht für alle Teilnehmer<br /> passende Kurse an.
+                    Momentan bieten wir nicht für alle Teilnehmer<br /> einen passenden Kurs an.
                 </h2>
                 <div className="mb-3">
-                    Wir werden prüfen, ob wir für {this.getParticipantWithNoPossibleCourseDisplayName()} einen Kurs durchführen können. 
-                    Wir werden Sie baldmöglichst per SMS auf der <span className='text-nowrap'>Nummer "{this.props.applicantPhoneNumber}"</span> informieren.
+                    Wir prüfen, ob wir für {this.getParticipantWithNoPossibleCourseDisplayName()} einen Kurs durchführen können. 
+                    Sie werden baldmöglichst per SMS unter der <span className='text-nowrap'>Nummer "{this.props.applicantPhoneNumber}"</span> informiert.
                 </div></>}
 
             {participants.length > 1 && possibleCourseLength > 0 &&

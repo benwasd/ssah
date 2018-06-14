@@ -11,7 +11,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "api/values",
+      "launchUrl": "api/Instructor/GetMyCourses?instructorId=AEEF01D4-14DE-49D1-980A-004AF5135C30",
       "environmentVariables": {
         "ASPNETCORE_preventHostingStartup": "true",
         "ASPNETCORE_ENVIRONMENT": "Development"
@@ -20,7 +20,7 @@
     "SSAH.Startup": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "api/values",
+      "launchUrl": "api/Instructor/GetMyCourses?instructorId=AEEF01D4-14DE-49D1-980A-004AF5135C30",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
